@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[环境变量配置]]></title>
+    <url>%2F2018%2F07%2F22%2F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE%2F</url>
+    <content type="text"><![CDATA[java环境变量配置windows方式一(常用):变量名：JAVA_HOME变量值：D:\Program Files\Java\jdk1.8.0_73变量名：PATH变量值：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin变量名：classpath变量值：.,%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar; %JAVA_HOME%\lib\tools.jar 方法二：path:D:\Program Files\Java\jdk1.8.0_60\binclasspath:D:\Program Files\Java\jdk1.8.0_60\libjavac linuxJAVA_HOME=/home/hadoop/java/jdk1.8.0_73CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jarPATH=$PATH:$JAVA_HOME/binexport JAVA_HOME CLASSPATH 验证在命令行输入一下命令进行验证：1.java2.javac 查看版本号maven环境变量配置windowsMAVEM_HOMED:\Program Files\mavenpath%MAVEN_HOME%\bin注意：%MAVEN_HOME%\bin 应该放在path的最前面。 linux12MAVEN_HOME=/home/hadoop/maven PATH=$PATH:$MAVEN_HOME/bin]]></content>
+      <categories>
+        <category>环境变量配置</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+</search>
