@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://tgluon.github.io/"/>
-  <updated>2018-07-22T23:57:11.871Z</updated>
+  <updated>2018-07-24T10:39:00.771Z</updated>
   <id>https://tgluon.github.io/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>大数据平台监控工具</title>
+    <link href="https://tgluon.github.io/2018/07/24/%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7/"/>
+    <id>https://tgluon.github.io/2018/07/24/监控工具/</id>
+    <published>2018-07-24T10:19:59.000Z</published>
+    <updated>2018-07-24T10:39:00.771Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="大数据平台监控工具"><a href="#大数据平台监控工具" class="headerlink" title="大数据平台监控工具"></a>大数据平台监控工具</h1><h2 id="Prometheus-grafana"><a href="#Prometheus-grafana" class="headerlink" title="Prometheus+grafana"></a>Prometheus+grafana</h2><p><code>环境搭建参考博客：</code></p><blockquote><p><a href="http://blog.51cto.com/youerning/2050543" target="_blank" rel="noopener">http://blog.51cto.com/youerning/2050543</a>   </p></blockquote><h2 id="cerebro"><a href="#cerebro" class="headerlink" title="cerebro"></a>cerebro</h2><p><code>作为本地监控，监控elasticsearch</code>     </p><blockquote><p><a href="https://github.com/lmenezes/cerebro" target="_blank" rel="noopener">https://github.com/lmenezes/cerebro</a></p></blockquote><h2 id="openTSDB-grafana"><a href="#openTSDB-grafana" class="headerlink" title="openTSDB+grafana"></a>openTSDB+grafana</h2><p><code>参考</code></p><blockquote><p><a href="https://blog.csdn.net/u011537073/article/details/54565742" target="_blank" rel="noopener">https://blog.csdn.net/u011537073/article/details/54565742</a></p></blockquote><h2 id="tableau"><a href="#tableau" class="headerlink" title="tableau"></a>tableau</h2><p><code>付费</code> </p><blockquote><p><a href="https://www.tableau.com/support/help" target="_blank" rel="noopener">https://www.tableau.com/support/help</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;大数据平台监控工具&quot;&gt;&lt;a href=&quot;#大数据平台监控工具&quot; class=&quot;headerlink&quot; title=&quot;大数据平台监控工具&quot;&gt;&lt;/a&gt;大数据平台监控工具&lt;/h1&gt;&lt;h2 id=&quot;Prometheus-grafana&quot;&gt;&lt;a href=&quot;#Prometh
+      
+    
+    </summary>
+    
+      <category term="大数据平台监控" scheme="https://tgluon.github.io/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E7%9B%91%E6%8E%A7/"/>
+    
+    
+      <category term="大数据平台监控" scheme="https://tgluon.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E7%9B%91%E6%8E%A7/"/>
+    
+  </entry>
+  
+  <entry>
     <title>环境变量配置</title>
     <link href="https://tgluon.github.io/2018/07/22/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/"/>
     <id>https://tgluon.github.io/2018/07/22/环境变量配置/</id>
     <published>2018-07-22T15:10:10.000Z</published>
-    <updated>2018-07-22T23:57:11.871Z</updated>
+    <updated>2018-07-24T10:18:23.016Z</updated>
     
     <content type="html"><![CDATA[<h1 id="java环境变量配置"><a href="#java环境变量配置" class="headerlink" title="java环境变量配置"></a>java环境变量配置</h1><h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><h3 id="方式一-常用"><a href="#方式一-常用" class="headerlink" title="方式一(常用):"></a>方式一(常用):</h3><p>变量名：JAVA_HOME<br>变量值：D:\Program Files\Java\jdk1.8.0_73<br>变量名：PATH<br>变量值：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin<br>变量名：classpath<br>变量值：.,%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;  %JAVA_HOME%\lib\tools.jar  </p><h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>path:<br>D:\Program Files\Java\jdk1.8.0_60\bin<br>classpath:<br>D:\Program Files\Java\jdk1.8.0_60\lib<br>javac</p><h2 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h2><p>JAVA_HOME=/home/hadoop/java/jdk1.8.0_73<br>CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>PATH=$PATH:$JAVA_HOME/bin<br>export JAVA_HOME CLASSPATH   </p><h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>在命令行输入一下命令进行验证：<br>1.java<br>2.javac   </p><h2 id="查看版本号"><a href="#查看版本号" class="headerlink" title="查看版本号"></a>查看版本号</h2><h1 id="maven环境变量配置"><a href="#maven环境变量配置" class="headerlink" title="maven环境变量配置"></a>maven环境变量配置</h1><h2 id="windows-1"><a href="#windows-1" class="headerlink" title="windows"></a>windows</h2><p><code>MAVEM_HOME</code><br>D:\Program Files\maven<br><code>path</code><br>%MAVEN_HOME%\bin<br>注意：%MAVEN_HOME%\bin 应该放在path的最前面。   </p><h2 id="linux-1"><a href="#linux-1" class="headerlink" title="linux"></a>linux</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MAVEN_HOME=/home/hadoop/maven     </span><br><span class="line">PATH=$PATH:$MAVEN_HOME/bin</span><br></pre></td></tr></table></figure>]]></content>
     
