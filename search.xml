@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[加载json文件到hive表]]></title>
+    <url>%2F2018%2F07%2F28%2F%E5%8A%A0%E8%BD%BDjson%E6%96%87%E4%BB%B6%E5%88%B0hive%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[struct类型应用准备json文件simple.json1&#123;"foo":"abc","bar":"200901011000000","quux":&#123;"quuxid":1234,"quuxname":"sam"&#125;&#125; 添加hive-hcatalog-core.jar包1add jar /home/hadoop/hive/lib/hive-hcatalog-core.jar 建立测试表123456789create database if not exists mytest;use mytest;create table if not exists my_table( foo string, bar string, quux struct&lt;quuxid:int,quuxname:string&gt;) row format serde 'org.apache.hive.hcatlog.data.JsonSerde'stored as textfile; 装载数据1load data local inpath '/home/hadoop/data/simple.json' into table my_table; 查询1select foo, bar,quux.quuxid,quux.quuname from my_table; sstruct结合array类型应用准备json文件complex.json1&#123;"docid":"abc","user":&#123;"id":123,"username":"saml1234","name":"sam","shippingaddress":&#123;"address1":"123mainst","address2:""","city":"durham","state":"nc"&#125;,"orders":[&#123;"itemid":6789,"orderdate":"11/11/2012"&#125;,&#123;"itemid":4352,"orderdate"："12/12/2012"&#125;]&#125;&#125; 添加hive-hcatalog-core.jar包1add jar /home/hadoop/hive/lib/hive-hcatalog-core.jar 建立测试表12345678910111213use mytest;create table if not exists complex_json( docid string, user struct&lt;id: int, username: string, shippingaddress:struct&lt;address1:string address2: string, city: string, state: string&gt;, orders:array&lt;struct&lt;itemid:int,orderdate:String&gt;&gt;&gt;)row format serde 'org.apache.hive.hcatlog.data.JsonSerde'stored as textfile; 装载数据1load data local inpath '/home/hadoop/data/complex.json' overwrite table complex_json; 查询12select docid,user.id,user.shippingaddress.city as city ,user.orders[0].itemid as order0id,user.orders[1].itemid as order1ib from complex_json; 动态map类型应用json文件a.json12345&#123;"conflict":&#123;"liveid":123,"zhuboid":"456","media":789,"proxy":"ac","result":10000&#125;&#125;&#123;"conflict":&#123;"liveid":123,"zhuboid":"456","media":789,"proxy":"ac"&#125;&#125;&#123;"conflict":&#123;"liveid":123,"zhuboid":"456","media":789&#125;&#125;&#123;"conflict":&#123;"liveid":123,"zhuboid":"456"&#125;&#125;&#123;"conflict":&#123;"liveid":123&#125;&#125; 添加hive-hcatalog-core.jar包1add jar /home/hadoop/hive/lib/hive-hcatalog-core.jar 建立测试表123456use mytest;create table if not exists json_table( conflict map&lt;string,string&gt;)row format serde 'org.apache.hive.hcatlog.data.JsonSerde'stored as textfile; 查询12select * from json_table; select conflict['media'] from json_table;]]></content>
+      <categories>
+        <category>hive</category>
+      </categories>
+      <tags>
+        <tag>hive</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[大数据平台监控工具]]></title>
     <url>%2F2018%2F07%2F24%2F%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%2F</url>
     <content type="text"><![CDATA[大数据平台监控工具Prometheus+grafana环境搭建参考博客： http://blog.51cto.com/youerning/2050543 cerebro作为本地监控，监控elasticsearch https://github.com/lmenezes/cerebro openTSDB+grafana参考 https://blog.csdn.net/u011537073/article/details/54565742 tableau付费 https://www.tableau.com/support/help]]></content>
