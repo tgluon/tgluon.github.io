@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="struct类型应用准备json文件simple.json1&amp;#123;&quot;foo&quot;:&quot;abc&quot;,&quot;bar&quot;:&quot;200901011000000&quot;,&quot;quux&quot;:&amp;#123;&quot;quuxid&quot;:1234,&quot;quuxname&quot;:&quot;sam&quot;&amp;#125;&amp;#125; 添加hive-hcatalog-core.jar包1add jar /home/hadoop/hive/lib/hive-hcatalog-co">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-27T16:53:59.199Z">
+<meta property="og:updated_time" content="2018-07-28T00:37:43.547Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="加载json文件到hive表">
 <meta name="twitter:description" content="struct类型应用准备json文件simple.json1&amp;#123;&quot;foo&quot;:&quot;abc&quot;,&quot;bar&quot;:&quot;200901011000000&quot;,&quot;quux&quot;:&amp;#123;&quot;quuxid&quot;:1234,&quot;quuxname&quot;:&quot;sam&quot;&amp;#125;&amp;#125; 添加hive-hcatalog-core.jar包1add jar /home/hadoop/hive/lib/hive-hcatalog-co">
@@ -498,7 +498,6 @@
 <h2 id="添加hive-hcatalog-core-jar包-2"><a href="#添加hive-hcatalog-core-jar包-2" class="headerlink" title="添加hive-hcatalog-core.jar包"></a>添加hive-hcatalog-core.jar包</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add jar /home/hadoop/hive/lib/hive-hcatalog-core.jar</span><br></pre></td></tr></table></figure>
 <h2 id="建立测试表-2"><a href="#建立测试表-2" class="headerlink" title="建立测试表"></a>建立测试表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> mytest;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exists</span> json_table(</span><br><span class="line">    conflict <span class="keyword">map</span>&lt;<span class="keyword">string</span>,<span class="keyword">string</span>&gt;</span><br><span class="line">)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> serde <span class="string">'org.apache.hive.hcatlog.data.JsonSerde'</span></span><br><span class="line"><span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure>
 <h2 id="查询-2"><a href="#查询-2" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> json_table;   </span><br><span class="line"><span class="keyword">select</span> conflict[<span class="string">'media'</span>] <span class="keyword">from</span> json_table;</span><br></pre></td></tr></table></figure>
-
       
     </div>
     
@@ -517,7 +516,7 @@
   <p><span>本文标题:</span><a href="/2018/07/28/加载json文件到hive表/">加载json文件到hive表</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
   <p><span>发布时间:</span>2018年07月28日 - 00:07</p>
-  <p><span>最后更新:</span>2018年07月28日 - 00:07</p>
+  <p><span>最后更新:</span>2018年07月28日 - 08:07</p>
   <p><span>原始链接:</span><a href="/2018/07/28/加载json文件到hive表/" title="加载json文件到hive表">https://tgluon.github.io/2018/07/28/加载json文件到hive表/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2018/07/28/加载json文件到hive表/"  aria-label="复制成功！"></i></span>
   </p>
@@ -585,6 +584,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/28/SEQUENCEFILE格式存储到hive表/" rel="prev" title="sequencefile方式存储到hive表">
+                sequencefile方式存储到hive表 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -703,7 +706,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -836,7 +839,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共634字</span>
+  <span class="post-count">博客全站共1.6k字</span>
 </div>
 
 
