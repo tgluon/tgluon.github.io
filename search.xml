@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[maven删除本地仓库lastUpdated文件]]></title>
+    <url>%2F2018%2F08%2F13%2Fmaven%E5%88%A0%E9%99%A4lastupdated%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[12windows:for /r %i in (*.lastUpdated) do del %i 12linux:find ~/ . -name &quot;*.lastUpdated&quot; -exec rm -rf &#123;&#125; \;]]></content>
+      <categories>
+        <category>maven</category>
+      </categories>
+      <tags>
+        <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[ORCFILE格式存储到hive表]]></title>
     <url>%2F2018%2F07%2F28%2FORCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
     <content type="text"><![CDATA[概述ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。ORCFILE格式的输出包是：1org.apache.hadoop.hive.ql.io.orc 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立ORCFILE格式表12345678create table t_orcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as orcfile; 向表中导入数据注意：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_orcfile select * from t_textfile]]></content>
@@ -25,7 +36,7 @@
   <entry>
     <title><![CDATA[TEXTFILE格式存储到hive表]]></title>
     <url>%2F2018%2F07%2F28%2FTEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
-    <content type="text"><![CDATA[概述TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。TEXTFILE格式的输出包是： org.apache.hadoop.mapred.TextfileInputFormatorg.apache.hadoop.mapred.TextfileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立TEXTFILE格式表12345678create table t_textfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as textfile; 装载数据1load data local inpath '/home/hadoop/textfile/a.txt' into/overwrite t_textfile; 向表中导入数据1insert overwrite table t_orcfile select * from t_textfile]]></content>
+    <content type="text"><![CDATA[概述TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。TEXTFILE格式的输出包是： org.apache.hadoop.mapred.TextfileInputFormatorg.apache.hadoop.mapred.TextfileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立TEXTFILE格式表12345678create table t_textfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as textfile; 装载数据1load data local inpath '/home/hadoop/textfile/a.txt' into/overwrite t_textfile; 查询数据1select * from t_textfile]]></content>
       <categories>
         <category>hive</category>
       </categories>
