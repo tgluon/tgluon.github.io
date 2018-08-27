@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>https://tgluon.github.io/2018/08/27/%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2018-08-27T15:19:36.000Z</lastmod>
+    <data>
+        <display>
+        <title>java自定义注解</title>
+        <pubTime>2018-08-27T15:19:23.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="https://tgluon.github.io/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://tgluon.github.io/2018/08/13/maven%E5%88%A0%E9%99%A4lastupdated%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4/</loc>
-    <lastmod>2018-08-13T15:34:16.000Z</lastmod>
+    <lastmod>2018-08-13T15:40:00.748Z</lastmod>
     <data>
         <display>
         <title>maven删除本地仓库lastUpdated文件</title>
