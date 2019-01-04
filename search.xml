@@ -34,9 +34,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[TEXTFILE格式存储到hive表]]></title>
-    <url>%2F2018%2F07%2F28%2FTEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
-    <content type="text"><![CDATA[概述TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。TEXTFILE格式的输出包是： org.apache.hadoop.mapred.TextfileInputFormatorg.apache.hadoop.mapred.TextfileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立TEXTFILE格式表12345678create table t_textfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as textfile; 装载数据1load data local inpath '/home/hadoop/textfile/a.txt' into/overwrite t_textfile; 查询数据1select * from t_textfile]]></content>
+    <title><![CDATA[RCFILE格式存储到hive表]]></title>
+    <url>%2F2018%2F07%2F28%2FRCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[概述RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，被用于在一个时间点操作多行的场景。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。RCFILE格式的输入输出包是：12org.apache.hadoop.hive.ql.io.RCFileInputFormatorg.apache.hadoop.hive.ql.io.RCFileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立RCFILE格式表12345678create table t_rcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as rcfile; 向表中导入数据注意：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_rcfile select * from t_textfile 查询1select * from t_rcfile]]></content>
       <categories>
         <category>hive</category>
       </categories>
@@ -45,9 +45,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[RCFILE格式存储到hive表]]></title>
-    <url>%2F2018%2F07%2F28%2FRCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
-    <content type="text"><![CDATA[概述RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，被用于在一个时间点操作多行的场景。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。RCFILE格式的输入输出包是：12org.apache.hadoop.hive.ql.io.RCFileInputFormatorg.apache.hadoop.hive.ql.io.RCFileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立RCFILE格式表12345678create table t_rcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as rcfile; 向表中导入数据注意：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_rcfile select * from t_textfile 查询1select * from t_rcfile]]></content>
+    <title><![CDATA[TEXTFILE格式存储到hive表]]></title>
+    <url>%2F2018%2F07%2F28%2FTEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[概述TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。TEXTFILE格式的输出包是： org.apache.hadoop.mapred.TextfileInputFormatorg.apache.hadoop.mapred.TextfileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立TEXTFILE格式表12345678create table t_textfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as textfile; 装载数据1load data local inpath '/home/hadoop/textfile/a.txt' into/overwrite t_textfile; 查询数据1select * from t_textfile]]></content>
       <categories>
         <category>hive</category>
       </categories>
