@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spark," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta name="keywords" content="spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sparksql详解">
+<meta property="og:url" content="https://tgluon.github.io/2019/01/04/sparksql详解/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/dataset分区.jpg">
+<meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/ExternalClusterManager.png">
+<meta property="og:updated_time" content="2019-01-04T12:05:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sparksql详解">
+<meta name="twitter:description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta name="twitter:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/dataset分区.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tgluon.github.io/2019/01/04/sparksql详解/"/>
+
+
+
+
+
+  <title>sparksql详解 | blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/tgluon"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">追梦青年</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/04/sparksql详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sparksql详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T19:53:18+08:00">
+                2019-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sparksql/" itemprop="url" rel="index">
+                    <span itemprop="name">sparksql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/04/sparksql详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/04/sparksql详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,832
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  24
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Spark-SQL的Dataset基本操作"><a href="#Spark-SQL的Dataset基本操作" class="headerlink" title="Spark SQL的Dataset基本操作"></a>Spark SQL的Dataset基本操作</h1><p><a href="https://www.toutiao.com/i6631318012546793992/" target="_blank" rel="noopener">https://www.toutiao.com/i6631318012546793992/</a><br>版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解   </p>
+<h2 id="1-基本简介和准备工作"><a href="#1-基本简介和准备工作" class="headerlink" title="1. 基本简介和准备工作"></a>1. 基本简介和准备工作</h2><p>Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Dataset的可以从jvm 对象创建，然后就可以使用转换函数(map，flatmap，filter等)。</p>
+<p>1.6版本之前常用的Dataframe是一种特殊的Dataset，也即是<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="title">DataFrame</span> </span>= <span class="type">Dataset</span>[<span class="type">Row</span>]</span><br></pre></td></tr></table></figure></p>
+<p>结构化数据文件(json,csv,orc等)，hive表，外部数据库，已有RDD。<br>下面进行测试，大家可能都会说缺少数据，实际上Spark源码里跟我们提供了丰富的测试数据。源码的examples路径下：examples/src/main/resources。</p>
+<p>首先要创建一个SparkSession:<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sparkConf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">.setAppName(<span class="keyword">this</span>.getClass.getName)</span><br><span class="line">.setMaster(<span class="string">"local[*]"</span>)</span><br><span class="line">.set(<span class="string">"yarn.resourcemanager.hostname"</span>, <span class="string">"localhost"</span>) </span><br><span class="line"><span class="comment">// executor的实例数</span></span><br><span class="line">.set(<span class="string">"spark.executor.instances"</span>,<span class="string">"2"</span>) </span><br><span class="line">.set(<span class="string">"spark.default.parallelism"</span>,<span class="string">"4"</span>) </span><br><span class="line"><span class="comment">// sql shuffle的并行度，由于是本地测试，所以设置较小值，避免产生过多空task，实际上要根据生产数据量进行设置。</span></span><br><span class="line">.set(<span class="string">"spark.sql.shuffle.partitions"</span>,<span class="string">"4"</span>)</span><br><span class="line">.setJars(<span class="type">List</span>(<span class="string">"/Users/meitu/Desktop/sparkjar/bigdata.jar"</span> </span><br><span class="line">,<span class="string">"/opt/jars/spark-streaming-kafka-0-10_2.11-2.3.1.jar"</span> </span><br><span class="line">,<span class="string">"/opt/jars/kafka-clients-0.10.2.2.jar"</span> </span><br><span class="line"> ,<span class="string">"/opt/jars/kafka_2.11-0.10.2.2.jar"</span></span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> spark = <span class="type">SparkSession</span> </span><br><span class="line">.builder() </span><br><span class="line">.config(sparkConf) </span><br><span class="line">.getOrCreate()</span><br></pre></td></tr></table></figure></p>
+<p>创建dataset<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sales = spark.createDataFrame(</span><br><span class="line"><span class="type">Seq</span>( (<span class="string">"Warsaw"</span>, <span class="number">2016</span>, <span class="number">100</span>), (<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">200</span>), (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">100</span>), (<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">200</span>), (<span class="string">"Beijing"</span>, <span class="number">2017</span>, <span class="number">200</span>), (<span class="string">"Beijing"</span>, <span class="number">2016</span>, <span class="number">200</span>),</span><br><span class="line"> (<span class="string">"Beijing"</span>, <span class="number">2015</span>, <span class="number">200</span>), (<span class="string">"Beijing"</span>, <span class="number">2014</span>, <span class="number">200</span>), (<span class="string">"Warsaw"</span>, <span class="number">2014</span>, <span class="number">200</span>),</span><br><span class="line"> (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">50</span>), (<span class="string">"Boston"</span>, <span class="number">2016</span>, <span class="number">50</span>), (<span class="string">"Boston"</span>, <span class="number">2015</span>, <span class="number">50</span>),</span><br><span class="line"> (<span class="string">"Boston"</span>, <span class="number">2014</span>, <span class="number">150</span>)))</span><br><span class="line">.toDF(<span class="string">"city"</span>, <span class="string">"year"</span>, <span class="string">"amount"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>使用函数的时候要导入包：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.&#123;col,expr&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-select"><a href="#2-select" class="headerlink" title="2.select"></a>2.select</h2><p>列名称可以是字符串，这种形式无法对列名称使用表达式进行逻辑操作。<br>使用col函数，可以直接对列进行一些逻辑操作。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.select(<span class="string">"city"</span>,<span class="string">"year"</span>,<span class="string">"amount"</span>).show(<span class="number">1</span>)</span><br><span class="line">sales.select(col(<span class="string">"city"</span>),col(<span class="string">"amount"</span>)+<span class="number">1</span>).show(<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-selectExpr"><a href="#3-selectExpr" class="headerlink" title="3. selectExpr"></a>3. selectExpr</h2><p>参数是字符串，且直接可以使用表达式。<br>也可以使用select+expr函数来替代。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.selectExpr(<span class="string">"city"</span>,<span class="string">"year as date"</span>,<span class="string">"amount+1"</span>).show(<span class="number">10</span>)</span><br><span class="line">sales.select(expr(<span class="string">"city"</span>),expr(<span class="string">"year as date"</span>),expr(<span class="string">"amount+1"</span>)).show(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-filter"><a href="#4-filter" class="headerlink" title="4. filter"></a>4. filter</h2><p>参数可以是与col结合的表达式，参数类型为row返回值为boolean的函数，字符串表达式。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sales.filter(col(<span class="string">"amount"</span>)&gt;<span class="number">150</span>).show()</span><br><span class="line">sales.filter(row=&gt;&#123; row.getInt(<span class="number">2</span>)&gt;<span class="number">150</span>&#125;).show(<span class="number">10</span>)</span><br><span class="line">sales.filter(<span class="string">"amount &gt; 150 "</span>).show(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-where"><a href="#5-where" class="headerlink" title="5. where"></a>5. where</h2><p>类似于fliter，参数可以是与col函数结合的表达式也可以是直接使用表达式字符串。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.where(col(<span class="string">"amount"</span>)&gt;<span class="number">150</span>).show()</span><br><span class="line">sales.where(<span class="string">"amount &gt; 150 "</span>).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="6-group-by"><a href="#6-group-by" class="headerlink" title="6. group by"></a>6. group by</h2><p>主要是以count和agg聚合函数为例讲解groupby函数。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.groupBy(<span class="string">"city"</span>).count().show(<span class="number">10</span>)</span><br><span class="line">sales.groupBy(col(<span class="string">"city"</span>)).agg(sum(<span class="string">"amount"</span>).as(<span class="string">"total"</span>)).show(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="7-union"><a href="#7-union" class="headerlink" title="7.union"></a>7.union</h2><p>两个dataset的union操作这个等价于union all操作，所以要实现传统数据库的union操作，需要在其后使用distinct进行去重操作。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sales.union(sales).groupBy(<span class="string">"city"</span>).count().show()</span><br></pre></td></tr></table></figure></p>
+<p>8.join<br>join操作相对比较复杂，具体如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 相同的列进行join</span></span><br><span class="line"> sales.join(sales,<span class="string">"city"</span>).show(<span class="number">10</span>)</span><br><span class="line"> <span class="comment">// 多列join</span></span><br><span class="line">sales.join(sales,<span class="type">Seq</span>(<span class="string">"city"</span>,<span class="string">"year"</span>)).show() </span><br><span class="line"><span class="comment">/* 指定join类型， join 类型可以选择: </span></span><br><span class="line"><span class="comment"> `inner`, `cross`, `outer`, `full`, `full_outer`, </span></span><br><span class="line"><span class="comment">`left`, `left_outer`, `right`, `right_outer`, </span></span><br><span class="line"><span class="comment">`left_semi`, `left_anti`. </span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line"><span class="comment">// 内部join</span></span><br><span class="line">sales.join(sales,<span class="type">Seq</span>(<span class="string">"city"</span>,<span class="string">"year"</span>),<span class="string">"inner"</span>).show() </span><br><span class="line"><span class="comment">/* join条件 ：</span></span><br><span class="line"><span class="comment">可以在join方法里放入join条件，</span></span><br><span class="line"><span class="comment">也可以使用where,这两种情况都要求字段名称不一样。</span></span><br><span class="line"><span class="comment">*/</span> </span><br><span class="line">sales.join(sales, col(<span class="string">"city"</span>).alias(<span class="string">"city1"</span>) === col(<span class="string">"city"</span>)).show() sales.join(sales).where(col(<span class="string">"city"</span>).alias(<span class="string">"city1"</span>) === col(<span class="string">"city"</span>)).show() </span><br><span class="line"> <span class="comment">/* </span></span><br><span class="line"><span class="comment">dataset的self join 此处使用where作为条件，</span></span><br><span class="line"><span class="comment">需要增加配置.set("spark.sql.crossJoin.enabled","true") </span></span><br><span class="line"><span class="comment">也可以加第三个参数，join类型，可以选择如下： </span></span><br><span class="line"><span class="comment">`inner`, `cross`, `outer`, `full`, `full_outer`, `left`,</span></span><br><span class="line"><span class="comment"> `left_outer`, `right`, `right_outer`, `left_semi`, `left_anti` </span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line">sales.join(sales,sales(<span class="string">"city"</span>) === sales(<span class="string">"city"</span>)).show() sales.join(sales).where(sales(<span class="string">"city"</span>) === sales(<span class="string">"city"</span>)).show()</span><br><span class="line"><span class="comment">/* joinwith,可以指定第三个参数，join类型，</span></span><br><span class="line"><span class="comment">类型可以选择如下：</span></span><br><span class="line"><span class="comment"> `inner`, `cross`, `outer`, `full`, `full_outer`, `left`, `left_outer`, </span></span><br><span class="line"><span class="comment"> `right`, `right_outer`。 </span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line">sales.joinWith(sales,sales(<span class="string">"city"</span>) === sales(<span class="string">"city"</span>),<span class="string">"inner"</span>).show()</span><br></pre></td></tr></table></figure></p>
+<p>输出结果： </p>
+<h2 id="9-order-by"><a href="#9-order-by" class="headerlink" title="9. order by"></a>9. order by</h2><p>orderby 全局有序，其实用的还是sort<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.orderBy(col(<span class="string">"year"</span>).desc,col(<span class="string">"amount"</span>).asc).show()</span><br><span class="line">sales.orderBy(<span class="string">"city"</span>,<span class="string">"year"</span>).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="10-sort"><a href="#10-sort" class="headerlink" title="10.sort"></a>10.sort</h2><p>全局排序，直接替换掉8小结的orderby即可。</p>
+<h2 id="11-sortwithinpartition"><a href="#11-sortwithinpartition" class="headerlink" title="11.sortwithinpartition"></a>11.sortwithinpartition</h2><p>在分区内部进行排序，局部排序。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sales.sortWithinPartitions(col(<span class="string">"year"</span>).desc,col(<span class="string">"amount"</span>).asc).show()</span><br><span class="line">sales.sortWithinPartitions(<span class="string">"city"</span>,<span class="string">"year"</span>).show()</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，city为背景的应该是分配到不同的分区，然后每个分区内部year都是有序的。</p>
+<h2 id="12-withColumn"><a href="#12-withColumn" class="headerlink" title="12. withColumn"></a>12. withColumn</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* withColumn </span></span><br><span class="line"><span class="comment">假如列，存在就替换，不存在新增 </span></span><br><span class="line"><span class="comment">withColumnRenamed </span></span><br><span class="line"><span class="comment">对已有的列进行重命名</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//相当于给原来amount列，+1</span></span><br><span class="line">sales.withColumn(<span class="string">"amount"</span>,col(<span class="string">"amount"</span>)+<span class="number">1</span>).show()</span><br><span class="line"><span class="comment">// 对amount列+1，然后将值增加到一个新列 amount1</span></span><br><span class="line">sales.withColumn(<span class="string">"amount1"</span>,col(<span class="string">"amount"</span>)+<span class="number">1</span>).show()</span><br><span class="line"><span class="comment">// 将amount列名，修改为amount1</span></span><br><span class="line">sales.withColumnRenamed(<span class="string">"amount"</span>,<span class="string">"amount1"</span>).show()</span><br></pre></td></tr></table></figure>
+<h2 id="13-foreach"><a href="#13-foreach" class="headerlink" title="13. foreach"></a>13. foreach</h2><p>这个跟rdd的foreach一样，元素类型是row。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sales.foreach(row=&gt;&#123; </span><br><span class="line">println(row.getString(<span class="number">0</span>))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="14-foreachPartition"><a href="#14-foreachPartition" class="headerlink" title="14. foreachPartition"></a>14. foreachPartition</h2><p>跟RDD的foreachPartition一样，针对分区进行计算，对于输出到数据库，kafka等数据相对于使用foreach可以大量减少连接数。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sales.foreachPartition(partition=&gt;&#123; </span><br><span class="line"> <span class="comment">//打开数据库链接等 </span></span><br><span class="line"> partition.foreach(each=&gt;&#123; </span><br><span class="line"> println(each.getString(<span class="number">0</span>))</span><br><span class="line"> <span class="comment">//插入数据库 </span></span><br><span class="line"> &#125;)</span><br><span class="line"> <span class="comment">//关闭数据库链接 </span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="15-distinct"><a href="#15-distinct" class="headerlink" title="15. distinct"></a>15. distinct</h2><p>针对dataset的行去重，返回的是所有行都不重复的dataset。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sales.distinct().show(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="16-dropDuplicates"><a href="#16-dropDuplicates" class="headerlink" title="16. dropDuplicates"></a>16. dropDuplicates</h2><p>这个适用于dataset有唯一的主键，然后对主键进行去重。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> before = sales.count()</span><br><span class="line"><span class="keyword">val</span> after = sales.dropDuplicates(<span class="string">"city"</span>).count()</span><br><span class="line">println(<span class="string">"before ====&gt; "</span> +before)</span><br><span class="line">println(<span class="string">"after ====&gt; "</span>+after)</span><br></pre></td></tr></table></figure></p>
+<h2 id="17-drop"><a href="#17-drop" class="headerlink" title="17. drop"></a>17. drop</h2><p>删除一列，或者多列，这是一个变参数算子。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sales.drop(<span class="string">"city"</span>).show()</span><br><span class="line">打印出来schema信息如下：</span><br><span class="line">root</span><br><span class="line">|-- year: integer (nullable = <span class="literal">false</span>)</span><br><span class="line">|-- amount: integer (nullable = <span class="literal">false</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="18-printSchema"><a href="#18-printSchema" class="headerlink" title="18.printSchema"></a>18.printSchema</h2><p>输出dataset的schema信息<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sales.printSchema()</span><br><span class="line"></span><br><span class="line">输出结果如下：</span><br><span class="line"></span><br><span class="line">root</span><br><span class="line"></span><br><span class="line">|-- city: string (nullable = <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">|-- year: integer (nullable = <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">|-- amount: integer (nullable = <span class="literal">false</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="17-explain"><a href="#17-explain" class="headerlink" title="17.explain()"></a>17.explain()</h2><p>打印执行计划，这个便于调试，了解spark sql引擎的优化执行的整个过程<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sales.orderBy(col(<span class="string">"year"</span>).desc,col(<span class="string">"amount"</span>).asc).explain()</span><br><span class="line">执行计划输出如下：</span><br><span class="line">== <span class="type">Physical</span> <span class="type">Plan</span> ==</span><br><span class="line">*(<span class="number">1</span>) <span class="type">Sort</span> [year#<span class="number">7</span> <span class="type">DESC</span> <span class="type">NULLS</span> <span class="type">LAST</span>, amount#<span class="number">8</span> <span class="type">ASC</span> <span class="type">NULLS</span> <span class="type">FIRST</span>], <span class="literal">true</span>, <span class="number">0</span></span><br><span class="line">+- <span class="type">Exchange</span> rangepartitioning(year#<span class="number">7</span> <span class="type">DESC</span> <span class="type">NULLS</span> <span class="type">LAST</span>, amount#<span class="number">8</span> <span class="type">ASC</span> <span class="type">NULLS</span> <span class="type">FIRST</span>, <span class="number">3</span>)</span><br><span class="line">+- <span class="type">LocalTableScan</span> [city#<span class="number">6</span>, year#<span class="number">7</span>, amount#<span class="number">8</span>]</span><br></pre></td></tr></table></figure></p>
+<h1 id="Spark-SQL入门到精通之第二篇Dataset的复杂操作"><a href="#Spark-SQL入门到精通之第二篇Dataset的复杂操作" class="headerlink" title="Spark SQL入门到精通之第二篇Dataset的复杂操作"></a>Spark SQL入门到精通之第二篇Dataset的复杂操作</h1><p>本文是Spark SQL入门到精通系列第二弹，数据仓库常用的操作：<br>cube，rollup，pivot操作。</p>
+<h2 id="1-cube"><a href="#1-cube" class="headerlink" title="1. cube"></a>1. cube</h2><p>简单的理解就是维度及度量组成的数据体。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sales.cube(<span class="string">"city"</span>,<span class="string">"year"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>)) </span><br><span class="line">.sort(col(<span class="string">"city"</span>).desc_nulls_first,col(<span class="string">"year"</span>).desc_nulls_first) </span><br><span class="line">.show()</span><br></pre></td></tr></table></figure></p>
+<p>举个简单的例子，上面的纬度city，year两个列是纬度，然后amount是要进行聚合的度量。<br>实际上就相当于，(year,city),(year),(city),() 分别分组然后对amount求sum，最终输出结果，代码如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> city_year = sales</span><br><span class="line">.groupBy(<span class="string">"city"</span>,<span class="string">"year"</span>).</span><br><span class="line">agg(sum(<span class="string">"amount"</span>))</span><br><span class="line"><span class="keyword">val</span> city = sales.groupBy(<span class="string">"city"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.select(col(<span class="string">"city"</span>), lit(<span class="literal">null</span>) as <span class="string">"year"</span>, col(<span class="string">"amount"</span>))</span><br><span class="line"><span class="keyword">val</span> year = sales.groupBy(<span class="string">"year"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.select( lit(<span class="literal">null</span>) as <span class="string">"city"</span>,col(<span class="string">"year"</span>), col(<span class="string">"amount"</span>))</span><br><span class="line"><span class="keyword">val</span> none = sales .groupBy()</span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.select(lit(<span class="literal">null</span>) as <span class="string">"city"</span>, lit(<span class="literal">null</span>) as <span class="string">"year"</span>, col(<span class="string">"amount"</span>)) </span><br><span class="line">city_year.union(city).union(year).union(none) </span><br><span class="line">.sort(desc_nulls_first(<span class="string">"city"</span>), desc_nulls_first(<span class="string">"year"</span>)) </span><br><span class="line">.show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-rollup"><a href="#2-rollup" class="headerlink" title="2. rollup"></a>2. rollup</h2><p>这里也是以案例开始，代码如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> expenses = spark.createDataFrame(<span class="type">Seq</span>( </span><br><span class="line">((<span class="number">2012</span>, <span class="type">Month</span>.<span class="type">DECEMBER</span>, <span class="number">12</span>), <span class="number">5</span>), </span><br><span class="line"> ((<span class="number">2016</span>, <span class="type">Month</span>.<span class="type">AUGUST</span>, <span class="number">13</span>), <span class="number">10</span>), </span><br><span class="line"> ((<span class="number">2017</span>, <span class="type">Month</span>.<span class="type">MAY</span>, <span class="number">27</span>), <span class="number">15</span>)) </span><br><span class="line">.map &#123; <span class="keyword">case</span> ((yy, mm, dd), a) =&gt; (<span class="type">LocalDate</span>.of(yy, mm, dd), a) &#125; </span><br><span class="line">.map &#123; <span class="keyword">case</span> (d, a) =&gt; (d.toString, a) &#125; </span><br><span class="line">.map &#123; <span class="keyword">case</span> (d, a) =&gt; (<span class="type">Date</span>.valueOf(d), a) &#125;).toDF(<span class="string">"date"</span>, <span class="string">"amount"</span>)</span><br><span class="line"><span class="comment">// rollup time!</span></span><br><span class="line"><span class="keyword">val</span> res = expenses </span><br><span class="line">.rollup(year(col(<span class="string">"date"</span>)) as <span class="string">"year"</span>, month(col(<span class="string">"date"</span>)) as <span class="string">"month"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.sort(col(<span class="string">"year"</span>).asc_nulls_last, col(<span class="string">"month"</span>).asc_nulls_last) </span><br><span class="line">.show()</span><br></pre></td></tr></table></figure></p>
+<p>这个等价于分别对(year,month),(year),()进行 groupby 对amount求sum，然后再进行union操作，也即是可以按照下面的实现：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> year_month = expenses</span><br><span class="line">.groupBy(year(col(<span class="string">"date"</span>)) as <span class="string">"year"</span>, month(col(<span class="string">"date"</span>)) as <span class="string">"month"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>)</span><br><span class="line"><span class="keyword">val</span> yearOnly = expenses.groupBy(year(col(<span class="string">"date"</span>)) as <span class="string">"year"</span>) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.select(col(<span class="string">"year"</span>), lit(<span class="literal">null</span>) as <span class="string">"month"</span>, col(<span class="string">"amount"</span>))</span><br><span class="line"><span class="keyword">val</span> none = expenses.groupBy() </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.select(lit(<span class="literal">null</span>) as <span class="string">"year"</span>, lit(<span class="literal">null</span>) as <span class="string">"month"</span>, col(<span class="string">"amount"</span>))</span><br><span class="line">year_month.union(yearOnly).union(none) </span><br><span class="line">.sort(col(<span class="string">"year"</span>).asc_nulls_last, col(<span class="string">"month"</span>).asc_nulls_last) </span><br><span class="line">.show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-pivot"><a href="#3-pivot" class="headerlink" title="3. pivot"></a>3. pivot</h2><p>旋转操作<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sales = spark.createDataFrame(<span class="type">Seq</span>( </span><br><span class="line"> (<span class="string">"Warsaw"</span>, <span class="number">2016</span>, <span class="number">100</span>,<span class="string">"Warsaw"</span>), </span><br><span class="line"> (<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">200</span>,<span class="string">"Warsaw"</span>), </span><br><span class="line"> (<span class="string">"Warsaw"</span>, <span class="number">2016</span>, <span class="number">100</span>,<span class="string">"Warsaw"</span>), </span><br><span class="line">(<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">200</span>,<span class="string">"Warsaw"</span>), </span><br><span class="line"> (<span class="string">"Boston"</span>, <span class="number">2015</span>, <span class="number">50</span>,<span class="string">"Boston"</span>), </span><br><span class="line">(<span class="string">"Boston"</span>, <span class="number">2016</span>, <span class="number">150</span>,<span class="string">"Boston"</span>), </span><br><span class="line">(<span class="string">"Toronto"</span>, <span class="number">2017</span>, <span class="number">50</span>,<span class="string">"Toronto"</span>)))</span><br><span class="line">.toDF(<span class="string">"city"</span>, <span class="string">"year"</span>, <span class="string">"amount"</span>,<span class="string">"test"</span>)</span><br><span class="line">sales.groupBy(<span class="string">"year"</span>)</span><br><span class="line">.pivot(<span class="string">"city"</span>,<span class="type">Seq</span>(<span class="string">"Warsaw"</span>,<span class="string">"Boston"</span>,<span class="string">"Toronto"</span>)) </span><br><span class="line">.agg(sum(<span class="string">"amount"</span>) as <span class="string">"amount"</span>) </span><br><span class="line">.show()</span><br></pre></td></tr></table></figure></p>
+<p>思路就是首先对year分组，然后旋转city字段，只取:<br>“Warsaw”,”Boston”,”Toronto”<br>然后对amount进行聚合操作   </p>
+<h1 id="源码-Spark-SQL-分区特性第一弹"><a href="#源码-Spark-SQL-分区特性第一弹" class="headerlink" title="源码:Spark SQL 分区特性第一弹"></a>源码:Spark SQL 分区特性第一弹</h1><h2 id="常见RDD分区"><a href="#常见RDD分区" class="headerlink" title="常见RDD分区"></a>常见RDD分区</h2><p>Spark Core 中的RDD的分区特性大家估计都很了解，这里说的分区特性是指从数据源读取数据的第一个RDD或者Dataset的分区，而后续再介绍转换过程中分区的变化。<br>举几个浪尖在星球里分享比较多的例子，比如：<br>Spark Streaming 与kafka 结合 DirectDstream 生成的微批RDD（kafkardd）分区数和kafka分区数一样。<br>Spark Streaming 与kafka结合 基于receiver的方式，生成的微批RDD（blockRDD），分区数就是block数。<br>普通的文件RDD，那么分可分割和不可分割，通常不可分割的分区数就是文件数。可分割需要计算而且是有条件的，在星球里分享过了。<br>这些都很简单，那么今天咱们要谈的是Spark DataSet的分区数的决定因素。  </p>
+<h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2><p>首先是由Seq数据集合生成一个Dataset<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sales = spark.createDataFrame(<span class="type">Seq</span>(</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2016</span>, <span class="number">110</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">10</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">100</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">50</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">80</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">100</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">130</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2015</span>, <span class="number">160</span>),</span><br><span class="line">     (<span class="string">"Warsaw"</span>, <span class="number">2017</span>, <span class="number">200</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2017</span>, <span class="number">100</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2016</span>, <span class="number">150</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2015</span>, <span class="number">50</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2015</span>, <span class="number">30</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2015</span>, <span class="number">10</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2014</span>, <span class="number">200</span>),</span><br><span class="line">     (<span class="string">"Beijing"</span>, <span class="number">2014</span>, <span class="number">170</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">50</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">70</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">110</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">150</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2017</span>, <span class="number">180</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2016</span>, <span class="number">30</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2015</span>, <span class="number">200</span>),</span><br><span class="line">     (<span class="string">"Boston"</span>, <span class="number">2014</span>, <span class="number">20</span>)</span><br><span class="line">   )).toDF(<span class="string">"city"</span>, <span class="string">"year"</span>, <span class="string">"amount"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>将Dataset存处为partquet格式的hive表，分两种情况：<br>用city和year字段分区<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sales.write.partitionBy(<span class="string">"city"</span>,<span class="string">"year"</span>).mode(<span class="type">SaveMode</span>.<span class="type">Overwrite</span>).saveAsTable(<span class="string">"ParquetTestCityAndYear"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>用city字段分区<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sales.write.partitionBy(<span class="string">"city"</span>).mode(<span class="type">SaveMode</span>.<span class="type">Overwrite</span>).saveAsTable(<span class="string">"ParquetTestCity"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>读取数据采用的是<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> res = spark.read.parquet(<span class="string">"/user/hive/warehouse/parquettestcity"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>直接展示，结果发现结果会随着spark.default.parallelism变化而变化。文章里只读取city字段分区的数据，特点就是只有单个分区字段。   </p>
+<h3 id="1-spark-default-parallelism-40"><a href="#1-spark-default-parallelism-40" class="headerlink" title="1. spark.default.parallelism =40"></a>1. spark.default.parallelism =40</h3><p>Dataset的分区数是由参数：<br>目录数和生成的FileScanRDD的分区数分别数下面截图的第一行和第二行<br>这个分区数目正好是文件数，那么假如不了解细节的话，肯定会认为分区数就是由文件数决定的，其实不然。   </p>
+<h3 id="2-spark-default-parallelism-4"><a href="#2-spark-default-parallelism-4" class="headerlink" title="2. spark.default.parallelism =4"></a>2. spark.default.parallelism =4</h3><p>Dataset的分区数是由参数：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">"partition size = "</span>+res.rdd.partitions.length)</span><br></pre></td></tr></table></figure></p>
+<p>目录数和生成的FileScanRDD的分区数分别数下面截图的第一行和第二行。<br><img src="images/dataset分区.jpg" alt=""><br>那么数据源生成的Dataset的分区数到底是如何决定的呢？<br>我们这种情况，我只能告诉你是由下面的函数在生成FileScanRDD的时候计算得到的，具体计算细节可以仔细阅读该函数。该函数是类FileSourceScanExec的方法。</p>
+<p>那么数据源生成的Dataset的分区数到底是如何决定的呢？<br>我们这种情况，我只能告诉你是由下面的函数在生成FileScanRDD的时候计算得到的，具体计算细节可以仔细阅读该函数。该函数是类FileSourceScanExec的方法。<br>那么数据源生成的Dataset的分区数到底是如何决定的呢？<br>我们这种情况，我只能告诉你是由下面的函数在生成FileScanRDD的时候计算得到的，具体计算细节可以仔细阅读该函数。该函数是类FileSourceScanExec的方法。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">createNonBucketedReadRDD</span></span>(</span><br><span class="line">                                       readFile: (<span class="type">PartitionedFile</span>) =&gt; <span class="type">Iterator</span>[<span class="type">InternalRow</span>],</span><br><span class="line">                                       selectedPartitions: <span class="type">Seq</span>[<span class="type">PartitionDirectory</span>],</span><br><span class="line">                                       fsRelation: <span class="type">HadoopFsRelation</span>): <span class="type">RDD</span>[<span class="type">InternalRow</span>] = &#123;</span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">     selectedPartitions 的大小代表目录数目</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   println(<span class="string">"selectedPartitions.size : "</span>+ selectedPartitions.size)</span><br><span class="line">   <span class="keyword">val</span> defaultMaxSplitBytes =</span><br><span class="line">     fsRelation.sparkSession.sessionState.conf.filesMaxPartitionBytes</span><br><span class="line">   <span class="keyword">val</span> openCostInBytes = fsRelation.sparkSession.sessionState.conf.filesOpenCostInBytes</span><br><span class="line"></span><br><span class="line">   <span class="comment">// spark.default.parallelism</span></span><br><span class="line">   <span class="keyword">val</span> defaultParallelism = fsRelation.sparkSession.sparkContext.defaultParallelism</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 计算文件总大小，单位字节数</span></span><br><span class="line">   <span class="keyword">val</span> totalBytes = selectedPartitions.flatMap(_.files.map(_.getLen + openCostInBytes)).sum</span><br><span class="line"></span><br><span class="line">   <span class="comment">//计算平均每个并行度读取数据大小</span></span><br><span class="line">   <span class="keyword">val</span> bytesPerCore = totalBytes / defaultParallelism</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 首先spark.sql.files.openCostInBytes 该参数配置的值和bytesPerCore 取最大值</span></span><br><span class="line">   <span class="comment">// 然后，比较spark.sql.files.maxPartitionBytes 取小者</span></span><br><span class="line">   <span class="keyword">val</span> maxSplitBytes = <span class="type">Math</span>.min(defaultMaxSplitBytes, <span class="type">Math</span>.max(openCostInBytes, bytesPerCore))</span><br><span class="line">   logInfo(<span class="string">s"Planning scan with bin packing, max size: <span class="subst">$maxSplitBytes</span> bytes, "</span> +</span><br><span class="line">     <span class="string">s"open cost is considered as scanning <span class="subst">$openCostInBytes</span> bytes."</span>)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 这对目录遍历</span></span><br><span class="line">   <span class="keyword">val</span> splitFiles = selectedPartitions.flatMap &#123; partition =&gt;</span><br><span class="line">     partition.files.flatMap &#123; file =&gt;</span><br><span class="line">       <span class="keyword">val</span> blockLocations = getBlockLocations(file)</span><br><span class="line"></span><br><span class="line">       <span class="comment">//判断文件类型是否支持分割，以parquet为例，是支持分割的</span></span><br><span class="line">       <span class="keyword">if</span> (fsRelation.fileFormat.isSplitable(</span><br><span class="line">         fsRelation.sparkSession, fsRelation.options, file.getPath)) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// eg. 0 until 2不包括 2。相当于</span></span><br><span class="line">    <span class="comment">// println(0 until(10) by 3) 输出 Range(0, 3, 6, 9)</span></span><br><span class="line">         (<span class="number">0</span>L until file.getLen by maxSplitBytes).map &#123; offset =&gt;</span><br><span class="line"></span><br><span class="line">           <span class="comment">// 计算文件剩余的量</span></span><br><span class="line">           <span class="keyword">val</span> remaining = file.getLen - offset</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 假如剩余量不足 maxSplitBytes 那么就剩余的作为一个分区</span></span><br><span class="line">           <span class="keyword">val</span> size = <span class="keyword">if</span> (remaining &gt; maxSplitBytes) maxSplitBytes <span class="keyword">else</span> remaining</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 位置信息</span></span><br><span class="line">           <span class="keyword">val</span> hosts = getBlockHosts(blockLocations, offset, size)</span><br><span class="line">           <span class="type">PartitionedFile</span>(</span><br><span class="line">             partition.values, file.getPath.toUri.toString, offset, size, hosts)</span><br><span class="line">         &#125;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     <span class="comment">// 不可分割的话，那即是一个文件一个分区</span></span><br><span class="line">         <span class="keyword">val</span> hosts = getBlockHosts(blockLocations, <span class="number">0</span>, file.getLen)</span><br><span class="line">         <span class="type">Seq</span>(<span class="type">PartitionedFile</span>(</span><br><span class="line">           partition.values, file.getPath.toUri.toString, <span class="number">0</span>, file.getLen, hosts))</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;.toArray.sortBy(_.length)(implicitly[<span class="type">Ordering</span>[<span class="type">Long</span>]].reverse)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">val</span> partitions = <span class="keyword">new</span> <span class="type">ArrayBuffer</span>[<span class="type">FilePartition</span>]</span><br><span class="line">   <span class="keyword">val</span> currentFiles = <span class="keyword">new</span> <span class="type">ArrayBuffer</span>[<span class="type">PartitionedFile</span>]</span><br><span class="line">   <span class="keyword">var</span> currentSize = <span class="number">0</span>L</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Close the current partition and move to the next. */</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">closePartition</span></span>(): <span class="type">Unit</span> = &#123;</span><br><span class="line">     <span class="keyword">if</span> (currentFiles.nonEmpty) &#123;</span><br><span class="line">       <span class="keyword">val</span> newPartition =</span><br><span class="line">         <span class="type">FilePartition</span>(</span><br><span class="line">           partitions.size,</span><br><span class="line">           currentFiles.toArray.toSeq) <span class="comment">// Copy to a new Array.</span></span><br><span class="line">       partitions += newPartition</span><br><span class="line">     &#125;</span><br><span class="line">     currentFiles.clear()</span><br><span class="line">     currentSize = <span class="number">0</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Assign files to partitions using "Next Fit Decreasing"</span></span><br><span class="line">   splitFiles.foreach &#123; file =&gt;</span><br><span class="line">     <span class="keyword">if</span> (currentSize + file.length &gt; maxSplitBytes) &#123;</span><br><span class="line">       closePartition()</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="comment">// Add the given file to the current partition.</span></span><br><span class="line">     currentSize += file.length + openCostInBytes</span><br><span class="line">     currentFiles += file</span><br><span class="line">   &#125;</span><br><span class="line">   closePartition()</span><br><span class="line"></span><br><span class="line">   println(<span class="string">"FileScanRDD partitions size : "</span>+partitions.size)</span><br><span class="line">   <span class="keyword">new</span> <span class="type">FileScanRDD</span>(fsRelation.sparkSession, readFile, partitions)</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="找到一列中的中位数"><a href="#找到一列中的中位数" class="headerlink" title="找到一列中的中位数"></a>找到一列中的中位数</h1><p><a href="https://spark.apache.org/docs/latest/api/sql/index.html" target="_blank" rel="noopener">https://spark.apache.org/docs/latest/api/sql/index.html</a><br>df函数： approxQuantile<br>sql函数： percentile_approx  </p>
+<h1 id="自定义数据源"><a href="#自定义数据源" class="headerlink" title="自定义数据源"></a>自定义数据源</h1><p>ServiceLoader<br><a href="https://mp.weixin.qq.com/s/QpYvqJpw7TnFAY8rD6Jf3w" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/QpYvqJpw7TnFAY8rD6Jf3w</a><br>ServiceLoader是SPI的是一种实现，所谓SPI，即Service Provider Interface，用于一些服务提供给第三方实现或者扩展，可以增强框架的扩展或者替换一些组件。<br>要配置在相关项目的固定目录下：<br>resources/META-INF/services/接口全称。<br>这个在大数据的应用中颇为广泛，比如Spark2.3.1 的集群管理器插入：<br>SparkContext类<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">getClusterManager</span></span>(url: <span class="type">String</span>): <span class="type">Option</span>[<span class="type">ExternalClusterManager</span>] = &#123;</span><br><span class="line">    <span class="keyword">val</span> loader = <span class="type">Utils</span>.getContextOrSparkClassLoader</span><br><span class="line">    <span class="keyword">val</span> serviceLoaders =</span><br><span class="line">      <span class="type">ServiceLoader</span>.load(classOf[<span class="type">ExternalClusterManager</span>], loader).asScala.filter(_.canCreate(url))</span><br><span class="line">    <span class="keyword">if</span> (serviceLoaders.size &gt; <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">SparkException</span>(</span><br><span class="line">        <span class="string">s"Multiple external cluster managers registered for the url <span class="subst">$url</span>: <span class="subst">$serviceLoaders</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    serviceLoaders.headOption</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>配置是在<br><img src="images/ExternalClusterManager.png" alt=""><br>spark sql数据源的接入，新增数据源插入的时候可以采用这种方式，要实现的接口是DataSourceRegister。<br>简单测试<br>首先实现一个接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.services;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DoSomething</span> </span>&#123;</span><br><span class="line">   <span class="comment">//可以制定实现类名加载</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">shortName</span><span class="params">()</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomeThing</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后将接口配置在resources/META-INF/services/<br>bigdata.spark.services.DoSomething文件<br>内容：<br>实现该接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.services;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SayHello</span> <span class="keyword">implements</span> <span class="title">DoSomething</span> </span>&#123;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">shortName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"SayHello"</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomeThing</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       System.out.println(<span class="string">"hello !!!"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>测试</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.services;</span><br><span class="line"><span class="keyword">import</span> java.util.ServiceLoader;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">   <span class="keyword">static</span> ServiceLoader&lt;DoSomething&gt; loader = ServiceLoader.load(DoSomething.class);</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">       <span class="keyword">for</span>(DoSomething sayhello : loader)&#123;</span><br><span class="line">        <span class="comment">//要加载的类名称我们可以制定</span></span><br><span class="line">           <span class="keyword">if</span>(sayhello.shortName().equalsIgnoreCase(<span class="string">"SayHello"</span>))&#123;</span><br><span class="line">               sayhello.doSomeThing();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个主要是为讲自定义数据源作准备。    </p>
+<p><a href="https://articles.zsxq.com/id_702s32f46zet.html" target="_blank" rel="noopener">https://articles.zsxq.com/id_702s32f46zet.html</a><br>首先要搞明白spark是如何支持多数据源的，昨天说了是通过serverloader加载的。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Given a provider name, look up the data source class definition. */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">lookupDataSource</span></span>(provider: <span class="type">String</span>): <span class="type">Class</span>[_] = &#123;</span><br><span class="line">    <span class="keyword">val</span> provider1 = backwardCompatibilityMap.getOrElse(provider, provider)</span><br><span class="line">    <span class="comment">// 指定路径加载，默认加载类名是DefaultSource</span></span><br><span class="line">    <span class="keyword">val</span> provider2 = <span class="string">s"<span class="subst">$provider1</span>.DefaultSource"</span></span><br><span class="line">    <span class="keyword">val</span> loader = <span class="type">Utils</span>.getContextOrSparkClassLoader</span><br><span class="line">    <span class="comment">// ServiceLoader加载</span></span><br><span class="line">    <span class="keyword">val</span> serviceLoader = <span class="type">ServiceLoader</span>.load(classOf[<span class="type">DataSourceRegister</span>], loader)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      serviceLoader.asScala.filter(_.shortName().equalsIgnoreCase(provider1)).toList <span class="keyword">match</span> &#123;</span><br><span class="line">        <span class="comment">// the provider format did not match any given registered aliases</span></span><br><span class="line">        <span class="keyword">case</span> <span class="type">Nil</span> =&gt;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Try</span>(loader.loadClass(provider1)).orElse(<span class="type">Try</span>(loader.loadClass(provider2))) <span class="keyword">match</span> &#123;</span><br><span class="line">              <span class="keyword">case</span> <span class="type">Success</span>(dataSource) =&gt;</span><br><span class="line">                <span class="comment">// Found the data source using fully qualified path</span></span><br><span class="line">                dataSource</span><br><span class="line">              <span class="keyword">case</span> <span class="type">Failure</span>(error) =&gt;</span><br><span class="line">                <span class="keyword">if</span> (provider1.toLowerCase == <span class="string">"orc"</span> ||</span><br><span class="line">                  provider1.startsWith(<span class="string">"org.apache.spark.sql.hive.orc"</span>)) &#123;</span><br><span class="line">                  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">AnalysisException</span>(</span><br><span class="line">                    <span class="string">"The ORC data source must be used with Hive support enabled"</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (provider1.toLowerCase == <span class="string">"avro"</span> ||</span><br><span class="line">                  provider1 == <span class="string">"com.databricks.spark.avro"</span>) &#123;</span><br><span class="line">                  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">AnalysisException</span>(</span><br><span class="line">                    <span class="string">s"Failed to find data source: <span class="subst">$&#123;provider1.toLowerCase&#125;</span>. Please find an Avro "</span> +</span><br><span class="line">                      <span class="string">"package at http://spark.apache.org/third-party-projects.html"</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ClassNotFoundException</span>(</span><br><span class="line">                    <span class="string">s"Failed to find data source: <span class="subst">$provider1</span>. Please find packages at "</span> +</span><br><span class="line">                      <span class="string">"http://spark.apache.org/third-party-projects.html"</span>,</span><br><span class="line">                    error)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> e: <span class="type">NoClassDefFoundError</span> =&gt; <span class="comment">// This one won't be caught by Scala NonFatal</span></span><br><span class="line">              <span class="comment">// NoClassDefFoundError's class name uses "/" rather than "." for packages</span></span><br><span class="line">              <span class="keyword">val</span> className = e.getMessage.replaceAll(<span class="string">"/"</span>, <span class="string">"."</span>)</span><br><span class="line">              <span class="keyword">if</span> (spark2RemovedClasses.contains(className)) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ClassNotFoundException</span>(<span class="string">s"<span class="subst">$className</span> was removed in Spark 2.0. "</span> +</span><br><span class="line">                  <span class="string">"Please check if your library is compatible with Spark 2.0"</span>, e)</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> e</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="keyword">case</span> head :: <span class="type">Nil</span> =&gt;</span><br><span class="line">          <span class="comment">// there is exactly one registered alias</span></span><br><span class="line">          head.getClass</span><br><span class="line">        <span class="keyword">case</span> sources =&gt;</span><br><span class="line">          <span class="comment">// There are multiple registered aliases for the input</span></span><br><span class="line">          sys.error(<span class="string">s"Multiple sources found for <span class="subst">$provider1</span> "</span> +</span><br><span class="line">            <span class="string">s"(<span class="subst">$&#123;sources.map(_.getClass.getName).mkString(", ")&#125;</span>), "</span> +</span><br><span class="line">            <span class="string">"please specify the fully qualified class name."</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> e: <span class="type">ServiceConfigurationError</span> <span class="keyword">if</span> e.getCause.isInstanceOf[<span class="type">NoClassDefFoundError</span>] =&gt;</span><br><span class="line">        <span class="comment">// NoClassDefFoundError's class name uses "/" rather than "." for packages</span></span><br><span class="line">        <span class="keyword">val</span> className = e.getCause.getMessage.replaceAll(<span class="string">"/"</span>, <span class="string">"."</span>)</span><br><span class="line">        <span class="keyword">if</span> (spark2RemovedClasses.contains(className)) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ClassNotFoundException</span>(<span class="string">s"Detected an incompatible DataSourceRegister. "</span> +</span><br><span class="line">            <span class="string">"Please remove the incompatible library from classpath or upgrade it. "</span> +</span><br><span class="line">            <span class="string">s"Error: <span class="subst">$&#123;e.getMessage&#125;</span>"</span>, e)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">throw</span> e</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>其实，从这个点，你可以思考一下，自己能学到多少东西：类加载，可扩展的编程思路。</p>
+<p>主要思路是：</p>
+<ol>
+<li><p>实现DefaultSource。</p>
+</li>
+<li><p>实现工厂类。</p>
+</li>
+<li><p>实现具体的数据加载类。</p>
+</li>
+</ol>
+<p>首先，主要是有三个实现吧，需要反射加载的类DefaultSource，这个名字很固定的：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.<span class="type">SparkSQL</span>.<span class="type">DataSources</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.sources.v2.&#123;<span class="type">DataSourceOptions</span>, <span class="type">DataSourceV2</span>, <span class="type">ReadSupport</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DefaultSource</span>  <span class="keyword">extends</span> <span class="title">DataSourceV2</span> <span class="keyword">with</span> <span class="title">ReadSupport</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createReader</span></span>(options: <span class="type">DataSourceOptions</span>) = <span class="keyword">new</span> <span class="type">SimpleDataSourceReader</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后是，要实现DataSourceReader，负责创建阅读器工厂：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.<span class="type">SparkSQL</span>.<span class="type">DataSources</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">Row</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.sources.v2.reader.&#123;<span class="type">DataReaderFactory</span>, <span class="type">DataSourceReader</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.&#123;<span class="type">StringType</span>, <span class="type">StructField</span>, <span class="type">StructType</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleDataSourceReader</span> <span class="keyword">extends</span> <span class="title">DataSourceReader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">readSchema</span></span>() = <span class="type">StructType</span>(<span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"value"</span>, <span class="type">StringType</span>)))</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createDataReaderFactories</span> </span>= &#123;</span><br><span class="line">    <span class="keyword">val</span> factoryList = <span class="keyword">new</span> java.util.<span class="type">ArrayList</span>[<span class="type">DataReaderFactory</span>[<span class="type">Row</span>]]</span><br><span class="line">    factoryList.add(<span class="keyword">new</span> <span class="type">SimpleDataSourceReaderFactory</span>())</span><br><span class="line">    factoryList</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>数据源的具体实现类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.<span class="type">SparkSQL</span>.<span class="type">DataSources</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">Row</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.sources.v2.reader.&#123;<span class="type">DataReader</span>, <span class="type">DataReaderFactory</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleDataSourceReaderFactory</span> <span class="keyword">extends</span></span></span><br><span class="line"><span class="class">  <span class="title">DataReaderFactory</span>[<span class="type">Row</span>] <span class="keyword">with</span> <span class="title">DataReader</span>[<span class="type">Row</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createDataReader</span> </span>= <span class="keyword">new</span> <span class="type">SimpleDataSourceReaderFactory</span>()</span><br><span class="line">  <span class="keyword">val</span> values = <span class="type">Array</span>(<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">next</span> </span>= index &lt; values.length</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span> </span>= &#123;</span><br><span class="line">    <span class="keyword">val</span> row = <span class="type">Row</span>(values(index))</span><br><span class="line">    index = index + <span class="number">1</span></span><br><span class="line">    row</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">close</span></span>() = <span class="type">Unit</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用我们默认的数据源：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bigdata.spark.<span class="type">SparkSQL</span>.<span class="type">DataSources</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.<span class="type">SparkConf</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.<span class="type">SparkSession</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">App</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> sparkConf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(<span class="keyword">this</span>.getClass.getName).setMaster(<span class="string">"local[*]"</span>)</span><br><span class="line">      .set(<span class="string">"yarn.resourcemanager.hostname"</span>, <span class="string">"mt-mdh.local"</span>)</span><br><span class="line">      .set(<span class="string">"spark.executor.instances"</span>,<span class="string">"2"</span>)</span><br><span class="line">      .setJars(<span class="type">List</span>(<span class="string">"/opt/sparkjar/bigdata.jar"</span></span><br><span class="line">        ,<span class="string">"/opt/jars/spark-streaming-kafka-0-10_2.11-2.3.1.jar"</span></span><br><span class="line">        ,<span class="string">"/opt/jars/kafka-clients-0.10.2.2.jar"</span></span><br><span class="line">        ,<span class="string">"/opt/jars/kafka_2.11-0.10.2.2.jar"</span>))</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></span><br><span class="line">      .builder()</span><br><span class="line">      .config(sparkConf)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> simpleDf = spark.read</span><br><span class="line">      .format(<span class="string">"bigdata.spark.SparkSQL.DataSources"</span>)</span><br><span class="line">      .load()</span><br><span class="line"></span><br><span class="line">    simpleDf.show()</span><br><span class="line">    spark.stop()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>format里面指定的是包路径，然后加载的时候会加上默认类名：DefaultSource。</p>
+
+      
+    </div>
+    
+    
+    
+     <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2019/01/04/sparksql详解/">sparksql详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
+  <p><span>发布时间:</span>2019年01月04日 - 19:01</p>
+  <p><span>最后更新:</span>2019年01月04日 - 20:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/04/sparksql详解/" title="sparksql详解">https://tgluon.github.io/2019/01/04/sparksql详解/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/01/04/sparksql详解/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+
+      
+     </div>
+     <div>
+     
+     <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spark/" rel="tag"><i class="fa fa-tag"></i> spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/27/注解详解/" rel="next" title="java自定义注解">
+                <i class="fa fa-chevron-left"></i> java自定义注解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="tang" />
+            
+              <p class="site-author-name" itemprop="name">tang</p>
+              <p class="site-description motion-element" itemprop="description">火星度假村追梦程序员。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tgluon" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-SQL的Dataset基本操作"><span class="nav-number">1.</span> <span class="nav-text">Spark SQL的Dataset基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基本简介和准备工作"><span class="nav-number">1.1.</span> <span class="nav-text">1. 基本简介和准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-select"><span class="nav-number">1.2.</span> <span class="nav-text">2.select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-selectExpr"><span class="nav-number">1.3.</span> <span class="nav-text">3. selectExpr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-filter"><span class="nav-number">1.4.</span> <span class="nav-text">4. filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-where"><span class="nav-number">1.5.</span> <span class="nav-text">5. where</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-group-by"><span class="nav-number">1.6.</span> <span class="nav-text">6. group by</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-union"><span class="nav-number">1.7.</span> <span class="nav-text">7.union</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-order-by"><span class="nav-number">1.8.</span> <span class="nav-text">9. order by</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-sort"><span class="nav-number">1.9.</span> <span class="nav-text">10.sort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-sortwithinpartition"><span class="nav-number">1.10.</span> <span class="nav-text">11.sortwithinpartition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-withColumn"><span class="nav-number">1.11.</span> <span class="nav-text">12. withColumn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-foreach"><span class="nav-number">1.12.</span> <span class="nav-text">13. foreach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-foreachPartition"><span class="nav-number">1.13.</span> <span class="nav-text">14. foreachPartition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-distinct"><span class="nav-number">1.14.</span> <span class="nav-text">15. distinct</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-dropDuplicates"><span class="nav-number">1.15.</span> <span class="nav-text">16. dropDuplicates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-drop"><span class="nav-number">1.16.</span> <span class="nav-text">17. drop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-printSchema"><span class="nav-number">1.17.</span> <span class="nav-text">18.printSchema</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-explain"><span class="nav-number">1.18.</span> <span class="nav-text">17.explain()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-SQL入门到精通之第二篇Dataset的复杂操作"><span class="nav-number">2.</span> <span class="nav-text">Spark SQL入门到精通之第二篇Dataset的复杂操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-cube"><span class="nav-number">2.1.</span> <span class="nav-text">1. cube</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-rollup"><span class="nav-number">2.2.</span> <span class="nav-text">2. rollup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-pivot"><span class="nav-number">2.3.</span> <span class="nav-text">3. pivot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码-Spark-SQL-分区特性第一弹"><span class="nav-number">3.</span> <span class="nav-text">源码:Spark SQL 分区特性第一弹</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见RDD分区"><span class="nav-number">3.1.</span> <span class="nav-text">常见RDD分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备数据"><span class="nav-number">3.2.</span> <span class="nav-text">准备数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-spark-default-parallelism-40"><span class="nav-number">3.2.1.</span> <span class="nav-text">1. spark.default.parallelism =40</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-spark-default-parallelism-4"><span class="nav-number">3.2.2.</span> <span class="nav-text">2. spark.default.parallelism =4</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#找到一列中的中位数"><span class="nav-number">4.</span> <span class="nav-text">找到一列中的中位数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义数据源"><span class="nav-number">5.</span> <span class="nav-text">自定义数据源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tang</span>
+
+  
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+<span id="busuanzi_container_site_pv">
+    本站总访问量:<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+  
+<!--<div class="powered-by">{
+  }由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动{}</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">{
+  }主题 &mdash; {
+  }<a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">{
+    }NexT.Pisces{
+  }</a> v5.1.4{
+}</div>
+-->
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共7.4k字</span>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+  
+  <script type="text/javascript"
+color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://tgluon.github.io/2019/01/04/sparksql详解/';
+          this.page.identifier = '2019/01/04/sparksql详解/';
+          this.page.title = 'sparksql详解';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
