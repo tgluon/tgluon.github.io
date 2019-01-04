@@ -10,6 +10,16 @@
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script>
+    (function(){
+        if('jeffdean$limu'){
+            if (prompt('请输入文章密码') !== 'jeffdean$limu'){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
 <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
 <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
 <style>
@@ -113,7 +123,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/dataset分区.jpg">
 <meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/ExternalClusterManager.png">
-<meta property="og:updated_time" content="2019-01-04T12:05:59.000Z">
+<meta property="og:updated_time" content="2019-01-04T12:10:18.789Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sparksql详解">
 <meta name="twitter:description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
