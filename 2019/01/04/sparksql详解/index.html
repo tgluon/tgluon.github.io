@@ -113,20 +113,20 @@
 
 
 
-<meta name="description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta name="description" content="Spark SQL的Dataset基本操作说明：文章来自https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引">
 <meta name="keywords" content="spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sparksql详解">
 <meta property="og:url" content="https://tgluon.github.io/2019/01/04/sparksql详解/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta property="og:description" content="Spark SQL的Dataset基本操作说明：文章来自https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/dataset分区.jpg">
 <meta property="og:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/ExternalClusterManager.png">
-<meta property="og:updated_time" content="2019-01-04T12:10:18.789Z">
+<meta property="og:updated_time" content="2019-01-07T15:22:39.037Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sparksql详解">
-<meta name="twitter:description" content="Spark SQL的Dataset基本操作https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Da">
+<meta name="twitter:description" content="Spark SQL的Dataset基本操作说明：文章来自https://www.toutiao.com/i6631318012546793992/版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解    1. 基本简介和准备工作Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引">
 <meta name="twitter:image" content="https://tgluon.github.io/2019/01/04/sparksql详解/images/dataset分区.jpg">
 
 
@@ -460,7 +460,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,832
+                  4,838
                 </span>
               
 
@@ -497,7 +497,7 @@
       
 
       
-        <h1 id="Spark-SQL的Dataset基本操作"><a href="#Spark-SQL的Dataset基本操作" class="headerlink" title="Spark SQL的Dataset基本操作"></a>Spark SQL的Dataset基本操作</h1><p><a href="https://www.toutiao.com/i6631318012546793992/" target="_blank" rel="noopener">https://www.toutiao.com/i6631318012546793992/</a><br>版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解   </p>
+        <h1 id="Spark-SQL的Dataset基本操作"><a href="#Spark-SQL的Dataset基本操作" class="headerlink" title="Spark SQL的Dataset基本操作"></a>Spark SQL的Dataset基本操作</h1><p>说明：<br>文章来自<a href="https://www.toutiao.com/i6631318012546793992/" target="_blank" rel="noopener">https://www.toutiao.com/i6631318012546793992/</a><br>版本：Spark 2.3.1，hadoop-2.7.4，jdk1.8为例讲解   </p>
 <h2 id="1-基本简介和准备工作"><a href="#1-基本简介和准备工作" class="headerlink" title="1. 基本简介和准备工作"></a>1. 基本简介和准备工作</h2><p>Dataset接口是在spark 1.6引入的，受益于RDD(强类型，可以使用强大的lambda函数)，同时也可以享受Spark SQL优化执行引擎的优点。Dataset的可以从jvm 对象创建，然后就可以使用转换函数(map，flatmap，filter等)。</p>
 <p>1.6版本之前常用的Dataframe是一种特殊的Dataset，也即是<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="title">DataFrame</span> </span>= <span class="type">Dataset</span>[<span class="type">Row</span>]</span><br></pre></td></tr></table></figure></p>
 <p>结构化数据文件(json,csv,orc等)，hive表，外部数据库，已有RDD。<br>下面进行测试，大家可能都会说缺少数据，实际上Spark源码里跟我们提供了丰富的测试数据。源码的examples路径下：examples/src/main/resources。</p>
@@ -582,7 +582,7 @@
   <p><span>本文标题:</span><a href="/2019/01/04/sparksql详解/">sparksql详解</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
   <p><span>发布时间:</span>2019年01月04日 - 19:01</p>
-  <p><span>最后更新:</span>2019年01月04日 - 20:01</p>
+  <p><span>最后更新:</span>2019年01月07日 - 23:01</p>
   <p><span>原始链接:</span><a href="/2019/01/04/sparksql详解/" title="sparksql详解">https://tgluon.github.io/2019/01/04/sparksql详解/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/01/04/sparksql详解/"  aria-label="复制成功！"></i></span>
   </p>
@@ -650,6 +650,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/04/scala特殊符号使用/" rel="prev" title="scala特殊符号使用">
+                scala特殊符号使用 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -768,7 +772,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -779,7 +783,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -790,7 +794,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -901,7 +905,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共7.4k字</span>
+  <span class="post-count">博客全站共8.7k字</span>
 </div>
 
 

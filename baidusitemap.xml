@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://tgluon.github.io/2019/01/04/sparksql%E8%AF%A6%E8%A7%A3/</loc>
-    <lastmod>2019-01-04T12:10:18.789Z</lastmod>
+    <lastmod>2019-01-07T15:22:39.037Z</lastmod>
     <data>
         <display>
         <title>sparksql详解</title>
@@ -17,6 +17,46 @@
            
              
               <breadCrumb title="sparksql" url="https://tgluon.github.io/categories/sparksql/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-01-04T12:44:32.049Z</lastmod>
+    <data>
+        <display>
+        <title>scala特殊符号使用</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%B1%BB%E7%B1%BB%E5%90%8D/</loc>
+    <lastmod>2019-01-04T12:38:21.814Z</lastmod>
+    <data>
+        <display>
+        <title>scala通过反射获取当前类类名</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
           
         </display>
     </data>
