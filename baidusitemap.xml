@@ -3,6 +3,27 @@
 
 
     
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/</loc>
+    <lastmod>2019-01-09T05:25:45.791Z</lastmod>
+    <data>
+        <display>
+        <title>scala自定注解</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
   <url>
     <loc>https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2019-01-09T03:40:26.019Z</lastmod>
@@ -69,26 +90,6 @@
     <data>
         <display>
         <title>scala通过反射获取当前类类名</title>
-        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/</loc>
-    <lastmod>2019-01-04T12:28:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>scala自定注解</title>
         <pubTime>2019-01-04T11:53:18.000Z</pubTime>
         
         <tag>scala</tag>
@@ -282,7 +283,6 @@
     </data>
     </url>
 
-    
     
     
     
