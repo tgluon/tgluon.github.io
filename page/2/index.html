@@ -360,7 +360,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/ORCFILE格式存储到hive表/">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tang">
@@ -379,7 +379,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/28/ORCFILE格式存储到hive表/" itemprop="url">ORCFILE格式存储到hive表</a></h1>
+                <a class="post-title-link" href="/2018/07/28/RCFILE格式存储到hive表/" itemprop="url">RCFILE格式存储到hive表</a></h1>
         
 
         <div class="post-meta">
@@ -432,9 +432,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/28/ORCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/28/RCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/28/ORCFILE格式存储到hive表/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/28/RCFILE格式存储到hive表/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -458,7 +458,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  201
+                  275
                 </span>
               
 
@@ -497,10 +497,11 @@
       
         
           
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。<br>ORCFILE格式的输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.orc</span><br></pre></td></tr></table></figure></p>
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，<strong>被用于在一个时间点操作多行的场景</strong>。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。<br>RCFILE格式的输入输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.RCFileInputFormat</span><br><span class="line">org.apache.hadoop.hive.ql.io.RCFileOutputFormat</span><br></pre></td></tr></table></figure></p>
 <p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立ORCFILE格式表"><a href="#建立ORCFILE格式表" class="headerlink" title="建立ORCFILE格式表"></a>建立ORCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_orcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> orcfile;</span><br></pre></td></tr></table></figure>
-<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_orcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立RCFILE格式表"><a href="#建立RCFILE格式表" class="headerlink" title="建立RCFILE格式表"></a>建立RCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_rcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> rcfile;</span><br></pre></td></tr></table></figure>
+<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_rcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_rcfile</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1517,7 +1518,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共15.1k字</span>
+  <span class="post-count">博客全站共20.8k字</span>
 </div>
 
 
