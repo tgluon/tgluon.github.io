@@ -68,31 +68,6 @@
   </entry>
   
   <entry>
-    <title>scala特殊符号使用</title>
-    <link href="https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/"/>
-    <id>https://tgluon.github.io/2019/01/04/scala特殊符号使用/</id>
-    <published>2019-01-04T11:53:18.000Z</published>
-    <updated>2019-01-09T03:40:26.019Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="符号"><a href="#符号" class="headerlink" title="_*符号"></a>_*符号</h1><p>作用：它告诉编译器将序列类型的单个参数视为可变参数序列。<br>举例：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">ProcessBuilder</span>(<span class="type">String</span>... command) &#123;</span><br><span class="line">       <span class="keyword">this</span>.command = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(command.length);</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">String</span> arg : command)</span><br><span class="line">           <span class="keyword">this</span>.command.add(arg);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> commandSeq = <span class="type">Seq</span>(command.mainClass) ++ command.arguments</span><br><span class="line"><span class="keyword">val</span> builder = <span class="keyword">new</span> <span class="type">ProcessBuilder</span>(commandSeq: _*)</span><br></pre></td></tr></table></figure><h1 id=""><a href="#" class="headerlink" title="::"></a>::</h1><p>该方法被称为cons，意为构造，向队列的头部追加数据，创造新的列表。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    args.toList <span class="keyword">match</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> workerUrl :: userJar :: mainClass :: extraArgs =&gt;</span><br><span class="line">        <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">        <span class="keyword">val</span> rpcEnv = <span class="type">RpcEnv</span>.create(<span class="string">"Driver"</span>,</span><br><span class="line">          <span class="type">Utils</span>.localHostName(), <span class="number">0</span>, conf, <span class="keyword">new</span> <span class="type">SecurityManager</span>(conf))</span><br><span class="line">        rpcEnv.setupEndpoint(<span class="string">"workerWatcher"</span>, <span class="keyword">new</span> <span class="type">WorkerWatcher</span>(rpcEnv, workerUrl))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> currentLoader = <span class="type">Thread</span>.currentThread.getContextClassLoader</span><br><span class="line">        <span class="keyword">val</span> userJarUrl = <span class="keyword">new</span> <span class="type">File</span>(userJar).toURI().toURL()</span><br><span class="line">        <span class="keyword">val</span> loader =</span><br><span class="line">          <span class="keyword">if</span> (sys.props.getOrElse(<span class="string">"spark.driver.userClassPathFirst"</span>, <span class="string">"false"</span>).toBoolean) &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">ChildFirstURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">MutableURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="type">Thread</span>.currentThread.setContextClassLoader(loader)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Delegate to supplied main class</span></span><br><span class="line">        <span class="keyword">val</span> clazz = <span class="type">Utils</span>.classForName(mainClass)</span><br><span class="line">        <span class="keyword">val</span> mainMethod = clazz.getMethod(<span class="string">"main"</span>, classOf[<span class="type">Array</span>[<span class="type">String</span>]])</span><br><span class="line">        mainMethod.invoke(<span class="literal">null</span>, extraArgs.toArray[<span class="type">String</span>])</span><br><span class="line"></span><br><span class="line">        rpcEnv.shutdown()</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> _ =&gt;</span><br><span class="line">        <span class="comment">// scalastyle:off println</span></span><br><span class="line">        <span class="type">System</span>.err.println(<span class="string">"Usage: DriverWrapper &lt;workerUrl&gt; &lt;userJar&gt; &lt;driverMainClass&gt; [options]"</span>)</span><br><span class="line">        <span class="comment">// scalastyle:on println</span></span><br><span class="line">        <span class="type">System</span>.exit(<span class="number">-1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;符号&quot;&gt;&lt;a href=&quot;#符号&quot; class=&quot;headerlink&quot; title=&quot;_*符号&quot;&gt;&lt;/a&gt;_*符号&lt;/h1&gt;&lt;p&gt;作用：它告诉编译器将序列类型的单个参数视为可变参数序列。&lt;br&gt;举例：&lt;br&gt;&lt;figure class=&quot;highlight sc
-      
-    
-    </summary>
-    
-      <category term="scala" scheme="https://tgluon.github.io/categories/scala/"/>
-    
-    
-      <category term="scala" scheme="https://tgluon.github.io/tags/scala/"/>
-    
-  </entry>
-  
-  <entry>
     <title>scala自定注解</title>
     <link href="https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/"/>
     <id>https://tgluon.github.io/2019/01/04/scala自定义注解/</id>
@@ -106,6 +81,31 @@
       
       
         &lt;h1 id=&quot;为什么要注解&quot;&gt;&lt;a href=&quot;#为什么要注解&quot; class=&quot;headerlink&quot; title=&quot;为什么要注解&quot;&gt;&lt;/a&gt;为什么要注解&lt;/h1&gt;&lt;p&gt;除了编译和允许之外，还可以对程序做：&lt;br&gt;1、使用Scaladoc 自动产生文档;&lt;br&gt;2、漂亮的打印印
+      
+    
+    </summary>
+    
+      <category term="scala" scheme="https://tgluon.github.io/categories/scala/"/>
+    
+    
+      <category term="scala" scheme="https://tgluon.github.io/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>scala特殊符号使用</title>
+    <link href="https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/"/>
+    <id>https://tgluon.github.io/2019/01/04/scala特殊符号使用/</id>
+    <published>2019-01-04T11:53:18.000Z</published>
+    <updated>2019-01-09T03:40:26.019Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="符号"><a href="#符号" class="headerlink" title="_*符号"></a>_*符号</h1><p>作用：它告诉编译器将序列类型的单个参数视为可变参数序列。<br>举例：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">ProcessBuilder</span>(<span class="type">String</span>... command) &#123;</span><br><span class="line">       <span class="keyword">this</span>.command = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(command.length);</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">String</span> arg : command)</span><br><span class="line">           <span class="keyword">this</span>.command.add(arg);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> commandSeq = <span class="type">Seq</span>(command.mainClass) ++ command.arguments</span><br><span class="line"><span class="keyword">val</span> builder = <span class="keyword">new</span> <span class="type">ProcessBuilder</span>(commandSeq: _*)</span><br></pre></td></tr></table></figure><h1 id=""><a href="#" class="headerlink" title="::"></a>::</h1><p>该方法被称为cons，意为构造，向队列的头部追加数据，创造新的列表。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    args.toList <span class="keyword">match</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> workerUrl :: userJar :: mainClass :: extraArgs =&gt;</span><br><span class="line">        <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">        <span class="keyword">val</span> rpcEnv = <span class="type">RpcEnv</span>.create(<span class="string">"Driver"</span>,</span><br><span class="line">          <span class="type">Utils</span>.localHostName(), <span class="number">0</span>, conf, <span class="keyword">new</span> <span class="type">SecurityManager</span>(conf))</span><br><span class="line">        rpcEnv.setupEndpoint(<span class="string">"workerWatcher"</span>, <span class="keyword">new</span> <span class="type">WorkerWatcher</span>(rpcEnv, workerUrl))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> currentLoader = <span class="type">Thread</span>.currentThread.getContextClassLoader</span><br><span class="line">        <span class="keyword">val</span> userJarUrl = <span class="keyword">new</span> <span class="type">File</span>(userJar).toURI().toURL()</span><br><span class="line">        <span class="keyword">val</span> loader =</span><br><span class="line">          <span class="keyword">if</span> (sys.props.getOrElse(<span class="string">"spark.driver.userClassPathFirst"</span>, <span class="string">"false"</span>).toBoolean) &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">ChildFirstURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">MutableURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="type">Thread</span>.currentThread.setContextClassLoader(loader)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Delegate to supplied main class</span></span><br><span class="line">        <span class="keyword">val</span> clazz = <span class="type">Utils</span>.classForName(mainClass)</span><br><span class="line">        <span class="keyword">val</span> mainMethod = clazz.getMethod(<span class="string">"main"</span>, classOf[<span class="type">Array</span>[<span class="type">String</span>]])</span><br><span class="line">        mainMethod.invoke(<span class="literal">null</span>, extraArgs.toArray[<span class="type">String</span>])</span><br><span class="line"></span><br><span class="line">        rpcEnv.shutdown()</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> _ =&gt;</span><br><span class="line">        <span class="comment">// scalastyle:off println</span></span><br><span class="line">        <span class="type">System</span>.err.println(<span class="string">"Usage: DriverWrapper &lt;workerUrl&gt; &lt;userJar&gt; &lt;driverMainClass&gt; [options]"</span>)</span><br><span class="line">        <span class="comment">// scalastyle:on println</span></span><br><span class="line">        <span class="type">System</span>.exit(<span class="number">-1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;符号&quot;&gt;&lt;a href=&quot;#符号&quot; class=&quot;headerlink&quot; title=&quot;_*符号&quot;&gt;&lt;/a&gt;_*符号&lt;/h1&gt;&lt;p&gt;作用：它告诉编译器将序列类型的单个参数视为可变参数序列。&lt;br&gt;举例：&lt;br&gt;&lt;figure class=&quot;highlight sc
       
     
     </summary>
@@ -243,31 +243,6 @@
   </entry>
   
   <entry>
-    <title>TEXTFILE格式存储到hive表</title>
-    <link href="https://tgluon.github.io/2018/07/28/TEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
-    <id>https://tgluon.github.io/2018/07/28/TEXTFILE格式存储到hive表/</id>
-    <published>2018-07-27T23:43:23.000Z</published>
-    <updated>2018-07-28T00:40:59.562Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。<br>TEXTFILE格式的输出包是：   </p><blockquote></blockquote><p>org.apache.hadoop.mapred.TextfileInputFormat<br>org.apache.hadoop.mapred.TextfileOutputFormat</p><p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p><h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立TEXTFILE格式表"><a href="#建立TEXTFILE格式表" class="headerlink" title="建立TEXTFILE格式表"></a>建立TEXTFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_textfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure><h2 id="装载数据"><a href="#装载数据" class="headerlink" title="装载数据"></a>装载数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/home/hadoop/textfile/a.txt'</span> <span class="keyword">into</span>/overwrite t_textfile;</span><br></pre></td></tr></table></figure><h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向
-      
-    
-    </summary>
-    
-      <category term="hive" scheme="https://tgluon.github.io/categories/hive/"/>
-    
-    
-      <category term="hive" scheme="https://tgluon.github.io/tags/hive/"/>
-    
-  </entry>
-  
-  <entry>
     <title>RCFILE格式存储到hive表</title>
     <link href="https://tgluon.github.io/2018/07/28/RCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
     <id>https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/</id>
@@ -281,6 +256,31 @@
       
       
         &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，&lt;strong&gt;被用于在一个时间点操作多行的
+      
+    
+    </summary>
+    
+      <category term="hive" scheme="https://tgluon.github.io/categories/hive/"/>
+    
+    
+      <category term="hive" scheme="https://tgluon.github.io/tags/hive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TEXTFILE格式存储到hive表</title>
+    <link href="https://tgluon.github.io/2018/07/28/TEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
+    <id>https://tgluon.github.io/2018/07/28/TEXTFILE格式存储到hive表/</id>
+    <published>2018-07-27T23:43:23.000Z</published>
+    <updated>2018-07-28T00:40:59.562Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。<br>TEXTFILE格式的输出包是：   </p><blockquote></blockquote><p>org.apache.hadoop.mapred.TextfileInputFormat<br>org.apache.hadoop.mapred.TextfileOutputFormat</p><p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p><h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立TEXTFILE格式表"><a href="#建立TEXTFILE格式表" class="headerlink" title="建立TEXTFILE格式表"></a>建立TEXTFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_textfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure><h2 id="装载数据"><a href="#装载数据" class="headerlink" title="装载数据"></a>装载数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/home/hadoop/textfile/a.txt'</span> <span class="keyword">into</span>/overwrite t_textfile;</span><br></pre></td></tr></table></figure><h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向
       
     
     </summary>
