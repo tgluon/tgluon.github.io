@@ -100,7 +100,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="scala," />
 
 
 
@@ -113,17 +113,18 @@
 
 
 
-<meta name="description" content="火星度假村追梦程序员。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="https://tgluon.github.io/tags/index.html">
+<meta name="description" content="内容来源于：https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable     说明12protected val _response   = new DynamicVariable[HttpServletResponse](null)protected val _request">
+<meta name="keywords" content="scala">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DynamicVariable详解">
+<meta property="og:url" content="https://tgluon.github.io/2019/02/13/DynamicVariable详解/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="火星度假村追梦程序员。">
+<meta property="og:description" content="内容来源于：https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable     说明12protected val _response   = new DynamicVariable[HttpServletResponse](null)protected val _request">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-22T22:56:01.883Z">
+<meta property="og:updated_time" content="2019-02-13T09:53:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="火星度假村追梦程序员。">
+<meta name="twitter:title" content="DynamicVariable详解">
+<meta name="twitter:description" content="内容来源于：https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable     说明12protected val _response   = new DynamicVariable[HttpServletResponse](null)protected val _request">
 
 
 
@@ -153,13 +154,13 @@
 
 
 
-  <link rel="canonical" href="https://tgluon.github.io/tags/"/>
+  <link rel="canonical" href="https://tgluon.github.io/2019/02/13/DynamicVariable详解/"/>
 
 
 
 
 
-  <title>tags | blog</title>
+  <title>DynamicVariable详解 | blog</title>
   
 
 
@@ -348,40 +349,292 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/DynamicVariable详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">tags</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                目前共计 6 个标签
+          <h1 class="post-title" itemprop="name headline">DynamicVariable详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-13T23:34:37+08:00">
+                2019-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/13/DynamicVariable详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/13/DynamicVariable详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  304
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
             </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/hive/" style="font-size: 24px; color: #4f4f4f">hive</a> <a href="/tags/java/" style="font-size: 18px; color: #8e8e8e">java</a> <a href="/tags/maven/" style="font-size: 12px; color: #ccc">maven</a> <a href="/tags/scala/" style="font-size: 30px; color: #111">scala</a> <a href="/tags/spark/" style="font-size: 12px; color: #ccc">spark</a> <a href="/tags/大数据平台监控/" style="font-size: 12px; color: #ccc">大数据平台监控</a>
-            </div>
-          </div>
-        
-      </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>内容来源于：<a href="https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable" target="_blank" rel="noopener">https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable</a>    </p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">val</span> _response   = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">HttpServletResponse</span>](<span class="literal">null</span>)</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">val</span> _request    = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">HttpServletRequest</span>](<span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+<p>DynamicVariable是贷款和动态范围模式的实现。 DynamicVariable的使用情况与Java中的ThreadLocal非常相似(事实上，DynamicVariable在后台使用InheritableThreadLocal) – 当需要在一个封闭的作用域内进行计算时，每个线程都有自己的副本的变量值：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dynamicVariable.withValue(value)&#123; valueInContext =&gt;</span><br><span class="line">  <span class="comment">// value used in the context</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于DynamicVariable使用可继承的ThreadLocal，变量的值被传递给上下文中生成的线程：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dynamicVariable.withValue(value)&#123; valueInContext =&gt;</span><br><span class="line">  spawn&#123;</span><br><span class="line">    <span class="comment">// value is passed to the spawned thread</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>DynamicVariable(和ThreadLocal)在Scalatra中使用的原因与在许多其他框架(Lift，Spring，Struts等)中使用的相同 – 它是一种非侵入性的方式来存储和传递上下文(线程)特定的信息。</p>
+<p>使HttpServletResponse和HttpServletRequest动态变量(并因此，绑定到处理请求的特定线程)只是最简单的方法来获取它们在代码中的任何地方(不通过方法参数或任何其他显式)。</p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> dyn = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">String</span>](<span class="string">"withoutValue"</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print=println</span></span>(dyn.value)</span><br><span class="line">print</span><br><span class="line">dyn.withValue(<span class="string">"withValue"</span>) &#123;</span><br><span class="line">  print</span><br><span class="line">&#125;</span><br><span class="line">print</span><br></pre></td></tr></table></figure>
+<p><strong><em>结果</em></strong><br>withoutValue<br>withValue<br>withoutValue   </p>
+
       
     </div>
     
     
     
+     <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2019/02/13/DynamicVariable详解/">DynamicVariable详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
+  <p><span>发布时间:</span>2019年02月13日 - 23:02</p>
+  <p><span>最后更新:</span>2019年02月13日 - 17:02</p>
+  <p><span>原始链接:</span><a href="/2019/02/13/DynamicVariable详解/" title="DynamicVariable详解">https://tgluon.github.io/2019/02/13/DynamicVariable详解/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/02/13/DynamicVariable详解/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+
+      
+     </div>
+     <div>
+     
+     <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/scala/" rel="tag"><i class="fa fa-tag"></i> scala</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/13/java concurrent包类详解/" rel="next" title="java concurrent包类详解">
+                <i class="fa fa-chevron-left"></i> java concurrent包类详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
   </div>
 
 
@@ -425,8 +678,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -507,6 +769,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -703,9 +981,9 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://tgluon.github.io/tags/index.html';
-          this.page.identifier = 'tags/index.html';
-          this.page.title = 'tags';
+          this.page.url = 'https://tgluon.github.io/2019/02/13/DynamicVariable详解/';
+          this.page.identifier = '2019/02/13/DynamicVariable详解/';
+          this.page.title = 'DynamicVariable详解';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://.disqus.com/embed.js';

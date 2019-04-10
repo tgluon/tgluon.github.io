@@ -360,6 +360,205 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/DynamicVariable详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/13/DynamicVariable详解/" itemprop="url">DynamicVariable详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-13T23:34:37+08:00">
+                2019-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/13/DynamicVariable详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/13/DynamicVariable详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  304
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>内容来源于：<a href="https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable" target="_blank" rel="noopener">https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable</a>    </p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">val</span> _response   = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">HttpServletResponse</span>](<span class="literal">null</span>)</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">val</span> _request    = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">HttpServletRequest</span>](<span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+<p>DynamicVariable是贷款和动态范围模式的实现。 DynamicVariable的使用情况与Java中的ThreadLocal非常相似(事实上，DynamicVariable在后台使用InheritableThreadLocal) – 当需要在一个封闭的作用域内进行计算时，每个线程都有自己的副本的变量值：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dynamicVariable.withValue(value)&#123; valueInContext =&gt;</span><br><span class="line">  <span class="comment">// value used in the context</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于DynamicVariable使用可继承的ThreadLocal，变量的值被传递给上下文中生成的线程：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dynamicVariable.withValue(value)&#123; valueInContext =&gt;</span><br><span class="line">  spawn&#123;</span><br><span class="line">    <span class="comment">// value is passed to the spawned thread</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>DynamicVariable(和ThreadLocal)在Scalatra中使用的原因与在许多其他框架(Lift，Spring，Struts等)中使用的相同 – 它是一种非侵入性的方式来存储和传递上下文(线程)特定的信息。</p>
+<p>使HttpServletResponse和HttpServletRequest动态变量(并因此，绑定到处理请求的特定线程)只是最简单的方法来获取它们在代码中的任何地方(不通过方法参数或任何其他显式)。</p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> dyn = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">String</span>](<span class="string">"withoutValue"</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print=println</span></span>(dyn.value)</span><br><span class="line">print</span><br><span class="line">dyn.withValue(<span class="string">"withValue"</span>) &#123;</span><br><span class="line">  print</span><br><span class="line">&#125;</span><br><span class="line">print</span><br></pre></td></tr></table></figure>
+<p><strong><em>结果</em></strong><br>withoutValue<br>withValue<br>withoutValue   </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/java concurrent包类详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -556,6 +755,199 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/09/scala枚举/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/09/scala枚举/" itemprop="url">scala枚举</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-09T23:34:37+08:00">
+                2019-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/09/scala枚举/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/09/scala枚举/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  175
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="定义枚举对象"><a href="#定义枚举对象" class="headerlink" title="定义枚举对象"></a>定义枚举对象</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 定义一个枚举类 */</span></span><br><span class="line"><span class="keyword">private</span>[deploy] <span class="class"><span class="keyword">object</span> <span class="title">SparkSubmitAction</span> <span class="keyword">extends</span> <span class="title">Enumeration</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 声明枚举对外暴露的变量类型</span></span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">SparkSubmitAction</span> </span>= <span class="type">Value</span></span><br><span class="line">  <span class="comment">// 枚举的定义</span></span><br><span class="line">  <span class="keyword">val</span> <span class="type">SUBMIT</span>, <span class="type">KILL</span>, <span class="type">REQUEST_STATUS</span> = <span class="type">Value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用枚举"><a href="#使用枚举" class="headerlink" title="使用枚举"></a>使用枚举</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 定义一个枚举类 */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SparkSubmitAction</span> <span class="keyword">extends</span> <span class="title">Enumeration</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 声明枚举对外暴露的变量类型</span></span><br><span class="line">  <span class="class"><span class="keyword">type</span> <span class="title">SparkSubmitAction</span> </span>= <span class="type">Value</span></span><br><span class="line">  <span class="comment">// 枚举的定义</span></span><br><span class="line">  <span class="keyword">val</span> <span class="type">SUBMIT</span>, <span class="type">KILL</span>, <span class="type">REQUEST_STATUS</span> = <span class="type">Value</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getAction</span></span>(action: <span class="type">SparkSubmitAction</span>)&#123;</span><br><span class="line">  action <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">SUBMIT</span> =&gt; println (<span class="string">"action is "</span> + action)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">KILL</span> =&gt; println (<span class="string">"action is "</span> + action)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">REQUEST_STATUS</span> =&gt; println (<span class="string">"action is "</span> + action)</span><br><span class="line">    <span class="keyword">case</span> _ =&gt; println (<span class="string">"Unknown type"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">EnumerationTest</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> action = <span class="type">SparkSubmitAction</span>.apply(<span class="number">1</span>)</span><br><span class="line">    <span class="type">SparkSubmitAction</span>.getAction(action)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> action1 = <span class="type">SparkSubmitAction</span>.withName(<span class="string">"quit"</span>)</span><br><span class="line">    <span class="type">SparkSubmitAction</span>.getAction(action1)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/09/scala学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -654,7 +1046,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,613
+                  6,121
                 </span>
               
 
@@ -670,7 +1062,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  25
+                  27
                 </span>
               
             </div>
@@ -766,17 +1158,226 @@
 <p>自类型是一种细化 this 或 this 别名之类型的方法。 语法看起来像普通函数语法，但是意义完全不一样。</p>
 <p>要在特质中使用自类型，写一个标识符，跟上要混入的另一个特质，以及 =&gt;（例如 someIdentifier: SomeOtherTrait =&gt;）。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">username</span></span>: <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Tweeter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>: <span class="type">User</span> =&gt;  <span class="comment">// 重新赋予 this 的类型</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">tweet</span></span>(tweetText: <span class="type">String</span>) = println(<span class="string">s"<span class="subst">$username</span>: <span class="subst">$tweetText</span>"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VerifiedTweeter</span>(<span class="params">val username_ : <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Tweeter</span> <span class="keyword">with</span> <span class="title">User</span> </span>&#123;  <span class="comment">// 我们混入特质 User 因为 Tweeter 需要</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">username</span> </span>= <span class="string">s"real <span class="subst">$username_</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> realBeyoncé = <span class="keyword">new</span> <span class="type">VerifiedTweeter</span>(<span class="string">"Beyoncé"</span>)</span><br><span class="line">realBeyoncé.tweet(<span class="string">"Just spilled my glass of lemonade"</span>)  <span class="comment">// 打印出 "real Beyoncé: Just spilled my glass of lemonade"</span></span><br></pre></td></tr></table></figure></p>
 <p>因为我们在特质 trait Tweeter 中定义了 this: User =&gt;，现在变量 username 可以在 tweet 方法内使用。 这也意味着，由于 VerifiedTweeter 继承了 Tweeter，它还必须混入 User（使用 with User）。<br><strong>自类型别名</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">  self =&gt;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sum</span></span>(num1: <span class="type">Int</span>, num2: <span class="type">Int</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    num1 + num2</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(self.sum(<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h1><p><strong>定义</strong>：指的是那种以implicit关键字声明的带有单个参数的函数。</p>
+<h1 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h1><p><strong>定义</strong>：指的是那种以implicit关键字声明的带有单个参数的函数。<br>通过隐式转换，程序员可以在编写Scala程序时故意漏掉一些信息，让编译器去尝试在编译期间自动推导出这些信息来，这种特性可以极大的减少代码量，忽略那些冗长，过于细节的代码。<br>1.将方法或变量标记为implicit<br>2.将方法的参数列表标记为implicit<br>3.将类标记为implicit   </p>
+<p>Scala支持两种形式的隐式转换：<br>隐式值：用于给方法提供参数<br>隐式视图：用于类型间转换或使针对某类型的方法能调用成功   </p>
 <h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="给File类增加read方法"><a href="#给File类增加read方法" class="headerlink" title="给File类增加read方法"></a>给File类增加read方法</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RichFile</span>(<span class="params">val f: <span class="type">File</span></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">read</span></span>() = <span class="type">Source</span>.fromFile(f).mkString</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>门面类</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">File</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">RichFilePredef</span> </span>&#123;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">fileToRichFile</span></span>(f: <span class="type">File</span>) = <span class="keyword">new</span> <span class="type">RichFile</span>(f)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">File</span></span><br><span class="line"><span class="keyword">import</span> scala.io.<span class="type">Source</span></span><br><span class="line"><span class="keyword">import</span> com.tm.scala.implic.<span class="type">RichFilePredef</span>._</span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">RichFile</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">     <span class="keyword">val</span> f = <span class="keyword">new</span> <span class="type">File</span>(<span class="string">"/home/hadoop/sample_movielens_data.txt"</span>)</span><br><span class="line">    <span class="comment">// 注意：要使用隐式转换，必须在当前object之前导入隐式转换的门面object</span></span><br><span class="line">    <span class="keyword">val</span> contents = f.read()</span><br><span class="line">    println(contents)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用</strong></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.<span class="type">File</span></span><br><span class="line"><span class="keyword">import</span> scala.io.<span class="type">Source</span></span><br><span class="line"><span class="keyword">import</span> com.tm.scala.implic.<span class="type">RichFilePredef</span>._</span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">RichFile</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">     <span class="keyword">val</span> f = <span class="keyword">new</span> <span class="type">File</span>(<span class="string">"/home/hadoop/sample_movielens_data.txt"</span>)</span><br><span class="line">    <span class="comment">// 注意：要使用隐式转换，必须在当前object之前导入隐式转换的门面object</span></span><br><span class="line">    <span class="keyword">val</span> contents = f.read()</span><br><span class="line">    println(contents)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="排序中的使用案例"><a href="#排序中的使用案例" class="headerlink" title="排序中的使用案例"></a>排序中的使用案例</h3><h4 id="Ordered方式"><a href="#Ordered方式" class="headerlink" title="Ordered方式"></a>Ordered方式</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span>(<span class="params">val name: <span class="type">String</span>, var faceValue: <span class="type">Int</span>, var age: <span class="type">Int</span></span>)</span></span><br></pre></td></tr></table></figure>
 <p><strong>定义比较规则</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 视图定界</span></span><br><span class="line"><span class="comment">  * 使用视图定界,视图定界其实就是隐式转换,将T转换成Ordered</span></span><br><span class="line"><span class="comment">  * 有时候，你并不需要指定一个类型是等/子/超于另一个类，你可以通过转换这个类来伪装这种关联关系。</span></span><br><span class="line"><span class="comment">  * 一个视界指定一个类型可以被“看作是”另一个类型。这对对象的只读操作是很有用的。</span></span><br><span class="line"><span class="comment">  * 更多知识：https://twitter.github.io/scala_school/zh_cn/advanced-types.html</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderedChooser</span>[<span class="type">T</span> &lt;% <span class="type">Ordered</span>[<span class="type">T</span>]] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">choose</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">T</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (first &gt; second) first <span class="keyword">else</span> second</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>门面类</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">OrderedPredef</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 方式一</span></span><br><span class="line"> <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">gilrToOrdered</span></span>(girl: <span class="type">Girl</span>):<span class="type">Ordered</span>[<span class="type">Girl</span>] = <span class="keyword">new</span> <span class="type">Ordered</span>[<span class="type">Girl</span>] &#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(that: <span class="type">Girl</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">          <span class="keyword">if</span> (girl.faceValue == that.faceValue) &#123;</span><br><span class="line">            girl.age - that.age</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            girl.faceValue - that.faceValue</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 方式二</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> gilrToOrdered = (girl: <span class="type">Girl</span>) =&gt; <span class="keyword">new</span> <span class="type">Ordered</span>[<span class="type">Girl</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(that: <span class="type">Girl</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">      <span class="keyword">if</span> (girl.faceValue == that.faceValue) &#123;</span><br><span class="line">        girl.age - that.age</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        girl.faceValue - that.faceValue</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>测试类</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestOrdered</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> girl1 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"spark"</span>, <span class="number">100</span>,<span class="number">50</span>)</span><br><span class="line">    <span class="keyword">val</span> girl2 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"mxnet"</span>, <span class="number">90</span>,<span class="number">30</span>)</span><br><span class="line">    <span class="keyword">import</span> <span class="type">OrderedPredef</span>._</span><br><span class="line">    <span class="keyword">val</span> chooser = <span class="keyword">new</span> <span class="type">OrderingChoose</span>[<span class="type">Girl</span>]</span><br><span class="line">    <span class="keyword">val</span> g = chooser.choose(girl1, girl2)</span><br><span class="line">    println(g.faceValue)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="Ordering方式"><a href="#Ordering方式" class="headerlink" title="Ordering方式"></a>Ordering方式</h4><p><strong>定义比较规则</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 文本定界</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderingChoose</span>[<span class="type">T</span>: <span class="type">Ordering</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">choose</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">T</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> ord = implicitly[<span class="type">Ordering</span>[<span class="type">T</span>]]</span><br><span class="line">    <span class="keyword">if</span> (ord.gt(first, second)) first <span class="keyword">else</span> second</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Ordering方式"><a href="#Ordering方式" class="headerlink" title="Ordering方式"></a>Ordering方式</h4><p><strong>定义比较规则</strong>  </p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 文本定界</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderingChoose</span>[<span class="type">T</span>: <span class="type">Ordering</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">choose</span></span>(first: <span class="type">T</span>, second: <span class="type">T</span>): <span class="type">T</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> ord = implicitly[<span class="type">Ordering</span>[<span class="type">T</span>]]</span><br><span class="line">    <span class="keyword">if</span> (ord.gt(first, second)) first <span class="keyword">else</span> second</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>门面类</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">OrderingPredef</span> </span>&#123;</span><br><span class="line">  <span class="comment">//  方式一</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="keyword">val</span> gilrToOrdering = <span class="keyword">new</span> <span class="type">Ordering</span>[<span class="type">Girl</span>] &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(x: <span class="type">Girl</span>, y: <span class="type">Girl</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">      x.faceValue - y.faceValue</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  方式二</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">object</span> <span class="title">GilrToOrdering</span> <span class="keyword">extends</span> <span class="title">Ordering</span>[<span class="type">Girl</span>] </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(x: <span class="type">Girl</span>, y: <span class="type">Girl</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">      x.faceValue - y.faceValue</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 方式三</span></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 参考：Ordering中的下面方法</span></span><br><span class="line"><span class="comment">    * trait IntOrdering extends Ordering[Int] &#123;</span></span><br><span class="line"><span class="comment">    * def compare(x: Int, y: Int) =</span></span><br><span class="line"><span class="comment">    * if (x &lt; y) -1</span></span><br><span class="line"><span class="comment">    * else if (x == y) 0</span></span><br><span class="line"><span class="comment">    * else 1</span></span><br><span class="line"><span class="comment">    * &#125;</span></span><br><span class="line"><span class="comment">    * implicit object Int extends IntOrdering</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">trait</span> <span class="title">GirlToOrdering</span> <span class="keyword">extends</span> <span class="title">Ordering</span>[<span class="type">Girl</span>] </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span></span>(x: <span class="type">Girl</span>, y: <span class="type">Girl</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">      x.faceValue - y.faceValue</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">implicit</span> <span class="class"><span class="keyword">object</span> <span class="title">Girl</span> <span class="keyword">extends</span> <span class="title">GirlToOrdering</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">&#125;</span></span><br></pre></td></tr></table></figure></p>
 <p><strong>测试类</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">TestOrdering</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> g1 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"zhangsan"</span>, <span class="number">50</span>,<span class="number">50</span>)</span><br><span class="line">    <span class="keyword">val</span> g2 = <span class="keyword">new</span> <span class="type">Girl</span>(<span class="string">"lisi"</span>, <span class="number">500</span>,<span class="number">50</span>)</span><br><span class="line">    <span class="keyword">import</span> <span class="type">OrderingPredef</span>._</span><br><span class="line">    <span class="keyword">val</span> choose = <span class="keyword">new</span> <span class="type">OrderingChoose</span>[<span class="type">Girl</span>]</span><br><span class="line">    <span class="keyword">val</span> g = choose.choose(g1, g2)</span><br><span class="line">    println(g.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="scala导入类并取别名"><a href="#scala导入类并取别名" class="headerlink" title="scala导入类并取别名"></a>scala导入类并取别名</h1><p>导入Map,并取别名<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.&#123;<span class="type">Map</span> =&gt; <span class="type">JMap</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="scala-Try的使用"><a href="#scala-Try的使用" class="headerlink" title="scala Try的使用"></a>scala Try的使用</h1><p>spark Utils中的使用案例：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classIsLoadable</span></span>(clazz: <span class="type">String</span>): <span class="type">Boolean</span> = &#123;</span><br><span class="line">   <span class="comment">// scalastyle:off classforname</span></span><br><span class="line">   <span class="type">Try</span> &#123;</span><br><span class="line">     <span class="type">Class</span>.forName(clazz, <span class="literal">false</span>, getContextOrSparkClassLoader)</span><br><span class="line">   &#125;.isSuccess</span><br><span class="line">   <span class="comment">// scalastyle:on classforname</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="quasiquotes-q字符串-用于代码生成"><a href="#quasiquotes-q字符串-用于代码生成" class="headerlink" title="quasiquotes(q字符串)用于代码生成"></a>quasiquotes(q字符串)用于代码生成</h1><p>官方文档： <a href="https://docs.scala-lang.org/overviews/quasiquotes/intro.html" target="_blank" rel="noopener">https://docs.scala-lang.org/overviews/quasiquotes/intro.html</a><br>参考文档：<a href="https://www.cnblogs.com/shishanyuan/p/8455786.html" target="_blank" rel="noopener">https://www.cnblogs.com/shishanyuan/p/8455786.html</a><br><strong>作用</strong>： Quasiquotes允许在Scala语言中对抽象语法树（AST）进行编程式构建，然后在运行时将其提供给Scala编译器以生成字节码。<br>以q开头的字符串是quasiquotes，虽然它们看起来像字符串，但它们在编译时由Scala编译器解析，并代表其代码的AST。   </p>
+<pre><code class="scala"><span class="keyword">val</span> tree = <span class="string">q"i am { a quasiquote }"</span>  
+tree: universe.<span class="type">Tree</span> = i.am(a.quasiquote)   
+</code></pre>
+<h1 id="符号详解"><a href="#符号详解" class="headerlink" title="符号详解"></a>符号详解</h1><h2 id="和-的区别"><a href="#和-的区别" class="headerlink" title="== 和===的区别"></a>== 和===的区别</h2><p>参考：<a href="http://landcareweb.com/questions/25833/scala-sparkzhong-he-zhi-jian-de-qu-bie" target="_blank" rel="noopener">http://landcareweb.com/questions/25833/scala-sparkzhong-he-zhi-jian-de-qu-bie</a>      </p>
+<blockquote>
+<p>== 返回一个布尔值<br>=== 返回一列（包含两列元素比较的结果）</p>
+</blockquote>
+<h1 id="call-by-value-and-call-by-name"><a href="#call-by-value-and-call-by-name" class="headerlink" title="call-by-value and call-by-name"></a>call-by-value and call-by-name</h1><p>传值调用（call-by-value）：先计算参数表达式的值，再应用到函数内部；<br>传名调用（call-by-name）：将未计算的参数表达式直接应用到函数内部   </p>
+<h1 id="半生对象"><a href="#半生对象" class="headerlink" title="半生对象"></a>半生对象</h1><p>object中的构造器在第一次调用执行一次，以后调用的话不会多次执行。<br>object会有自己的构造方法，默认是没有参数的构造方法。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/04/scala通过反射获取当前类类名/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/04/scala通过反射获取当前类类名/" itemprop="url">scala通过反射获取当前类类名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T19:53:18+08:00">
+                2019-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/04/scala通过反射获取当前类类名/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/04/scala通过反射获取当前类类名/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  979
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="先编写HelloWord-scala文件"><a href="#先编写HelloWord-scala文件" class="headerlink" title="先编写HelloWord.scala文件"></a>先编写HelloWord.scala文件</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="comment">// 获取当前类类名</span></span><br><span class="line">    println(<span class="keyword">this</span>.getClass.getName.stripSuffix(<span class="string">"$"</span>))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>命令行使用scalac HelloWorld.scala编译后产生两个文件分别为HelloWorld.class和HelloWorld$.class </p>
+<h1 id="spark源码中的案例"><a href="#spark源码中的案例" class="headerlink" title="spark源码中的案例"></a>spark源码中的案例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</span></span><br><span class="line"><span class="comment"> * contributor license agreements.  See the NOTICE file distributed with</span></span><br><span class="line"><span class="comment"> * this work for additional information regarding copyright ownership.</span></span><br><span class="line"><span class="comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</span></span><br><span class="line"><span class="comment"> * (the "License"); you may not use this file except in compliance with</span></span><br><span class="line"><span class="comment"> * the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *    http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.apache.spark.internal</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.&#123;<span class="type">Level</span>, <span class="type">LogManager</span>, <span class="type">PropertyConfigurator</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.&#123;<span class="type">Logger</span>, <span class="type">LoggerFactory</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.impl.<span class="type">StaticLoggerBinder</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.util.<span class="type">Utils</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Utility trait for classes that want to log data. Creates a SLF4J logger for the class and allows</span></span><br><span class="line"><span class="comment"> * logging messages at different levels using methods that only evaluate parameters lazily if the</span></span><br><span class="line"><span class="comment"> * log level is enabled.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span>[spark] <span class="class"><span class="keyword">trait</span> <span class="title">Logging</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make the log field transient so that objects with Logging can</span></span><br><span class="line">  <span class="comment">// be serialized and used on another machine</span></span><br><span class="line">  <span class="meta">@transient</span> <span class="keyword">private</span> <span class="keyword">var</span> log_ : <span class="type">Logger</span> = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to get the logger name for this object</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logName</span> </span>= &#123;</span><br><span class="line">    <span class="comment">// Ignore trailing $'s in the class names for Scala objects</span></span><br><span class="line">    <span class="keyword">this</span>.getClass.getName.stripSuffix(<span class="string">"$"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to get or create the logger for this object</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">log</span></span>: <span class="type">Logger</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (log_ == <span class="literal">null</span>) &#123;</span><br><span class="line">      initializeLogIfNecessary(<span class="literal">false</span>)</span><br><span class="line">      log_ = <span class="type">LoggerFactory</span>.getLogger(logName)</span><br><span class="line">    &#125;</span><br><span class="line">    log_</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log methods that take only a String</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logInfo</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isInfoEnabled) log.info(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logDebug</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled) log.debug(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logTrace</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isTraceEnabled) log.trace(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logWarning</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isWarnEnabled) log.warn(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logError</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isErrorEnabled) log.error(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log methods that take Throwables (Exceptions/Errors) too</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logInfo</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isInfoEnabled) log.info(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logDebug</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled) log.debug(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logTrace</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isTraceEnabled) log.trace(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logWarning</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isWarnEnabled) log.warn(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logError</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isErrorEnabled) log.error(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">isTraceEnabled</span></span>(): <span class="type">Boolean</span> = &#123;</span><br><span class="line">    log.isTraceEnabled</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">initializeLogIfNecessary</span></span>(isInterpreter: <span class="type">Boolean</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="type">Logging</span>.initialized) &#123;</span><br><span class="line">      <span class="type">Logging</span>.initLock.synchronized &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="type">Logging</span>.initialized) &#123;</span><br><span class="line">          initializeLogging(isInterpreter)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">initializeLogging</span></span>(isInterpreter: <span class="type">Boolean</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// Don't use a logger in here, as this is itself occurring during initialization of a logger</span></span><br><span class="line">    <span class="comment">// If Log4j 1.2 is being used, but is not initialized, load a default properties file</span></span><br><span class="line">    <span class="keyword">val</span> binderClass = <span class="type">StaticLoggerBinder</span>.getSingleton.getLoggerFactoryClassStr</span><br><span class="line">    <span class="comment">// This distinguishes the log4j 1.2 binding, currently</span></span><br><span class="line">    <span class="comment">// org.slf4j.impl.Log4jLoggerFactory, from the log4j 2.0 binding, currently</span></span><br><span class="line">    <span class="comment">// org.apache.logging.slf4j.Log4jLoggerFactory</span></span><br><span class="line">    <span class="keyword">val</span> usingLog4j12 = <span class="string">"org.slf4j.impl.Log4jLoggerFactory"</span>.equals(binderClass)</span><br><span class="line">    <span class="keyword">if</span> (usingLog4j12) &#123;</span><br><span class="line">      <span class="keyword">val</span> log4j12Initialized = <span class="type">LogManager</span>.getRootLogger.getAllAppenders.hasMoreElements</span><br><span class="line">      <span class="comment">// scalastyle:off println</span></span><br><span class="line">      <span class="keyword">if</span> (!log4j12Initialized) &#123;</span><br><span class="line">        <span class="keyword">val</span> defaultLogProps = <span class="string">"org/apache/spark/log4j-defaults.properties"</span></span><br><span class="line">        <span class="type">Option</span>(<span class="type">Utils</span>.getSparkClassLoader.getResource(defaultLogProps)) <span class="keyword">match</span> &#123;</span><br><span class="line">          <span class="keyword">case</span> <span class="type">Some</span>(url) =&gt;</span><br><span class="line">            <span class="type">PropertyConfigurator</span>.configure(url)</span><br><span class="line">            <span class="type">System</span>.err.println(<span class="string">s"Using Spark's default log4j profile: <span class="subst">$defaultLogProps</span>"</span>)</span><br><span class="line">          <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">            <span class="type">System</span>.err.println(<span class="string">s"Spark was unable to load <span class="subst">$defaultLogProps</span>"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (isInterpreter) &#123;</span><br><span class="line">        <span class="comment">// Use the repl's main class to define the default log level when running the shell,</span></span><br><span class="line">        <span class="comment">// overriding the root logger's config if they're different.</span></span><br><span class="line">        <span class="keyword">val</span> rootLogger = <span class="type">LogManager</span>.getRootLogger()</span><br><span class="line">        <span class="keyword">val</span> replLogger = <span class="type">LogManager</span>.getLogger(logName)</span><br><span class="line">        <span class="keyword">val</span> replLevel = <span class="type">Option</span>(replLogger.getLevel()).getOrElse(<span class="type">Level</span>.<span class="type">WARN</span>)</span><br><span class="line">        <span class="keyword">if</span> (replLevel != rootLogger.getEffectiveLevel()) &#123;</span><br><span class="line">          <span class="type">System</span>.err.printf(<span class="string">"Setting default log level to \"%s\".\n"</span>, replLevel)</span><br><span class="line">          <span class="type">System</span>.err.println(<span class="string">"To adjust logging level use sc.setLogLevel(newLevel). "</span> +</span><br><span class="line">            <span class="string">"For SparkR, use setLogLevel(newLevel)."</span>)</span><br><span class="line">          rootLogger.setLevel(replLevel)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// scalastyle:on println</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Logging</span>.initialized = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Force a call into slf4j to initialize it. Avoids this happening from multiple threads</span></span><br><span class="line">    <span class="comment">// and triggering this: http://mailman.qos.ch/pipermail/slf4j-dev/2010-April/002956.html</span></span><br><span class="line">    log</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">object</span> <span class="title">Logging</span> </span>&#123;</span><br><span class="line">  <span class="meta">@volatile</span> <span class="keyword">private</span> <span class="keyword">var</span> initialized = <span class="literal">false</span></span><br><span class="line">  <span class="keyword">val</span> initLock = <span class="keyword">new</span> <span class="type">Object</span>()</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// We use reflection here to handle the case where users remove the</span></span><br><span class="line">    <span class="comment">// slf4j-to-jul bridge order to route their logs to JUL.</span></span><br><span class="line">    <span class="keyword">val</span> bridgeClass = <span class="type">Utils</span>.classForName(<span class="string">"org.slf4j.bridge.SLF4JBridgeHandler"</span>)</span><br><span class="line">    bridgeClass.getMethod(<span class="string">"removeHandlersForRootLogger"</span>).invoke(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">val</span> installed = bridgeClass.getMethod(<span class="string">"isInstalled"</span>).invoke(<span class="literal">null</span>).asInstanceOf[<span class="type">Boolean</span>]</span><br><span class="line">    <span class="keyword">if</span> (!installed) &#123;</span><br><span class="line">      bridgeClass.getMethod(<span class="string">"install"</span>).invoke(<span class="literal">null</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> e: <span class="type">ClassNotFoundException</span> =&gt; <span class="comment">// can't log anything yet so just fail silently</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1166,200 +1767,6 @@
 <h1 id="scala注解所在包和基本语法格式"><a href="#scala注解所在包和基本语法格式" class="headerlink" title="scala注解所在包和基本语法格式"></a>scala注解所在包和基本语法格式</h1><p>注解所在包： 标准库定义的注解相关内容在包scala.annotation中。<br>基本语法： @注解名称(注解参数)  </p>
 <h1 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h1><p>自定义注解需要从注解特质继承，scala提供两种注解：<br> 1、基本语法： @注解名称(注解参数)<br> scala中的自定义注解不是接口/特质，而是类。<br>自定义注解需要从注解特质中继承，Scala中提供了两类注解特质：</p>
 <p>scala.annotation.ClassfileAnnotation 由Java编译器生成注解<br>scala.annotation.StaticAnnotation 由Scala编译器生成注解</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/04/scala通过反射获取当前类类名/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/04/scala通过反射获取当前类类名/" itemprop="url">scala通过反射获取当前类类名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T19:53:18+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/scala/" itemprop="url" rel="index">
-                    <span itemprop="name">scala</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/04/scala通过反射获取当前类类名/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/04/scala通过反射获取当前类类名/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  979
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="先编写HelloWord-scala文件"><a href="#先编写HelloWord-scala文件" class="headerlink" title="先编写HelloWord.scala文件"></a>先编写HelloWord.scala文件</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="comment">// 获取当前类类名</span></span><br><span class="line">    println(<span class="keyword">this</span>.getClass.getName.stripSuffix(<span class="string">"$"</span>))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>命令行使用scalac HelloWorld.scala编译后产生两个文件分别为HelloWorld.class和HelloWorld$.class </p>
-<h1 id="spark源码中的案例"><a href="#spark源码中的案例" class="headerlink" title="spark源码中的案例"></a>spark源码中的案例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</span></span><br><span class="line"><span class="comment"> * contributor license agreements.  See the NOTICE file distributed with</span></span><br><span class="line"><span class="comment"> * this work for additional information regarding copyright ownership.</span></span><br><span class="line"><span class="comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</span></span><br><span class="line"><span class="comment"> * (the "License"); you may not use this file except in compliance with</span></span><br><span class="line"><span class="comment"> * the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *    http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an "AS IS" BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.apache.spark.internal</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.&#123;<span class="type">Level</span>, <span class="type">LogManager</span>, <span class="type">PropertyConfigurator</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.&#123;<span class="type">Logger</span>, <span class="type">LoggerFactory</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.impl.<span class="type">StaticLoggerBinder</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.util.<span class="type">Utils</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Utility trait for classes that want to log data. Creates a SLF4J logger for the class and allows</span></span><br><span class="line"><span class="comment"> * logging messages at different levels using methods that only evaluate parameters lazily if the</span></span><br><span class="line"><span class="comment"> * log level is enabled.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span>[spark] <span class="class"><span class="keyword">trait</span> <span class="title">Logging</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make the log field transient so that objects with Logging can</span></span><br><span class="line">  <span class="comment">// be serialized and used on another machine</span></span><br><span class="line">  <span class="meta">@transient</span> <span class="keyword">private</span> <span class="keyword">var</span> log_ : <span class="type">Logger</span> = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to get the logger name for this object</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logName</span> </span>= &#123;</span><br><span class="line">    <span class="comment">// Ignore trailing $'s in the class names for Scala objects</span></span><br><span class="line">    <span class="keyword">this</span>.getClass.getName.stripSuffix(<span class="string">"$"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to get or create the logger for this object</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">log</span></span>: <span class="type">Logger</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (log_ == <span class="literal">null</span>) &#123;</span><br><span class="line">      initializeLogIfNecessary(<span class="literal">false</span>)</span><br><span class="line">      log_ = <span class="type">LoggerFactory</span>.getLogger(logName)</span><br><span class="line">    &#125;</span><br><span class="line">    log_</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log methods that take only a String</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logInfo</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isInfoEnabled) log.info(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logDebug</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled) log.debug(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logTrace</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isTraceEnabled) log.trace(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logWarning</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isWarnEnabled) log.warn(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logError</span></span>(msg: =&gt; <span class="type">String</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isErrorEnabled) log.error(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Log methods that take Throwables (Exceptions/Errors) too</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logInfo</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isInfoEnabled) log.info(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logDebug</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled) log.debug(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logTrace</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isTraceEnabled) log.trace(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logWarning</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isWarnEnabled) log.warn(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">logError</span></span>(msg: =&gt; <span class="type">String</span>, throwable: <span class="type">Throwable</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (log.isErrorEnabled) log.error(msg, throwable)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">isTraceEnabled</span></span>(): <span class="type">Boolean</span> = &#123;</span><br><span class="line">    log.isTraceEnabled</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">def</span> <span class="title">initializeLogIfNecessary</span></span>(isInterpreter: <span class="type">Boolean</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="type">Logging</span>.initialized) &#123;</span><br><span class="line">      <span class="type">Logging</span>.initLock.synchronized &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="type">Logging</span>.initialized) &#123;</span><br><span class="line">          initializeLogging(isInterpreter)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">initializeLogging</span></span>(isInterpreter: <span class="type">Boolean</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// Don't use a logger in here, as this is itself occurring during initialization of a logger</span></span><br><span class="line">    <span class="comment">// If Log4j 1.2 is being used, but is not initialized, load a default properties file</span></span><br><span class="line">    <span class="keyword">val</span> binderClass = <span class="type">StaticLoggerBinder</span>.getSingleton.getLoggerFactoryClassStr</span><br><span class="line">    <span class="comment">// This distinguishes the log4j 1.2 binding, currently</span></span><br><span class="line">    <span class="comment">// org.slf4j.impl.Log4jLoggerFactory, from the log4j 2.0 binding, currently</span></span><br><span class="line">    <span class="comment">// org.apache.logging.slf4j.Log4jLoggerFactory</span></span><br><span class="line">    <span class="keyword">val</span> usingLog4j12 = <span class="string">"org.slf4j.impl.Log4jLoggerFactory"</span>.equals(binderClass)</span><br><span class="line">    <span class="keyword">if</span> (usingLog4j12) &#123;</span><br><span class="line">      <span class="keyword">val</span> log4j12Initialized = <span class="type">LogManager</span>.getRootLogger.getAllAppenders.hasMoreElements</span><br><span class="line">      <span class="comment">// scalastyle:off println</span></span><br><span class="line">      <span class="keyword">if</span> (!log4j12Initialized) &#123;</span><br><span class="line">        <span class="keyword">val</span> defaultLogProps = <span class="string">"org/apache/spark/log4j-defaults.properties"</span></span><br><span class="line">        <span class="type">Option</span>(<span class="type">Utils</span>.getSparkClassLoader.getResource(defaultLogProps)) <span class="keyword">match</span> &#123;</span><br><span class="line">          <span class="keyword">case</span> <span class="type">Some</span>(url) =&gt;</span><br><span class="line">            <span class="type">PropertyConfigurator</span>.configure(url)</span><br><span class="line">            <span class="type">System</span>.err.println(<span class="string">s"Using Spark's default log4j profile: <span class="subst">$defaultLogProps</span>"</span>)</span><br><span class="line">          <span class="keyword">case</span> <span class="type">None</span> =&gt;</span><br><span class="line">            <span class="type">System</span>.err.println(<span class="string">s"Spark was unable to load <span class="subst">$defaultLogProps</span>"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (isInterpreter) &#123;</span><br><span class="line">        <span class="comment">// Use the repl's main class to define the default log level when running the shell,</span></span><br><span class="line">        <span class="comment">// overriding the root logger's config if they're different.</span></span><br><span class="line">        <span class="keyword">val</span> rootLogger = <span class="type">LogManager</span>.getRootLogger()</span><br><span class="line">        <span class="keyword">val</span> replLogger = <span class="type">LogManager</span>.getLogger(logName)</span><br><span class="line">        <span class="keyword">val</span> replLevel = <span class="type">Option</span>(replLogger.getLevel()).getOrElse(<span class="type">Level</span>.<span class="type">WARN</span>)</span><br><span class="line">        <span class="keyword">if</span> (replLevel != rootLogger.getEffectiveLevel()) &#123;</span><br><span class="line">          <span class="type">System</span>.err.printf(<span class="string">"Setting default log level to \"%s\".\n"</span>, replLevel)</span><br><span class="line">          <span class="type">System</span>.err.println(<span class="string">"To adjust logging level use sc.setLogLevel(newLevel). "</span> +</span><br><span class="line">            <span class="string">"For SparkR, use setLogLevel(newLevel)."</span>)</span><br><span class="line">          rootLogger.setLevel(replLevel)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// scalastyle:on println</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Logging</span>.initialized = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Force a call into slf4j to initialize it. Avoids this happening from multiple threads</span></span><br><span class="line">    <span class="comment">// and triggering this: http://mailman.qos.ch/pipermail/slf4j-dev/2010-April/002956.html</span></span><br><span class="line">    log</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">object</span> <span class="title">Logging</span> </span>&#123;</span><br><span class="line">  <span class="meta">@volatile</span> <span class="keyword">private</span> <span class="keyword">var</span> initialized = <span class="literal">false</span></span><br><span class="line">  <span class="keyword">val</span> initLock = <span class="keyword">new</span> <span class="type">Object</span>()</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// We use reflection here to handle the case where users remove the</span></span><br><span class="line">    <span class="comment">// slf4j-to-jul bridge order to route their logs to JUL.</span></span><br><span class="line">    <span class="keyword">val</span> bridgeClass = <span class="type">Utils</span>.classForName(<span class="string">"org.slf4j.bridge.SLF4JBridgeHandler"</span>)</span><br><span class="line">    bridgeClass.getMethod(<span class="string">"removeHandlersForRootLogger"</span>).invoke(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">val</span> installed = bridgeClass.getMethod(<span class="string">"isInstalled"</span>).invoke(<span class="literal">null</span>).asInstanceOf[<span class="type">Boolean</span>]</span><br><span class="line">    <span class="keyword">if</span> (!installed) &#123;</span><br><span class="line">      bridgeClass.getMethod(<span class="string">"install"</span>).invoke(<span class="literal">null</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> e: <span class="type">ClassNotFoundException</span> =&gt; <span class="comment">// can't log anything yet so just fail silently</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -2185,400 +2592,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/TEXTFILE格式存储到hive表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/28/TEXTFILE格式存储到hive表/" itemprop="url">TEXTFILE格式存储到hive表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-28T07:43:23+08:00">
-                2018-07-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hive/" itemprop="url" rel="index">
-                    <span itemprop="name">hive</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/28/TEXTFILE格式存储到hive表/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/28/TEXTFILE格式存储到hive表/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  180
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。<br>TEXTFILE格式的输出包是：   </p>
-<blockquote>
-</blockquote>
-<p>org.apache.hadoop.mapred.TextfileInputFormat<br>org.apache.hadoop.mapred.TextfileOutputFormat</p>
-<p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立TEXTFILE格式表"><a href="#建立TEXTFILE格式表" class="headerlink" title="建立TEXTFILE格式表"></a>建立TEXTFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_textfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> textfile;</span><br></pre></td></tr></table></figure>
-<h2 id="装载数据"><a href="#装载数据" class="headerlink" title="装载数据"></a>装载数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/home/hadoop/textfile/a.txt'</span> <span class="keyword">into</span>/overwrite t_textfile;</span><br></pre></td></tr></table></figure>
-<h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/ORCFILE格式存储到hive表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/28/ORCFILE格式存储到hive表/" itemprop="url">ORCFILE格式存储到hive表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-28T07:43:23+08:00">
-                2018-07-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hive/" itemprop="url" rel="index">
-                    <span itemprop="name">hive</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/28/ORCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/28/ORCFILE格式存储到hive表/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  201
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。<br>ORCFILE格式的输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.orc</span><br></pre></td></tr></table></figure></p>
-<p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立ORCFILE格式表"><a href="#建立ORCFILE格式表" class="headerlink" title="建立ORCFILE格式表"></a>建立ORCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_orcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> orcfile;</span><br></pre></td></tr></table></figure>
-<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_orcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2634,7 +2647,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2751,7 +2764,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共20.7k字</span>
+  <span class="post-count">博客全站共21.7k字</span>
 </div>
 
 
