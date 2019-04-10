@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://tgluon.github.io/2019/01/09/scala%E6%9E%9A%E4%B8%BE/</loc>
-    <lastmod>2019-04-10T10:11:04.000Z</lastmod>
+    <lastmod>2019-04-10T10:31:26.664Z</lastmod>
     <data>
         <display>
         <title>scala枚举</title>
@@ -24,12 +24,92 @@
 
     
   <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%B1%BB%E7%B1%BB%E5%90%8D/</loc>
+    <lastmod>2019-04-10T10:31:26.661Z</lastmod>
+    <data>
+        <display>
+        <title>scala通过反射获取当前类类名</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/</loc>
+    <lastmod>2019-04-10T10:31:26.659Z</lastmod>
+    <data>
+        <display>
+        <title>scala自定注解</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-04-10T10:31:26.657Z</lastmod>
+    <data>
+        <display>
+        <title>scala特殊符号使用</title>
+        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://tgluon.github.io/2019/01/09/scala%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2019-04-10T10:06:02.000Z</lastmod>
+    <lastmod>2019-04-10T10:31:26.654Z</lastmod>
     <data>
         <display>
         <title>scala学习笔记</title>
         <pubTime>2019-01-09T15:34:37.000Z</pubTime>
+        
+        <tag>scala</tag>
+         
+         
+           
+             
+              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://tgluon.github.io/2019/02/13/DynamicVariable%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2019-04-10T10:31:26.649Z</lastmod>
+    <data>
+        <display>
+        <title>DynamicVariable详解</title>
+        <pubTime>2019-02-13T15:34:37.000Z</pubTime>
         
         <tag>scala</tag>
          
@@ -64,26 +144,6 @@
 
     
   <url>
-    <loc>https://tgluon.github.io/2019/02/13/DynamicVariable%E8%AF%A6%E8%A7%A3/</loc>
-    <lastmod>2019-02-13T09:53:31.000Z</lastmod>
-    <data>
-        <display>
-        <title>DynamicVariable详解</title>
-        <pubTime>2019-02-13T15:34:37.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://tgluon.github.io/2019/02/13/java%20concurrent%E5%8C%85%E7%B1%BB%E8%AF%A6%E8%A7%A3/</loc>
     <lastmod>2019-02-13T09:41:05.450Z</lastmod>
     <data>
@@ -103,66 +163,6 @@
     </url>
 
     
-    
-  <url>
-    <loc>https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/</loc>
-    <lastmod>2019-01-04T12:41:57.000Z</lastmod>
-    <data>
-        <display>
-        <title>scala特殊符号使用</title>
-        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://tgluon.github.io/2019/01/04/scala%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%B1%BB%E7%B1%BB%E5%90%8D/</loc>
-    <lastmod>2019-01-04T12:36:49.000Z</lastmod>
-    <data>
-        <display>
-        <title>scala通过反射获取当前类类名</title>
-        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/</loc>
-    <lastmod>2019-01-04T12:28:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>scala自定注解</title>
-        <pubTime>2019-01-04T11:53:18.000Z</pubTime>
-        
-        <tag>scala</tag>
-         
-         
-           
-             
-              <breadCrumb title="scala" url="https://tgluon.github.io/categories/scala/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>https://tgluon.github.io/2018/08/27/%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</loc>
