@@ -5,11 +5,11 @@
     
   <url>
     <loc>https://tgluon.github.io/2019/04/14/idea%E4%B8%ADSpark%20on%20yarn%20%E8%BF%9C%E7%A8%8BDebug%20Spark%20%E6%BA%90%E7%A0%81(Yarn%20Client+attach%20%E6%A8%A1%E5%BC%8F)/</loc>
-    <lastmod>2019-04-14T14:28:42.000Z</lastmod>
+    <lastmod>2019-04-14T15:10:22.000Z</lastmod>
     <data>
         <display>
-        <title>idea yarn-client模式连接yarn集群调试spark代码</title>
-        <pubTime>2019-04-14T14:29:11.225Z</pubTime>
+        <title>idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)</title>
+        <pubTime>2019-04-14T15:10:37.768Z</pubTime>
         
         <tag>spark</tag>
          
