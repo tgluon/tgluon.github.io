@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spark," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="参考文章主要以一些官方文档为参考。https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics    https://help.aliyun.com/document_detail/34994.html?spm=a2c4g.11174283.6.650.6f02590e0d209m#h2-">
+<meta name="keywords" content="spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark sql窗口函数实战">
+<meta property="og:url" content="https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="参考文章主要以一些官方文档为参考。https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics    https://help.aliyun.com/document_detail/34994.html?spm=a2c4g.11174283.6.650.6f02590e0d209m#h2-">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-15T08:39:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark sql窗口函数实战">
+<meta name="twitter:description" content="参考文章主要以一些官方文档为参考。https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics    https://help.aliyun.com/document_detail/34994.html?spm=a2c4g.11174283.6.650.6f02590e0d209m#h2-">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/"/>
+
+
+
+
+
+  <title>spark sql窗口函数实战 | blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/tgluon"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">追梦青年</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spark sql窗口函数实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-15T16:40:20+08:00">
+                2019-04-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sparksql/" itemprop="url" rel="index">
+                    <span itemprop="name">sparksql</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sparksql/spark/" itemprop="url" rel="index">
+                    <span itemprop="name">spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/15/spark sql窗口函数实战/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/15/spark sql窗口函数实战/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,501
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  19
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>主要以一些官方文档为参考。<br><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+WindowingAndAnalytics</a>   </p>
+<p><a href="https://help.aliyun.com/document_detail/34994.html?spm=a2c4g.11174283.6.650.6f02590e0d209m#h2-url-1" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/34994.html?spm=a2c4g.11174283.6.650.6f02590e0d209m#h2-url-1</a></p>
+<p><a href="https://databricks.com/blog/2015/07/15/introducing-window-functions-in-spark-sql.html" target="_blank" rel="noopener">https://databricks.com/blog/2015/07/15/introducing-window-functions-in-spark-sql.html</a> </p>
+<p><a href="https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-functions-windows.html" target="_blank" rel="noopener">https://jaceklaskowski.gitbooks.io/mastering-spark-sql/spark-sql-functions-windows.html</a>   </p>
+<p><a href="http://xinhstechblog.blogspot.com/2016/04/spark-window-functions-for-dataframes.html" target="_blank" rel="noopener">http://xinhstechblog.blogspot.com/2016/04/spark-window-functions-for-dataframes.html</a>    </p>
+<p><a href="http://cdn2.hubspot.net/hubfs/438089/notebooks/eBook/Introducing_Window_Functions_in_Spark_SQL_Notebook.html" target="_blank" rel="noopener">http://cdn2.hubspot.net/hubfs/438089/notebooks/eBook/Introducing_Window_Functions_in_Spark_SQL_Notebook.html</a>    </p>
+<p><a href="http://blog.madhukaraphatak.com/introduction-to-spark-two-part-5/" target="_blank" rel="noopener">http://blog.madhukaraphatak.com/introduction-to-spark-two-part-5/</a></p>
+<p><a href="https://www.cnblogs.com/piaolingzxh/p/5538783.html" target="_blank" rel="noopener">https://www.cnblogs.com/piaolingzxh/p/5538783.html</a></p>
+<h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">WindowFunctionTest</span> <span class="keyword">extends</span> <span class="title">BaseSparkSession</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">       <span class="keyword">val</span> sparkConf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">      .setAppName(<span class="string">"WindowFunctionTest"</span>)</span><br><span class="line">      .set(<span class="string">"spark.master"</span>, <span class="string">"local[*]"</span>)</span><br><span class="line">    <span class="keyword">val</span> spark = <span class="type">SparkSession</span></span><br><span class="line">      .builder()</span><br><span class="line">      .config(sparkConf)</span><br><span class="line">      .getOrCreate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">import</span> org.apache.spark.sql.expressions.<span class="type">Window</span></span><br><span class="line">    <span class="keyword">import</span> org.apache.spark.sql.functions._</span><br><span class="line">    <span class="keyword">import</span> spark.implicits._</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> df = <span class="type">List</span>(</span><br><span class="line">      (<span class="string">"浙江"</span>, <span class="string">"2018-01-01"</span>, <span class="number">500</span>),</span><br><span class="line">      (<span class="string">"浙江"</span>, <span class="string">"2018-01-02"</span>, <span class="number">450</span>),</span><br><span class="line">      (<span class="string">"浙江"</span>, <span class="string">"2018-01-03"</span>, <span class="number">550</span>),</span><br><span class="line">      (<span class="string">"湖北"</span>, <span class="string">"2018-01-01"</span>, <span class="number">250</span>),</span><br><span class="line">      (<span class="string">"湖北"</span>, <span class="string">"2018-01-02"</span>, <span class="number">290</span>),</span><br><span class="line">      (<span class="string">"湖北"</span>, <span class="string">"2018-01-03"</span>, <span class="number">270</span>)</span><br><span class="line">    ).toDF(<span class="string">"site"</span>, <span class="string">"date"</span>, <span class="string">"user_cnt"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="平均移动值"><a href="#平均移动值" class="headerlink" title="平均移动值"></a>平均移动值</h1><h2 id="DataFrame-API方式实现"><a href="#DataFrame-API方式实现" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 窗口定义从 -1(前一行)到 1(后一行)，每一个滑动的窗口总用有3行</span></span><br><span class="line"> <span class="keyword">val</span> movinAvgSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="number">-1</span>, <span class="number">1</span>)</span><br><span class="line"> df.withColumn(<span class="string">"MovingAvg"</span>, avg(df(<span class="string">"user_cnt"</span>)).over(movinAvgSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">val</span> movinAvgSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="number">-1</span>, <span class="number">1</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"amount"</span>,</span><br><span class="line">  avg($<span class="string">"user_cnt"</span>).over(movinAvgSpec).as(<span class="string">"moving_avg_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现"><a href="#sql方式实现" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">df.createOrReplaceTempView(<span class="string">"site_info"</span>)</span><br><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       avg(user_cnt) over(partition by site order by date rows between 1 preceding and 1 following) as moving_avg</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h1 id="lag函数"><a href="#lag函数" class="headerlink" title="lag函数"></a>lag函数</h1><p>说明：取当前记录的前x条数据的指定列，如果没有返回null，有就返回真实值。</p>
+<h2 id="DataFrame-API方式实现-1"><a href="#DataFrame-API方式实现-1" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> lagwSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.withColumn(<span class="string">"prevUserCnt"</span>, lag(df(<span class="string">"user_cnt"</span>), <span class="number">1</span>).over(lagwSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">val</span> lagwSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"amount"</span>,</span><br><span class="line">  lag($<span class="string">"user_cnt"</span>).over(movinAvgSpec).as(<span class="string">"lag_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-1"><a href="#sql方式实现-1" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">df.createOrReplaceTempView(<span class="string">"site_info"</span>)</span><br><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       lag(user_cnt,1) over(partition by  site order by date asc ) as prevUserCnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h1 id="lead函数"><a href="#lead函数" class="headerlink" title="lead函数"></a>lead函数</h1><p>说明：取当前记录的后x条数据的指定列，如果没有返回null，有就返回真实值。 </p>
+<h2 id="DataFrame-API方式实现-2"><a href="#DataFrame-API方式实现-2" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> leadwSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.withColumn(<span class="string">"lead_user_cnt"</span>, lead(df(<span class="string">"user_cnt"</span>), <span class="number">1</span>).over(leadwSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> leadwSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">  df.select(</span><br><span class="line">    $<span class="string">"site"</span>,</span><br><span class="line">    $<span class="string">"date"</span>,</span><br><span class="line">    $<span class="string">"user_cnt"</span>,</span><br><span class="line">    lead($<span class="string">"user_cnt"</span>, <span class="number">1</span>).over(leadwSpec).as(<span class="string">"lead_user_cnt"</span>)</span><br><span class="line">  ).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-2"><a href="#sql方式实现-2" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       lead(user_cnt,1) over(partition by site order by date asc ) as lead_user_cnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-------------+</span><br><span class="line">|site|      date|user_cnt|lead_user_cnt|</span><br><span class="line">+----+----------+--------+-------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|          <span class="number">290</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|          <span class="number">270</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="literal">null</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|          <span class="number">450</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|          <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|         <span class="literal">null</span>|</span><br><span class="line">+----+----------+--------+-------------+</span><br></pre></td></tr></table></figure>
+<h1 id="FIRST-VALUE函数"><a href="#FIRST-VALUE函数" class="headerlink" title="FIRST_VALUE函数"></a>FIRST_VALUE函数</h1><p>说明：该函数用于获取分组排序后最第一条记录的字段值。 </p>
+<h2 id="DataFrame-API方式实现-3"><a href="#DataFrame-API方式实现-3" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> firstValuewSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.withColumn(<span class="string">"first_value_user_cnt"</span>, first(<span class="string">"user_cnt"</span>).over(firstValuewSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> firstValuewSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  first($<span class="string">"user_cnt"</span>).over(firstValuewSpec).as(<span class="string">"first_value_user_cnt"</span>)).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-3"><a href="#sql方式实现-3" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       first_value(user_cnt) over(partition by site order by date asc ) as first_value_user_cnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+--------------------+</span><br><span class="line">|site|      date|user_cnt|first_value_user_cnt|</span><br><span class="line">+----+----------+--------+--------------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|                 <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|                 <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|                 <span class="number">250</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|                 <span class="number">500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|                 <span class="number">500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|                 <span class="number">500</span>|</span><br><span class="line">+----+----------+--------+--------------------+</span><br></pre></td></tr></table></figure>
+<h1 id="LAST-VALUE函数"><a href="#LAST-VALUE函数" class="headerlink" title="LAST_VALUE函数"></a>LAST_VALUE函数</h1><p>说明：该函数用于获取分组排序后最后一条记录的字段值。 </p>
+<h2 id="DataFrame-API方式实现-4"><a href="#DataFrame-API方式实现-4" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> lastValuewSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.withColumn(<span class="string">"last_value_user_cnt"</span>, last(<span class="string">"user_cnt"</span>).over(lastValuewSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> lastValuewSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  last($<span class="string">"user_cnt"</span>).over(lastValuewSpec).as(<span class="string">"last_value_user_cnt"</span>)).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-4"><a href="#sql方式实现-4" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       last_value(user_cnt) over(partition by site order by date asc rows between unbounded preceding and unbounded following ) as last_value_user_cnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-2"><a href="#结果-2" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-------------------+</span><br><span class="line">|site|      date|user_cnt|last_value_user_cnt|</span><br><span class="line">+----+----------+--------+-------------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|                <span class="number">270</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|                <span class="number">270</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|                <span class="number">270</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|                <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|                <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|                <span class="number">550</span>|</span><br><span class="line">+----+----------+--------+-------------------+</span><br></pre></td></tr></table></figure>
+<h1 id="COUNT"><a href="#COUNT" class="headerlink" title="COUNT"></a>COUNT</h1><p>说明：该函数用于计算计数值。</p>
+<h2 id="不指定order-by"><a href="#不指定order-by" class="headerlink" title="不指定order by"></a>不指定order by</h2><p>###<br><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> counWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.withColumn(<span class="string">"count"</span>, count(<span class="string">"user_cnt"</span>).over(counWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> counWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  count($<span class="string">"user_cnt"</span>).over(counWSpec).as(<span class="string">"count"</span>)).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-5"><a href="#sql方式实现-5" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">     <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">       | select  site,</span></span><br><span class="line"><span class="string">       |         date,</span></span><br><span class="line"><span class="string">       |         user_cnt,</span></span><br><span class="line"><span class="string">       |         count(user_cnt) over(partition by site) as count</span></span><br><span class="line"><span class="string">       |from     site_info</span></span><br><span class="line"><span class="string">     "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-3"><a href="#结果-3" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-----+</span><br><span class="line">|site|      date|user_cnt|count|</span><br><span class="line">+----+----------+--------+-----+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|    <span class="number">3</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|    <span class="number">3</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|    <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|    <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|    <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|    <span class="number">3</span>|</span><br><span class="line">+----+----------+--------+-----+</span><br></pre></td></tr></table></figure>
+<h2 id="指定order-by"><a href="#指定order-by" class="headerlink" title="指定order by"></a>指定order by</h2><p>指定order by时，返回当前窗口内从开始行到当前行的累计计数值。  </p>
+<h2 id="DataFrame-API方式实现-5"><a href="#DataFrame-API方式实现-5" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> counWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span>.asc)</span><br><span class="line">df.withColumn(<span class="string">"count"</span>, count(<span class="string">"user_cnt"</span>).over(counWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> counWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  count($<span class="string">"user_cnt"</span>).over(counWSpec).as(<span class="string">"count"</span>))</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-6"><a href="#sql方式实现-6" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    | select  site,</span></span><br><span class="line"><span class="string">    |         date,</span></span><br><span class="line"><span class="string">    |         user_cnt,</span></span><br><span class="line"><span class="string">    |         count(user_cnt) over(partition by site order by date) as count</span></span><br><span class="line"><span class="string">    |from     site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-4"><a href="#结果-4" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-----+</span><br><span class="line">|site|      date|user_cnt|count|</span><br><span class="line">+----+----------+--------+-----+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|    <span class="number">1</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|    <span class="number">2</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|    <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|    <span class="number">1</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|    <span class="number">2</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|    <span class="number">3</span>|</span><br><span class="line">+----+----------+--------+-----+</span><br></pre></td></tr></table></figure>
+<h1 id="sum函数"><a href="#sum函数" class="headerlink" title="sum函数"></a>sum函数</h1><p>说明：该函数用于计算汇总值。</p>
+<h2 id="不指定order-by-1"><a href="#不指定order-by-1" class="headerlink" title="不指定order by"></a>不指定order by</h2><h3 id="DataFrame-API方式实现-6"><a href="#DataFrame-API方式实现-6" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sumWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.withColumn(<span class="string">"sum_user_cnt"</span>, sum(<span class="string">"user_cnt"</span>).over(sumWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sumWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  sum($<span class="string">"user_cnt"</span>).over(sumWSpec).as(<span class="string">"sum_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-7"><a href="#sql方式实现-7" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       sum(user_cnt) over(partition by site ) as sum_user_cnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-5"><a href="#结果-5" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|sum_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">810</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">810</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">810</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|        <span class="number">1500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|        <span class="number">1500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|        <span class="number">1500</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h2 id="指定order-by-1"><a href="#指定order-by-1" class="headerlink" title="指定order by"></a>指定order by</h2><h3 id="DataFrame-API方式实现-7"><a href="#DataFrame-API方式实现-7" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sumWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.withColumn(<span class="string">"sum_user_cnt"</span>, sum(<span class="string">"user_cnt"</span>).over(sumWSpec))</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sumWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  sum($<span class="string">"user_cnt"</span>).over(sumWSpec).as(<span class="string">"sum_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-8"><a href="#sql方式实现-8" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select site,</span></span><br><span class="line"><span class="string">    |       date,</span></span><br><span class="line"><span class="string">    |       user_cnt,</span></span><br><span class="line"><span class="string">    |       sum(user_cnt) over(partition by site order by date asc  rows between unbounded preceding and unbounded following ) as sum_user_cnt</span></span><br><span class="line"><span class="string">    |from   site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-6"><a href="#结果-6" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|sum_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">810</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">810</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">810</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|        <span class="number">1500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|        <span class="number">1500</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|        <span class="number">1500</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h1 id="min函数"><a href="#min函数" class="headerlink" title="min函数"></a>min函数</h1><h2 id="不指定order-by-2"><a href="#不指定order-by-2" class="headerlink" title="不指定order by"></a>不指定order by</h2><h3 id="DataFrame-API方式实现-8"><a href="#DataFrame-API方式实现-8" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> minWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.withColumn(<span class="string">"min_user_cnt"</span>, min(<span class="string">"user_cnt"</span>).over(minWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  min($<span class="string">"user_cnt"</span>).over(minWSpec)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-9"><a href="#sql方式实现-9" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        min(user_cnt) over(partition by site) as min_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-7"><a href="#结果-7" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br><span class="line">|site|      date|user_cnt|min(user_cnt) <span class="type">OVER</span> (<span class="type">PARTITION</span> <span class="type">BY</span> site unspecifiedframe$())|</span><br><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|                                                       <span class="number">450</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|                                                       <span class="number">450</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|                                                       <span class="number">450</span>|</span><br><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="指定order-by-2"><a href="#指定order-by-2" class="headerlink" title="指定order by"></a>指定order by</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> minWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.withColumn(<span class="string">"min_user_cnt"</span>, min(<span class="string">"user_cnt"</span>).over(minWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> minWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  min($<span class="string">"user_cnt"</span>).over(minWSpec)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-10"><a href="#sql方式实现-10" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        min(user_cnt) over(partition by site order by date asc rows between unbounded preceding and unbounded following) as min_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-8"><a href="#结果-8" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br><span class="line">|site|      date|user_cnt|min(user_cnt) <span class="type">OVER</span> (<span class="type">PARTITION</span> <span class="type">BY</span> site unspecifiedframe$())|</span><br><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|                                                       <span class="number">250</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|                                                       <span class="number">450</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|                                                       <span class="number">450</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|                                                       <span class="number">450</span>|</span><br><span class="line">+----+----------+--------+----------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h1 id="max函数"><a href="#max函数" class="headerlink" title="max函数"></a>max函数</h1><h2 id="不指定order-by-3"><a href="#不指定order-by-3" class="headerlink" title="不指定order by"></a>不指定order by</h2><h3 id="DataFrame-API方式实现-9"><a href="#DataFrame-API方式实现-9" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> maxWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.withColumn(<span class="string">"min_user_cnt"</span>, max(<span class="string">"user_cnt"</span>).over(maxWSpec))</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> maxWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  max($<span class="string">"user_cnt"</span>).over(maxWSpec).as(<span class="string">"max_user_cnt"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-11"><a href="#sql方式实现-11" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">   <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">     |select  site,</span></span><br><span class="line"><span class="string">     |        date,</span></span><br><span class="line"><span class="string">     |        user_cnt,</span></span><br><span class="line"><span class="string">     |        max(user_cnt) over(partition by site ) as min_user_cnt</span></span><br><span class="line"><span class="string">     |from    site_info</span></span><br><span class="line"><span class="string">   "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-9"><a href="#结果-9" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|min_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">290</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">290</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">290</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|         <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|         <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|         <span class="number">550</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h2 id="指定order-by-3"><a href="#指定order-by-3" class="headerlink" title="指定order by"></a>指定order by</h2><h3 id="DataFrame-API方式实现-10"><a href="#DataFrame-API方式实现-10" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> maxWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.withColumn(<span class="string">"min_user_cnt"</span>, max(<span class="string">"user_cnt"</span>).over(maxWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> maxWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  max($<span class="string">"user_cnt"</span>).over(maxWSpec).as(<span class="string">"max_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-12"><a href="#sql方式实现-12" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        max(user_cnt) over(partition by site order by date asc rows between unbounded preceding and unbounded following) as min_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-10"><a href="#结果-10" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|min_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">290</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">290</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">290</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|         <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|         <span class="number">550</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|         <span class="number">550</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h1 id="avg函数"><a href="#avg函数" class="headerlink" title="avg函数"></a>avg函数</h1><p>说明：该函数用于计算平均值。</p>
+<h2 id="不指定order-by-4"><a href="#不指定order-by-4" class="headerlink" title="不指定order by"></a>不指定order by</h2><h3 id="DataFrame-API方式实现-11"><a href="#DataFrame-API方式实现-11" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> avgWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line"> df.withColumn(<span class="string">"avg_user_cnt"</span>, avg(<span class="string">"user_cnt"</span>).over(avgWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> avgWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  avg(<span class="string">"user_cnt"</span>).over(avgWSpec).as(<span class="string">"avg_user_cnt"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-13"><a href="#sql方式实现-13" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        avg(user_cnt) over(partition by site ) as avg_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-11"><a href="#结果-11" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|avg_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|       <span class="number">270.0</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|       <span class="number">270.0</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|       <span class="number">270.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|       <span class="number">500.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|       <span class="number">500.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|       <span class="number">500.0</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h2 id="指定order-by-4"><a href="#指定order-by-4" class="headerlink" title="指定order by"></a>指定order by</h2><h3 id="DataFrame-API方式实现-12"><a href="#DataFrame-API方式实现-12" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h3><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> avgWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.withColumn(<span class="string">"avg_user_cnt"</span>, avg(<span class="string">"user_cnt"</span>).over(avgWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> avgWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="string">"date"</span>).rowsBetween(<span class="type">Long</span>.<span class="type">MinValue</span>, <span class="type">Long</span>.<span class="type">MaxValue</span>)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  avg(<span class="string">"user_cnt"</span>).over(avgWSpec).as(<span class="string">"avg_user_cnt"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h3 id="sql方式实现-14"><a href="#sql方式实现-14" class="headerlink" title="sql方式实现"></a>sql方式实现</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        avg(user_cnt) over(partition by site order by date  asc rows between unbounded preceding and unbounded following ) as avg_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h3 id="结果-12"><a href="#结果-12" class="headerlink" title="结果"></a>结果</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+------------+</span><br><span class="line">|site|      date|user_cnt|avg_user_cnt|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|       <span class="number">270.0</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|       <span class="number">270.0</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|       <span class="number">270.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|       <span class="number">500.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|       <span class="number">500.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|       <span class="number">500.0</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h1 id="rank函数"><a href="#rank函数" class="headerlink" title="rank函数"></a>rank函数</h1><p>说明：该函数用于计算排名。</p>
+<h2 id="DataFrame-API方式实现-13"><a href="#DataFrame-API方式实现-13" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'user_cnt</span>.desc)</span><br><span class="line">df.withColumn(<span class="string">"rank"</span>, rank().over(rankWSpec))</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'user_cnt</span>.desc)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  rank().over(rankWSpec).as(<span class="string">"rank"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-15"><a href="#sql方式实现-15" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        rank() over(partition by site order by user_cnt desc) as rank_user_cnt</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-13"><a href="#结果-13" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="row-number-over-函数"><a href="#row-number-over-函数" class="headerlink" title="row_number over 函数"></a>row_number over 函数</h1><h2 id="DataFrame-API方式实现-14"><a href="#DataFrame-API方式实现-14" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rowNUmberWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> desc, <span class="symbol">'user_cnt</span> desc)</span><br><span class="line">df.withColumn(<span class="string">"row_num"</span>, row_number().over(rowNUmberWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rowNUmberWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> desc, <span class="symbol">'user_cnt</span> desc)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  row_number().over(rowNUmberWSpec).as(<span class="string">"row_num"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-16"><a href="#sql方式实现-16" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        row_number() over(partition by site order by date desc , user_cnt desc ) as row_num</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">    |</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin)</span><br></pre></td></tr></table></figure>
+<h2 id="结果-14"><a href="#结果-14" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-------+</span><br><span class="line">|site|      date|user_cnt|row_num|</span><br><span class="line">+----+----------+--------+-------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|      <span class="number">1</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|      <span class="number">2</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|      <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|      <span class="number">1</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|      <span class="number">2</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|      <span class="number">3</span>|</span><br><span class="line">+----+----------+--------+-------+</span><br></pre></td></tr></table></figure>
+<h1 id="dense-rank函数"><a href="#dense-rank函数" class="headerlink" title="dense_rank函数"></a>dense_rank函数</h1><p>说明：该函数用于计算连续排名。</p>
+<h2 id="DataFrame-API方式实现-15"><a href="#DataFrame-API方式实现-15" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> denseRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.withColumn(<span class="string">"dense_rank"</span>, dense_rank() over (denseRankWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> denseRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  dense_rank().over(denseRankWSpec).as(<span class="string">"dense_rank"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-17"><a href="#sql方式实现-17" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  spark.sql(</span><br><span class="line">    <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">      |select site,</span></span><br><span class="line"><span class="string">      |       date,</span></span><br><span class="line"><span class="string">      |       user_cnt,</span></span><br><span class="line"><span class="string">      |       dense_rank() over(partition by site order by date asc ) as dense_rank</span></span><br><span class="line"><span class="string">      |from   site_info</span></span><br><span class="line"><span class="string">      |</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-15"><a href="#结果-15" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+----------+</span><br><span class="line">|site|      date|user_cnt|dense_rank|</span><br><span class="line">+----+----------+--------+----------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">1</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">2</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">3</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|         <span class="number">1</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|         <span class="number">2</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|         <span class="number">3</span>|</span><br><span class="line">+----+----------+--------+----------+</span><br></pre></td></tr></table></figure>
+<h1 id="percent-rank函数"><a href="#percent-rank函数" class="headerlink" title="percent_rank函数"></a>percent_rank函数</h1><p>说明：该函数用于计算一组数据中某行的相对排名。</p>
+<h2 id="DataFrame-API方式实现-16"><a href="#DataFrame-API方式实现-16" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> percentRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.withColumn(<span class="string">"percent_rank"</span>, percent_rank() over (percentRankWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> percentRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  percent_rank().over(percentRankWSpec).as(<span class="string">"percent_rank"</span>)</span><br><span class="line">).show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-18"><a href="#sql方式实现-18" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  spark.sql(</span><br><span class="line">    <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">      |select site,</span></span><br><span class="line"><span class="string">      |       date,</span></span><br><span class="line"><span class="string">      |       user_cnt,</span></span><br><span class="line"><span class="string">      |       percent_rank() over(partition by site order by date asc ) as percent_rank</span></span><br><span class="line"><span class="string">      |from   site_info</span></span><br><span class="line"><span class="string">      |</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-16"><a href="#结果-16" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">|site|      date|user_cnt|percent_rank|</span><br><span class="line">+----+----------+--------+------------+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|         <span class="number">0.0</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|         <span class="number">0.5</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|         <span class="number">1.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|         <span class="number">0.0</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|         <span class="number">0.5</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|         <span class="number">1.0</span>|</span><br><span class="line">+----+----------+--------+------------+</span><br></pre></td></tr></table></figure>
+<h1 id="ntile函数"><a href="#ntile函数" class="headerlink" title="ntile函数"></a>ntile函数</h1><p>说明：用于将分组数据按照顺序切分成n片，并返回当前切片值，如果切片不均匀，默认增加第一个切片的分布。</p>
+<h2 id="DataFrame-API方式实现-17"><a href="#DataFrame-API方式实现-17" class="headerlink" title="DataFrame API方式实现"></a>DataFrame API方式实现</h2><p><strong>方式一：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> ntileRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.withColumn(<span class="string">"ntile"</span>, ntile(<span class="number">2</span>).over(ntileRankWSpec)).show()</span><br></pre></td></tr></table></figure></p>
+<p><strong>方式二：</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> ntileRankWSpec = <span class="type">Window</span>.partitionBy(<span class="string">"site"</span>).orderBy(<span class="symbol">'date</span> asc)</span><br><span class="line">df.select(</span><br><span class="line">  $<span class="string">"site"</span>,</span><br><span class="line">  $<span class="string">"date"</span>,</span><br><span class="line">  $<span class="string">"user_cnt"</span>,</span><br><span class="line">  ntile(<span class="number">2</span>).over(ntileRankWSpec).as(<span class="string">"ntile"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h2 id="sql方式实现-19"><a href="#sql方式实现-19" class="headerlink" title="sql方式实现"></a>sql方式实现</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spark.sql(</span><br><span class="line">  <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    |select  site,</span></span><br><span class="line"><span class="string">    |        date,</span></span><br><span class="line"><span class="string">    |        user_cnt,</span></span><br><span class="line"><span class="string">    |        ntile(2) over(partition by site order by date) as ntile</span></span><br><span class="line"><span class="string">    |from    site_info</span></span><br><span class="line"><span class="string">  "</span><span class="string">""</span>.stripMargin).show()</span><br></pre></td></tr></table></figure>
+<h2 id="结果-17"><a href="#结果-17" class="headerlink" title="结果"></a>结果</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------+-----+</span><br><span class="line">|site|      date|user_cnt|ntile|</span><br><span class="line">+----+----------+--------+-----+</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">250</span>|    <span class="number">1</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">290</span>|    <span class="number">1</span>|</span><br><span class="line">|湖北|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">270</span>|    <span class="number">2</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-01</span>|     <span class="number">500</span>|    <span class="number">1</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-02</span>|     <span class="number">450</span>|    <span class="number">1</span>|</span><br><span class="line">|浙江|<span class="number">2018</span><span class="number">-01</span><span class="number">-03</span>|     <span class="number">550</span>|    <span class="number">2</span>|</span><br><span class="line">+----+----------+--------+-----+</span><br></pre></td></tr></table></figure>
+<h1 id="致谢！"><a href="#致谢！" class="headerlink" title="致谢！"></a>致谢！</h1><p>本人能力有限，博客错误难免，有错往将错误发送到邮箱(<a href="mailto:t_spider@aliyun.com" target="_blank" rel="noopener">t_spider@aliyun.com</a>)</p>
+
+      
+    </div>
+    
+    
+    
+     <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/2019/04/15/spark sql窗口函数实战/">spark sql窗口函数实战</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
+  <p><span>发布时间:</span>2019年04月15日 - 16:04</p>
+  <p><span>最后更新:</span>2019年04月15日 - 16:04</p>
+  <p><span>原始链接:</span><a href="/2019/04/15/spark sql窗口函数实战/" title="spark sql窗口函数实战">https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '复制成功',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+
+      
+     </div>
+     <div>
+     
+     <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spark/" rel="tag"><i class="fa fa-tag"></i> spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/14/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/" rel="next" title="idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)">
+                <i class="fa fa-chevron-left"></i> idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="tang" />
+            
+              <p class="site-author-name" itemprop="name">tang</p>
+              <p class="site-description motion-element" itemprop="description">火星度假村追梦程序员。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/tgluon" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-number">1.</span> <span class="nav-text">参考文章</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备数据"><span class="nav-number">1.1.</span> <span class="nav-text">准备数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#平均移动值"><span class="nav-number">2.</span> <span class="nav-text">平均移动值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现"><span class="nav-number">2.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现"><span class="nav-number">2.2.</span> <span class="nav-text">sql方式实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lag函数"><span class="nav-number">3.</span> <span class="nav-text">lag函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-1"><span class="nav-number">3.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-1"><span class="nav-number">3.2.</span> <span class="nav-text">sql方式实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lead函数"><span class="nav-number">4.</span> <span class="nav-text">lead函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-2"><span class="nav-number">4.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-2"><span class="nav-number">4.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果"><span class="nav-number">4.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FIRST-VALUE函数"><span class="nav-number">5.</span> <span class="nav-text">FIRST_VALUE函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-3"><span class="nav-number">5.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-3"><span class="nav-number">5.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-1"><span class="nav-number">5.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LAST-VALUE函数"><span class="nav-number">6.</span> <span class="nav-text">LAST_VALUE函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-4"><span class="nav-number">6.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-4"><span class="nav-number">6.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-2"><span class="nav-number">6.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COUNT"><span class="nav-number">7.</span> <span class="nav-text">COUNT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不指定order-by"><span class="nav-number">7.1.</span> <span class="nav-text">不指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-5"><span class="nav-number">7.1.1.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-3"><span class="nav-number">7.1.2.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定order-by"><span class="nav-number">7.2.</span> <span class="nav-text">指定order by</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-5"><span class="nav-number">7.3.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-6"><span class="nav-number">7.4.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-4"><span class="nav-number">7.5.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sum函数"><span class="nav-number">8.</span> <span class="nav-text">sum函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不指定order-by-1"><span class="nav-number">8.1.</span> <span class="nav-text">不指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-6"><span class="nav-number">8.1.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-7"><span class="nav-number">8.1.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-5"><span class="nav-number">8.1.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定order-by-1"><span class="nav-number">8.2.</span> <span class="nav-text">指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-7"><span class="nav-number">8.2.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-8"><span class="nav-number">8.2.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-6"><span class="nav-number">8.2.3.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#min函数"><span class="nav-number">9.</span> <span class="nav-text">min函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不指定order-by-2"><span class="nav-number">9.1.</span> <span class="nav-text">不指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-8"><span class="nav-number">9.1.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-9"><span class="nav-number">9.1.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-7"><span class="nav-number">9.1.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定order-by-2"><span class="nav-number">9.2.</span> <span class="nav-text">指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-10"><span class="nav-number">9.2.1.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-8"><span class="nav-number">9.2.2.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#max函数"><span class="nav-number">10.</span> <span class="nav-text">max函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不指定order-by-3"><span class="nav-number">10.1.</span> <span class="nav-text">不指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-9"><span class="nav-number">10.1.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-11"><span class="nav-number">10.1.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-9"><span class="nav-number">10.1.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定order-by-3"><span class="nav-number">10.2.</span> <span class="nav-text">指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-10"><span class="nav-number">10.2.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-12"><span class="nav-number">10.2.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-10"><span class="nav-number">10.2.3.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#avg函数"><span class="nav-number">11.</span> <span class="nav-text">avg函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不指定order-by-4"><span class="nav-number">11.1.</span> <span class="nav-text">不指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-11"><span class="nav-number">11.1.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-13"><span class="nav-number">11.1.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-11"><span class="nav-number">11.1.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定order-by-4"><span class="nav-number">11.2.</span> <span class="nav-text">指定order by</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataFrame-API方式实现-12"><span class="nav-number">11.2.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql方式实现-14"><span class="nav-number">11.2.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果-12"><span class="nav-number">11.2.3.</span> <span class="nav-text">结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rank函数"><span class="nav-number">12.</span> <span class="nav-text">rank函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-13"><span class="nav-number">12.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-15"><span class="nav-number">12.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-13"><span class="nav-number">12.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#row-number-over-函数"><span class="nav-number">13.</span> <span class="nav-text">row_number over 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-14"><span class="nav-number">13.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-16"><span class="nav-number">13.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-14"><span class="nav-number">13.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dense-rank函数"><span class="nav-number">14.</span> <span class="nav-text">dense_rank函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-15"><span class="nav-number">14.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-17"><span class="nav-number">14.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-15"><span class="nav-number">14.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#percent-rank函数"><span class="nav-number">15.</span> <span class="nav-text">percent_rank函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-16"><span class="nav-number">15.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-18"><span class="nav-number">15.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-16"><span class="nav-number">15.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ntile函数"><span class="nav-number">16.</span> <span class="nav-text">ntile函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame-API方式实现-17"><span class="nav-number">16.1.</span> <span class="nav-text">DataFrame API方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql方式实现-19"><span class="nav-number">16.2.</span> <span class="nav-text">sql方式实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果-17"><span class="nav-number">16.3.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#致谢！"><span class="nav-number">17.</span> <span class="nav-text">致谢！</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tang</span>
+
+  
+</div>
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+<span id="busuanzi_container_site_pv">
+    本站总访问量:<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+  
+<!--<div class="powered-by">{
+  }由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动{}</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">{
+  }主题 &mdash; {
+  }<a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">{
+    }NexT.Pisces{
+  }</a> v5.1.4{
+}</div>
+-->
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共52.2k字</span>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+  
+  <script type="text/javascript"
+color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://tgluon.github.io/2019/04/15/spark sql窗口函数实战/';
+          this.page.identifier = '2019/04/15/spark sql窗口函数实战/';
+          this.page.title = 'spark sql窗口函数实战';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
