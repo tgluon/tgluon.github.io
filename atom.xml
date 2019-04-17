@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://tgluon.github.io/"/>
-  <updated>2019-04-17T10:28:00.000Z</updated>
+  <updated>2019-04-17T10:36:33.000Z</updated>
   <id>https://tgluon.github.io/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <title>antlr4学习笔记</title>
     <link href="https://tgluon.github.io/2019/04/17/antlr4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>https://tgluon.github.io/2019/04/17/antlr4学习笔记/</id>
-    <published>2019-04-17T10:29:08.038Z</published>
-    <updated>2019-04-17T10:28:00.000Z</updated>
+    <published>2019-04-17T10:36:55.169Z</published>
+    <updated>2019-04-17T10:36:33.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="下载antlr"><a href="#下载antlr" class="headerlink" title="下载antlr"></a>下载antlr</h1><p><a href="https://www.antlr.org/download/antlr-4.7.2-complete.jar" target="_blank" rel="noopener">https://www.antlr.org/download/antlr-4.7.2-complete.jar</a>   </p><h1 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure><h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><h2 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h2><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p><h2 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h2><p>antlr4 Hello.g4<br>javac Hello*.java</p><h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E6%B5%81%E5%8A%A8%E8%BF%87%E7%A8%8B.png" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="下载antlr"><a href="#下载antlr" class="headerlink" title="下载antlr"></a>下载antlr</h1><p><a href="https://www.antlr.org/download/antlr-4.7.2-complete.jar" target="_blank" rel="noopener">https://www.antlr.org/download/antlr-4.7.2-complete.jar</a>   </p><h1 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure><h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><h2 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h2><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p><h2 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h2><p>antlr4 Hello.g4<br>javac Hello*.java</p><h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/数据在语言程序中的流动过程.png.png" alt=""></p>]]></content>
     
     <summary type="html">
     
@@ -219,31 +219,6 @@
   </entry>
   
   <entry>
-    <title>scala自定注解</title>
-    <link href="https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/"/>
-    <id>https://tgluon.github.io/2019/01/04/scala自定义注解/</id>
-    <published>2019-01-04T11:53:18.000Z</published>
-    <updated>2019-04-10T10:31:26.659Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="为什么要注解"><a href="#为什么要注解" class="headerlink" title="为什么要注解"></a>为什么要注解</h1><p>除了编译和允许之外，还可以对程序做：<br>1、使用Scaladoc 自动产生文档;<br>2、漂亮的打印印出符合你偏爱分割的代码;<br>3、代码常见错误检查，如：打开了文件却没(在全部逻辑分支中)关闭。<br>4、实验类型检查，例如副作用管理或所有权属性确认。<br>这类工具（程序）被称为元编程工具，<code>它们把其它程序当做输入程序</code>。  </p><h1 id="scala注解所在包和基本语法格式"><a href="#scala注解所在包和基本语法格式" class="headerlink" title="scala注解所在包和基本语法格式"></a>scala注解所在包和基本语法格式</h1><p>注解所在包： 标准库定义的注解相关内容在包scala.annotation中。<br>基本语法： @注解名称(注解参数)  </p><h1 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h1><p>自定义注解需要从注解特质继承，scala提供两种注解：<br> 1、基本语法： @注解名称(注解参数)<br> scala中的自定义注解不是接口/特质，而是类。<br>自定义注解需要从注解特质中继承，Scala中提供了两类注解特质：</p><p>scala.annotation.ClassfileAnnotation 由Java编译器生成注解<br>scala.annotation.StaticAnnotation 由Scala编译器生成注解</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;为什么要注解&quot;&gt;&lt;a href=&quot;#为什么要注解&quot; class=&quot;headerlink&quot; title=&quot;为什么要注解&quot;&gt;&lt;/a&gt;为什么要注解&lt;/h1&gt;&lt;p&gt;除了编译和允许之外，还可以对程序做：&lt;br&gt;1、使用Scaladoc 自动产生文档;&lt;br&gt;2、漂亮的打印印
-      
-    
-    </summary>
-    
-      <category term="scala" scheme="https://tgluon.github.io/categories/scala/"/>
-    
-    
-      <category term="scala" scheme="https://tgluon.github.io/tags/scala/"/>
-    
-  </entry>
-  
-  <entry>
     <title>scala特殊符号使用</title>
     <link href="https://tgluon.github.io/2019/01/04/scala%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8/"/>
     <id>https://tgluon.github.io/2019/01/04/scala特殊符号使用/</id>
@@ -257,6 +232,31 @@
       
       
         &lt;h1 id=&quot;符号&quot;&gt;&lt;a href=&quot;#符号&quot; class=&quot;headerlink&quot; title=&quot;_*符号&quot;&gt;&lt;/a&gt;_*符号&lt;/h1&gt;&lt;p&gt;作用：它告诉编译器将序列类型的单个参数视为可变参数序列。&lt;br&gt;举例：&lt;br&gt;&lt;figure class=&quot;highlight sc
+      
+    
+    </summary>
+    
+      <category term="scala" scheme="https://tgluon.github.io/categories/scala/"/>
+    
+    
+      <category term="scala" scheme="https://tgluon.github.io/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>scala自定注解</title>
+    <link href="https://tgluon.github.io/2019/01/04/scala%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/"/>
+    <id>https://tgluon.github.io/2019/01/04/scala自定义注解/</id>
+    <published>2019-01-04T11:53:18.000Z</published>
+    <updated>2019-04-10T10:31:26.659Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="为什么要注解"><a href="#为什么要注解" class="headerlink" title="为什么要注解"></a>为什么要注解</h1><p>除了编译和允许之外，还可以对程序做：<br>1、使用Scaladoc 自动产生文档;<br>2、漂亮的打印印出符合你偏爱分割的代码;<br>3、代码常见错误检查，如：打开了文件却没(在全部逻辑分支中)关闭。<br>4、实验类型检查，例如副作用管理或所有权属性确认。<br>这类工具（程序）被称为元编程工具，<code>它们把其它程序当做输入程序</code>。  </p><h1 id="scala注解所在包和基本语法格式"><a href="#scala注解所在包和基本语法格式" class="headerlink" title="scala注解所在包和基本语法格式"></a>scala注解所在包和基本语法格式</h1><p>注解所在包： 标准库定义的注解相关内容在包scala.annotation中。<br>基本语法： @注解名称(注解参数)  </p><h1 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h1><p>自定义注解需要从注解特质继承，scala提供两种注解：<br> 1、基本语法： @注解名称(注解参数)<br> scala中的自定义注解不是接口/特质，而是类。<br>自定义注解需要从注解特质中继承，Scala中提供了两类注解特质：</p><p>scala.annotation.ClassfileAnnotation 由Java编译器生成注解<br>scala.annotation.StaticAnnotation 由Scala编译器生成注解</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;为什么要注解&quot;&gt;&lt;a href=&quot;#为什么要注解&quot; class=&quot;headerlink&quot; title=&quot;为什么要注解&quot;&gt;&lt;/a&gt;为什么要注解&lt;/h1&gt;&lt;p&gt;除了编译和允许之外，还可以对程序做：&lt;br&gt;1、使用Scaladoc 自动产生文档;&lt;br&gt;2、漂亮的打印印
       
     
     </summary>
