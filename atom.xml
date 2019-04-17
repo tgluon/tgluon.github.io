@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://tgluon.github.io/"/>
-  <updated>2019-04-17T10:36:33.000Z</updated>
+  <updated>2019-04-17T10:45:55.000Z</updated>
   <id>https://tgluon.github.io/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <title>antlr4学习笔记</title>
     <link href="https://tgluon.github.io/2019/04/17/antlr4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>https://tgluon.github.io/2019/04/17/antlr4学习笔记/</id>
-    <published>2019-04-17T10:36:55.169Z</published>
-    <updated>2019-04-17T10:36:33.000Z</updated>
+    <published>2019-04-17T10:46:07.910Z</published>
+    <updated>2019-04-17T10:45:55.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="下载antlr"><a href="#下载antlr" class="headerlink" title="下载antlr"></a>下载antlr</h1><p><a href="https://www.antlr.org/download/antlr-4.7.2-complete.jar" target="_blank" rel="noopener">https://www.antlr.org/download/antlr-4.7.2-complete.jar</a>   </p><h1 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure><h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><h2 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h2><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p><h2 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h2><p>antlr4 Hello.g4<br>javac Hello*.java</p><h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/数据在语言程序中的流动过程.png.png" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="下载antlr"><a href="#下载antlr" class="headerlink" title="下载antlr"></a>下载antlr</h1><p><a href="https://www.antlr.org/download/antlr-4.7.2-complete.jar" target="_blank" rel="noopener">https://www.antlr.org/download/antlr-4.7.2-complete.jar</a>   </p><h1 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure><h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><h2 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h2><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p><h2 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h2><p>antlr4 Hello.g4<br>javac Hello*.java</p><h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/数据在语言程序中的流动过程.png" alt=""></p>]]></content>
     
     <summary type="html">
     
@@ -118,31 +118,6 @@
   </entry>
   
   <entry>
-    <title>java concurrent包类详解</title>
-    <link href="https://tgluon.github.io/2019/02/13/java%20concurrent%E5%8C%85%E7%B1%BB%E8%AF%A6%E8%A7%A3/"/>
-    <id>https://tgluon.github.io/2019/02/13/java concurrent包类详解/</id>
-    <published>2019-02-13T15:34:37.000Z</published>
-    <updated>2019-02-13T09:41:05.450Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>原文：<a href="https://zhuanlan.zhihu.com/p/27314456" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27314456</a><br>Semaphore(信号量)是java.util.concurrent下的一个工具类.<strong>用来控制可同时访问特定资源的线程数</strong>.内部是通过维护父类(AQS)的 int state值实现.<br>Semaphore中有一个”许可”的概念:</p><p>访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。<br>访问资源后，使用release()释放许可。</p><p>这个许可在构造时传入,赋给state值,它等同于state.</p><p><strong>Semaphore应用场景</strong><br>系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。<br>Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。<br><strong>使用案例：</strong><br>spark LiveListenerBus类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> val eventLock = <span class="keyword">new</span> Semaphore(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> val listenerThread = <span class="keyword">new</span> Thread(name) &#123;</span><br><span class="line">  setDaemon(<span class="keyword">true</span>)</span><br><span class="line">  <span class="function">override def <span class="title">run</span><span class="params">()</span>: Unit </span>= Utils.tryOrStopSparkContext(sparkContext) &#123;</span><br><span class="line">    LiveListenerBus.withinListenerThread.withValue(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        eventLock.acquire()</span><br><span class="line">        self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">          processingEvent = <span class="keyword">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 消费消息</span></span><br><span class="line">          val event = eventQueue.poll</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// Get out of the while loop and shutdown the daemon thread</span></span><br><span class="line">            <span class="keyword">if</span> (!stopped.get) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Polling `null` from eventQueue means"</span> +</span><br><span class="line">                <span class="string">" the listener bus has been stopped. So `stopped` must be true"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          postToAll(event)</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">            processingEvent = <span class="keyword">false</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>Semaphore属于一种较常见的限流手段，Google Guava封装了一层。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JDK API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        semaphore.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">        semaphore.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Google Guava API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> RateLimiter rateLimiter = RateLimiter.create(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        rateLimiter.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;Semaphore&quot;&gt;&lt;a href=&quot;#Semaphore&quot; class=&quot;headerlink&quot; title=&quot;Semaphore&quot;&gt;&lt;/a&gt;Semaphore&lt;/h1&gt;&lt;p&gt;原文：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/2
-      
-    
-    </summary>
-    
-      <category term="java" scheme="https://tgluon.github.io/categories/java/"/>
-    
-    
-      <category term="java" scheme="https://tgluon.github.io/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
     <title>DynamicVariable详解</title>
     <link href="https://tgluon.github.io/2019/02/13/DynamicVariable%E8%AF%A6%E8%A7%A3/"/>
     <id>https://tgluon.github.io/2019/02/13/DynamicVariable详解/</id>
@@ -164,6 +139,31 @@
     
     
       <category term="scala" scheme="https://tgluon.github.io/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java concurrent包类详解</title>
+    <link href="https://tgluon.github.io/2019/02/13/java%20concurrent%E5%8C%85%E7%B1%BB%E8%AF%A6%E8%A7%A3/"/>
+    <id>https://tgluon.github.io/2019/02/13/java concurrent包类详解/</id>
+    <published>2019-02-13T15:34:37.000Z</published>
+    <updated>2019-02-13T09:41:05.450Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>原文：<a href="https://zhuanlan.zhihu.com/p/27314456" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27314456</a><br>Semaphore(信号量)是java.util.concurrent下的一个工具类.<strong>用来控制可同时访问特定资源的线程数</strong>.内部是通过维护父类(AQS)的 int state值实现.<br>Semaphore中有一个”许可”的概念:</p><p>访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。<br>访问资源后，使用release()释放许可。</p><p>这个许可在构造时传入,赋给state值,它等同于state.</p><p><strong>Semaphore应用场景</strong><br>系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。<br>Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。<br><strong>使用案例：</strong><br>spark LiveListenerBus类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> val eventLock = <span class="keyword">new</span> Semaphore(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> val listenerThread = <span class="keyword">new</span> Thread(name) &#123;</span><br><span class="line">  setDaemon(<span class="keyword">true</span>)</span><br><span class="line">  <span class="function">override def <span class="title">run</span><span class="params">()</span>: Unit </span>= Utils.tryOrStopSparkContext(sparkContext) &#123;</span><br><span class="line">    LiveListenerBus.withinListenerThread.withValue(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        eventLock.acquire()</span><br><span class="line">        self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">          processingEvent = <span class="keyword">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 消费消息</span></span><br><span class="line">          val event = eventQueue.poll</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// Get out of the while loop and shutdown the daemon thread</span></span><br><span class="line">            <span class="keyword">if</span> (!stopped.get) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Polling `null` from eventQueue means"</span> +</span><br><span class="line">                <span class="string">" the listener bus has been stopped. So `stopped` must be true"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          postToAll(event)</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">            processingEvent = <span class="keyword">false</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>Semaphore属于一种较常见的限流手段，Google Guava封装了一层。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JDK API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        semaphore.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">        semaphore.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Google Guava API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> RateLimiter rateLimiter = RateLimiter.create(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        rateLimiter.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Semaphore&quot;&gt;&lt;a href=&quot;#Semaphore&quot; class=&quot;headerlink&quot; title=&quot;Semaphore&quot;&gt;&lt;/a&gt;Semaphore&lt;/h1&gt;&lt;p&gt;原文：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/2
+      
+    
+    </summary>
+    
+      <category term="java" scheme="https://tgluon.github.io/categories/java/"/>
+    
+    
+      <category term="java" scheme="https://tgluon.github.io/tags/java/"/>
     
   </entry>
   
@@ -369,31 +369,6 @@
   </entry>
   
   <entry>
-    <title>RCFILE格式存储到hive表</title>
-    <link href="https://tgluon.github.io/2018/07/28/RCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
-    <id>https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/</id>
-    <published>2018-07-27T23:43:23.000Z</published>
-    <updated>2018-07-28T00:40:59.557Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，<strong>被用于在一个时间点操作多行的场景</strong>。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。<br>RCFILE格式的输入输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.RCFileInputFormat</span><br><span class="line">org.apache.hadoop.hive.ql.io.RCFileOutputFormat</span><br></pre></td></tr></table></figure></p><p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p><h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立RCFILE格式表"><a href="#建立RCFILE格式表" class="headerlink" title="建立RCFILE格式表"></a>建立RCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_rcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> rcfile;</span><br></pre></td></tr></table></figure><h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_rcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p><h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_rcfile</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，&lt;strong&gt;被用于在一个时间点操作多行的
-      
-    
-    </summary>
-    
-      <category term="hive" scheme="https://tgluon.github.io/categories/hive/"/>
-    
-    
-      <category term="hive" scheme="https://tgluon.github.io/tags/hive/"/>
-    
-  </entry>
-  
-  <entry>
     <title>ORCFILE格式存储到hive表</title>
     <link href="https://tgluon.github.io/2018/07/28/ORCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
     <id>https://tgluon.github.io/2018/07/28/ORCFILE格式存储到hive表/</id>
@@ -432,6 +407,31 @@
       
       
         &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向
+      
+    
+    </summary>
+    
+      <category term="hive" scheme="https://tgluon.github.io/categories/hive/"/>
+    
+    
+      <category term="hive" scheme="https://tgluon.github.io/tags/hive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RCFILE格式存储到hive表</title>
+    <link href="https://tgluon.github.io/2018/07/28/RCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8/"/>
+    <id>https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/</id>
+    <published>2018-07-27T23:43:23.000Z</published>
+    <updated>2018-07-28T00:40:59.557Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，<strong>被用于在一个时间点操作多行的场景</strong>。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。<br>RCFILE格式的输入输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.RCFileInputFormat</span><br><span class="line">org.apache.hadoop.hive.ql.io.RCFileOutputFormat</span><br></pre></td></tr></table></figure></p><p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p><h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立RCFILE格式表"><a href="#建立RCFILE格式表" class="headerlink" title="建立RCFILE格式表"></a>建立RCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_rcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> rcfile;</span><br></pre></td></tr></table></figure><h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_rcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p><h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_rcfile</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，&lt;strong&gt;被用于在一个时间点操作多行的
       
     
     </summary>

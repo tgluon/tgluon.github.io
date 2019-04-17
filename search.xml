@@ -45,17 +45,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[java concurrent包类详解]]></title>
-    <url>%2F2019%2F02%2F13%2Fjava%20concurrent%E5%8C%85%E7%B1%BB%E8%AF%A6%E8%A7%A3%2F</url>
-    <content type="text"><![CDATA[Semaphore原文：https://zhuanlan.zhihu.com/p/27314456Semaphore(信号量)是java.util.concurrent下的一个工具类.用来控制可同时访问特定资源的线程数.内部是通过维护父类(AQS)的 int state值实现.Semaphore中有一个”许可”的概念: 访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。访问资源后，使用release()释放许可。 这个许可在构造时传入,赋给state值,它等同于state. Semaphore应用场景系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。使用案例：spark LiveListenerBus类1234567891011121314151617181920212223242526272829303132private val eventLock = new Semaphore(0)private val listenerThread = new Thread(name) &#123; setDaemon(true) override def run(): Unit = Utils.tryOrStopSparkContext(sparkContext) &#123; LiveListenerBus.withinListenerThread.withValue(true) &#123; while (true) &#123; eventLock.acquire() self.synchronized &#123; processingEvent = true &#125; try &#123; // 消费消息 val event = eventQueue.poll if (event == null) &#123; // Get out of the while loop and shutdown the daemon thread if (!stopped.get) &#123; throw new IllegalStateException("Polling `null` from eventQueue means" + " the listener bus has been stopped. So `stopped` must be true") &#125; return &#125; postToAll(event) &#125; finally &#123; self.synchronized &#123; processingEvent = false &#125; &#125; &#125; &#125; &#125;&#125; Semaphore属于一种较常见的限流手段，Google Guava封装了一层。123456789101112131415161718//JDK API：流速控制在每秒执行100个任务final Semaphore semaphore = new Semaphore(100);void submitTasks(List&lt;Runnable&gt; tasks, Executor executor) &#123; for (Runnable task : tasks) &#123; semaphore.acquire(); // 也许需要等待 executor.execute(task); semaphore.release(); &#125;&#125;//Google Guava API：流速控制在每秒执行100个任务final RateLimiter rateLimiter = RateLimiter.create(100);void submitTasks(List&lt;Runnable&gt; tasks, Executor executor) &#123; for (Runnable task : tasks) &#123; rateLimiter.acquire(); // 也许需要等待 executor.execute(task); &#125;&#125;]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[DynamicVariable详解]]></title>
     <url>%2F2019%2F02%2F13%2FDynamicVariable%E8%AF%A6%E8%A7%A3%2F</url>
     <content type="text"><![CDATA[内容来源于：https://stackoverflow.com/questions/5116352/when-we-should-use-scala-util-dynamicvariable 说明12protected val _response = new DynamicVariable[HttpServletResponse](null)protected val _request = new DynamicVariable[HttpServletRequest](null) DynamicVariable是贷款和动态范围模式的实现。 DynamicVariable的使用情况与Java中的ThreadLocal非常相似(事实上，DynamicVariable在后台使用InheritableThreadLocal) – 当需要在一个封闭的作用域内进行计算时，每个线程都有自己的副本的变量值：123dynamicVariable.withValue(value)&#123; valueInContext =&gt; // value used in the context&#125; 由于DynamicVariable使用可继承的ThreadLocal，变量的值被传递给上下文中生成的线程：12345dynamicVariable.withValue(value)&#123; valueInContext =&gt; spawn&#123; // value is passed to the spawned thread &#125;&#125; DynamicVariable(和ThreadLocal)在Scalatra中使用的原因与在许多其他框架(Lift，Spring，Struts等)中使用的相同 – 它是一种非侵入性的方式来存储和传递上下文(线程)特定的信息。 使HttpServletResponse和HttpServletRequest动态变量(并因此，绑定到处理请求的特定线程)只是最简单的方法来获取它们在代码中的任何地方(不通过方法参数或任何其他显式)。 案例1234567val dyn = new DynamicVariable[String]("withoutValue")def print=println(dyn.value)printdyn.withValue("withValue") &#123; print&#125;print 结果withoutValuewithValuewithoutValue]]></content>
@@ -64,6 +53,17 @@
       </categories>
       <tags>
         <tag>scala</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[java concurrent包类详解]]></title>
+    <url>%2F2019%2F02%2F13%2Fjava%20concurrent%E5%8C%85%E7%B1%BB%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[Semaphore原文：https://zhuanlan.zhihu.com/p/27314456Semaphore(信号量)是java.util.concurrent下的一个工具类.用来控制可同时访问特定资源的线程数.内部是通过维护父类(AQS)的 int state值实现.Semaphore中有一个”许可”的概念: 访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。访问资源后，使用release()释放许可。 这个许可在构造时传入,赋给state值,它等同于state. Semaphore应用场景系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。使用案例：spark LiveListenerBus类1234567891011121314151617181920212223242526272829303132private val eventLock = new Semaphore(0)private val listenerThread = new Thread(name) &#123; setDaemon(true) override def run(): Unit = Utils.tryOrStopSparkContext(sparkContext) &#123; LiveListenerBus.withinListenerThread.withValue(true) &#123; while (true) &#123; eventLock.acquire() self.synchronized &#123; processingEvent = true &#125; try &#123; // 消费消息 val event = eventQueue.poll if (event == null) &#123; // Get out of the while loop and shutdown the daemon thread if (!stopped.get) &#123; throw new IllegalStateException("Polling `null` from eventQueue means" + " the listener bus has been stopped. So `stopped` must be true") &#125; return &#125; postToAll(event) &#125; finally &#123; self.synchronized &#123; processingEvent = false &#125; &#125; &#125; &#125; &#125;&#125; Semaphore属于一种较常见的限流手段，Google Guava封装了一层。123456789101112131415161718//JDK API：流速控制在每秒执行100个任务final Semaphore semaphore = new Semaphore(100);void submitTasks(List&lt;Runnable&gt; tasks, Executor executor) &#123; for (Runnable task : tasks) &#123; semaphore.acquire(); // 也许需要等待 executor.execute(task); semaphore.release(); &#125;&#125;//Google Guava API：流速控制在每秒执行100个任务final RateLimiter rateLimiter = RateLimiter.create(100);void submitTasks(List&lt;Runnable&gt; tasks, Executor executor) &#123; for (Runnable task : tasks) &#123; rateLimiter.acquire(); // 也许需要等待 executor.execute(task); &#125;&#125;]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -155,17 +155,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[RCFILE格式存储到hive表]]></title>
-    <url>%2F2018%2F07%2F28%2FRCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
-    <content type="text"><![CDATA[概述RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，被用于在一个时间点操作多行的场景。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。RCFILE格式的输入输出包是：12org.apache.hadoop.hive.ql.io.RCFileInputFormatorg.apache.hadoop.hive.ql.io.RCFileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立RCFILE格式表12345678create table t_rcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as rcfile; 向表中导入数据注意：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_rcfile select * from t_textfile 查询1select * from t_rcfile]]></content>
-      <categories>
-        <category>hive</category>
-      </categories>
-      <tags>
-        <tag>hive</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[ORCFILE格式存储到hive表]]></title>
     <url>%2F2018%2F07%2F28%2FORCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
     <content type="text"><![CDATA[概述ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。ORCFILE格式的输出包是：1org.apache.hadoop.hive.ql.io.orc 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立ORCFILE格式表12345678create table t_orcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as orcfile; 向表中导入数据注意：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_orcfile select * from t_textfile]]></content>
@@ -180,6 +169,17 @@
     <title><![CDATA[TEXTFILE格式存储到hive表]]></title>
     <url>%2F2018%2F07%2F28%2FTEXTFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
     <content type="text"><![CDATA[概述TEXTFILE就是普通的文本型文件，是hadoop里面最常用的输入输出格式，也是hive默认文件格式，如果表定义为TEXFILE,则可以向该表中装载以逗号、tab、空格作为分隔符的数据，也可以导入json格式文件。TEXTFILE格式的输出包是： org.apache.hadoop.mapred.TextfileInputFormatorg.apache.hadoop.mapred.TextfileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立TEXTFILE格式表12345678create table t_textfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as textfile; 装载数据1load data local inpath '/home/hadoop/textfile/a.txt' into/overwrite t_textfile; 查询数据1select * from t_textfile]]></content>
+      <categories>
+        <category>hive</category>
+      </categories>
+      <tags>
+        <tag>hive</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[RCFILE格式存储到hive表]]></title>
+    <url>%2F2018%2F07%2F28%2FRCFILE%E6%A0%BC%E5%BC%8F%E5%AD%98%E5%82%A8%E5%88%B0hive%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[概述RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，被用于在一个时间点操作多行的场景。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。RCFILE格式的输入输出包是：12org.apache.hadoop.hive.ql.io.RCFileInputFormatorg.apache.hadoop.hive.ql.io.RCFileOutputFormat 注意:本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节 案例建立RCFILE格式表12345678create table t_rcfile( c1 string, c2 int, c3 string, c4 string) row format delimited fields terminated by '\t' stored as rcfile; 向表中导入数据注意：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。1insert overwrite table t_rcfile select * from t_textfile 查询1select * from t_rcfile]]></content>
       <categories>
         <category>hive</category>
       </categories>

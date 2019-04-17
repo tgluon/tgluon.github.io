@@ -391,7 +391,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-17T18:36:55+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-17T18:46:07+08:00">
                 2019-04-17
               </time>
             
@@ -501,7 +501,7 @@
 <h1 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure>
 <h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><h2 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h2><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p>
 <h2 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h2><p>antlr4 Hello.g4<br>javac Hello*.java</p>
-<h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/数据在语言程序中的流动过程.png.png" alt=""></p>
+<h2 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h2><p>grun Hello r -gui<br><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/数据在语言程序中的流动过程.png" alt=""></p>
 
           
         
@@ -1333,202 +1333,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/java concurrent包类详解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/13/java concurrent包类详解/" itemprop="url">java concurrent包类详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-13T23:34:37+08:00">
-                2019-02-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/13/java concurrent包类详解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/13/java concurrent包类详解/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  549
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>原文：<a href="https://zhuanlan.zhihu.com/p/27314456" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27314456</a><br>Semaphore(信号量)是java.util.concurrent下的一个工具类.<strong>用来控制可同时访问特定资源的线程数</strong>.内部是通过维护父类(AQS)的 int state值实现.<br>Semaphore中有一个”许可”的概念:</p>
-<p>访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。<br>访问资源后，使用release()释放许可。</p>
-<p>这个许可在构造时传入,赋给state值,它等同于state.</p>
-<p><strong>Semaphore应用场景</strong><br>系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。<br>Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。<br><strong>使用案例：</strong><br>spark LiveListenerBus类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> val eventLock = <span class="keyword">new</span> Semaphore(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> val listenerThread = <span class="keyword">new</span> Thread(name) &#123;</span><br><span class="line">  setDaemon(<span class="keyword">true</span>)</span><br><span class="line">  <span class="function">override def <span class="title">run</span><span class="params">()</span>: Unit </span>= Utils.tryOrStopSparkContext(sparkContext) &#123;</span><br><span class="line">    LiveListenerBus.withinListenerThread.withValue(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        eventLock.acquire()</span><br><span class="line">        self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">          processingEvent = <span class="keyword">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 消费消息</span></span><br><span class="line">          val event = eventQueue.poll</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// Get out of the while loop and shutdown the daemon thread</span></span><br><span class="line">            <span class="keyword">if</span> (!stopped.get) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Polling `null` from eventQueue means"</span> +</span><br><span class="line">                <span class="string">" the listener bus has been stopped. So `stopped` must be true"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          postToAll(event)</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">            processingEvent = <span class="keyword">false</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Semaphore属于一种较常见的限流手段，Google Guava封装了一层。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JDK API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        semaphore.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">        semaphore.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Google Guava API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> RateLimiter rateLimiter = RateLimiter.create(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        rateLimiter.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/DynamicVariable详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1674,6 +1478,202 @@
 <p>使HttpServletResponse和HttpServletRequest动态变量(并因此，绑定到处理请求的特定线程)只是最简单的方法来获取它们在代码中的任何地方(不通过方法参数或任何其他显式)。</p>
 <h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> dyn = <span class="keyword">new</span> <span class="type">DynamicVariable</span>[<span class="type">String</span>](<span class="string">"withoutValue"</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print=println</span></span>(dyn.value)</span><br><span class="line">print</span><br><span class="line">dyn.withValue(<span class="string">"withValue"</span>) &#123;</span><br><span class="line">  print</span><br><span class="line">&#125;</span><br><span class="line">print</span><br></pre></td></tr></table></figure>
 <p><strong><em>结果</em></strong><br>withoutValue<br>withValue<br>withoutValue   </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/java concurrent包类详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/13/java concurrent包类详解/" itemprop="url">java concurrent包类详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-13T23:34:37+08:00">
+                2019-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/13/java concurrent包类详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/13/java concurrent包类详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  549
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>原文：<a href="https://zhuanlan.zhihu.com/p/27314456" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27314456</a><br>Semaphore(信号量)是java.util.concurrent下的一个工具类.<strong>用来控制可同时访问特定资源的线程数</strong>.内部是通过维护父类(AQS)的 int state值实现.<br>Semaphore中有一个”许可”的概念:</p>
+<p>访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。<br>访问资源后，使用release()释放许可。</p>
+<p>这个许可在构造时传入,赋给state值,它等同于state.</p>
+<p><strong>Semaphore应用场景</strong><br>系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。<br>Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。<br><strong>使用案例：</strong><br>spark LiveListenerBus类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> val eventLock = <span class="keyword">new</span> Semaphore(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> val listenerThread = <span class="keyword">new</span> Thread(name) &#123;</span><br><span class="line">  setDaemon(<span class="keyword">true</span>)</span><br><span class="line">  <span class="function">override def <span class="title">run</span><span class="params">()</span>: Unit </span>= Utils.tryOrStopSparkContext(sparkContext) &#123;</span><br><span class="line">    LiveListenerBus.withinListenerThread.withValue(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        eventLock.acquire()</span><br><span class="line">        self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">          processingEvent = <span class="keyword">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 消费消息</span></span><br><span class="line">          val event = eventQueue.poll</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// Get out of the while loop and shutdown the daemon thread</span></span><br><span class="line">            <span class="keyword">if</span> (!stopped.get) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Polling `null` from eventQueue means"</span> +</span><br><span class="line">                <span class="string">" the listener bus has been stopped. So `stopped` must be true"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          postToAll(event)</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">            processingEvent = <span class="keyword">false</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Semaphore属于一种较常见的限流手段，Google Guava封装了一层。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JDK API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        semaphore.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">        semaphore.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Google Guava API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> RateLimiter rateLimiter = RateLimiter.create(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        rateLimiter.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
           
         
