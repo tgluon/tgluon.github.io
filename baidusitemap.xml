@@ -4,12 +4,32 @@
 
     
   <url>
+    <loc>https://tgluon.github.io/2019/04/19/sparksql%20DataSet%E7%AE%97%E5%AD%90%E5%AE%9E%E6%88%98/</loc>
+    <lastmod>2019-04-19T09:15:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>sparksql DataSet算子实战</title>
+        <pubTime>2019-04-19T09:16:10.779Z</pubTime>
+        
+        <tag>spark</tag>
+         
+         
+           
+             
+              <breadCrumb title="sparksql" url="https://tgluon.github.io/categories/sparksql/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://tgluon.github.io/2019/04/18/sparksql%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2019-04-18T08:09:23.000Z</lastmod>
+    <lastmod>2019-04-18T08:10:12.056Z</lastmod>
     <data>
         <display>
         <title>sparksql读取数据库问题</title>
-        <pubTime>2019-04-18T08:09:41.718Z</pubTime>
+        <pubTime>2019-04-18T08:10:12.056Z</pubTime>
         
         <tag>spark</tag>
          
