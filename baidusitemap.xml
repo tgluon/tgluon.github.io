@@ -4,12 +4,32 @@
 
     
   <url>
+    <loc>https://tgluon.github.io/2019/04/20/java%E4%B8%AD%E8%B0%83%E7%94%A8scala/</loc>
+    <lastmod>2019-04-20T10:44:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>java中调用scala</title>
+        <pubTime>2019-04-20T11:01:53.942Z</pubTime>
+        
+        <tag>java</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="https://tgluon.github.io/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://tgluon.github.io/2019/04/19/sparksql%20DataSet%E7%AE%97%E5%AD%90%E5%AE%9E%E6%88%98/</loc>
-    <lastmod>2019-04-19T09:15:51.000Z</lastmod>
+    <lastmod>2019-04-19T09:22:37.970Z</lastmod>
     <data>
         <display>
         <title>sparksql DataSet算子实战</title>
-        <pubTime>2019-04-19T09:16:10.779Z</pubTime>
+        <pubTime>2019-04-19T09:22:37.970Z</pubTime>
         
         <tag>spark</tag>
          
