@@ -4,12 +4,32 @@
 
     
   <url>
+    <loc>https://tgluon.github.io/2019/04/24/hive%20%E8%87%AA%E5%AE%9A%E4%B9%89UDTF%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2019-04-24T06:08:47.000Z</lastmod>
+    <data>
+        <display>
+        <title>hive自定义UDTF函数</title>
+        <pubTime>2019-04-24T06:14:12.078Z</pubTime>
+        
+        <tag>hive</tag>
+         
+         
+           
+             
+              <breadCrumb title="hive" url="https://tgluon.github.io/categories/hive/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://tgluon.github.io/2019/04/20/java%E4%B8%AD%E8%B0%83%E7%94%A8scala/</loc>
-    <lastmod>2019-04-20T10:44:16.000Z</lastmod>
+    <lastmod>2019-04-20T11:03:09.154Z</lastmod>
     <data>
         <display>
         <title>java中调用scala</title>
-        <pubTime>2019-04-20T11:01:53.942Z</pubTime>
+        <pubTime>2019-04-20T11:03:09.154Z</pubTime>
         
         <tag>java</tag>
          
