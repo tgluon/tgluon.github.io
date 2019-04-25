@@ -360,6 +360,242 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/04/25/elasticsearch学习第一弹：集群搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/25/elasticsearch学习第一弹：集群搭建/" itemprop="url">elasticsearch学习第一弹：集群搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-25T14:56:22+08:00">
+                2019-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/25/elasticsearch学习第一弹：集群搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/25/elasticsearch学习第一弹：集群搭建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,864
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  17
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h1><h2 id="下载资源包"><a href="#下载资源包" class="headerlink" title="下载资源包"></a>下载资源包</h2><p>到官方网站 <a href="https://www.elastic.co/downloads/" target="_blank" rel="noopener">https://www.elastic.co/downloads/</a> 分别下载需要安装的组件 </p>
+<h2 id="集群规划"><a href="#集群规划" class="headerlink" title="集群规划"></a>集群规划</h2><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip</th>
+<th>组件</th>
+<th>节点类型 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hadoop01</td>
+<td>192.168.8.81</td>
+<td>elasticsearch、kibana</td>
+<td>主节点、非数据节点</td>
+</tr>
+<tr>
+<td>hadoop02</td>
+<td>192.168.8.82</td>
+<td>elasticsearch</td>
+<td>主节点、非数据节点</td>
+</tr>
+<tr>
+<td>hadoop03</td>
+<td>192.168.8.83</td>
+<td>elasticsearch</td>
+<td>非主节点、数据节点</td>
+</tr>
+</tbody>
+</table>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>elasticsearch.yml  </p>
+<h3 id="hadoop01"><a href="#hadoop01" class="headerlink" title="hadoop01"></a>hadoop01</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"># ======================== <span class="type">Elasticsearch</span> <span class="type">Configuration</span> =========================</span><br><span class="line">#</span><br><span class="line"># <span class="type">NOTE</span>: <span class="type">Elasticsearch</span> comes <span class="keyword">with</span> reasonable defaults <span class="keyword">for</span> most settings.</span><br><span class="line">#       <span class="type">Before</span> you set out to tweak and tune the configuration, make sure you</span><br><span class="line">#       understand what are you trying to accomplish and the consequences.</span><br><span class="line">#</span><br><span class="line"># <span class="type">The</span> primary way of configuring a node is via <span class="keyword">this</span> file. <span class="type">This</span> template lists</span><br><span class="line"># the most important settings you may want to configure <span class="keyword">for</span> a production cluster.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Please</span> consult the documentation <span class="keyword">for</span> further information on configuration options:</span><br><span class="line"># https:<span class="comment">//www.elastic.co/guide/en/elasticsearch/reference/index.html</span></span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Cluster</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> your cluster:</span><br><span class="line">#</span><br><span class="line">#cluster.name: my-application</span><br><span class="line">cluster.name: cluster</span><br><span class="line">#</span><br><span class="line"># ------------------------------------ <span class="type">Node</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> the node:</span><br><span class="line">#</span><br><span class="line">#node.name: node<span class="number">-1</span></span><br><span class="line">node.name: node<span class="number">-1</span></span><br><span class="line">node.master: <span class="literal">true</span></span><br><span class="line">node.data: <span class="literal">false</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Add</span> custom attributes to the node:</span><br><span class="line">#</span><br><span class="line">#node.attr.rack: r1</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Paths</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to directory where to store the data (separate multiple locations by comma):</span><br><span class="line">#</span><br><span class="line">#path.data: /path/to/data</span><br><span class="line">path.data: /home/hadoop/elasticsearch/data</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to log files:</span><br><span class="line">#</span><br><span class="line">#path.logs: /path/to/logs</span><br><span class="line">path.logs: /home/hadoop/elasticsearch/logs</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Memory</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Lock</span> the memory on startup:</span><br><span class="line">#</span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Make</span> sure that the heap size is set to about half the memory available</span><br><span class="line"># on the system and that the owner of the process is allowed to use <span class="keyword">this</span></span><br><span class="line"># limit.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Elasticsearch</span> performs poorly when the system is swapping the memory.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Network</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> the bind address to a specific <span class="type">IP</span> (<span class="type">IPv4</span> or <span class="type">IPv6</span>):</span><br><span class="line">#</span><br><span class="line">#network.host: <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">network.host: <span class="number">192.168</span><span class="number">.8</span><span class="number">.81</span></span><br><span class="line">network.bind_host: <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> a custom port <span class="keyword">for</span> <span class="type">HTTP</span>:</span><br><span class="line">#</span><br><span class="line">#http.port: <span class="number">9200</span></span><br><span class="line">http.port: <span class="number">9200</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the network module documentation.</span><br><span class="line">#</span><br><span class="line"># --------------------------------- <span class="type">Discovery</span> ----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Pass</span> an initial list of hosts to perform discovery when <span class="keyword">this</span> node is started:</span><br><span class="line"># <span class="type">The</span> <span class="keyword">default</span> list of hosts is [<span class="string">"127.0.0.1"</span>, <span class="string">"[::1]"</span>]</span><br><span class="line">#</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"host1"</span>, <span class="string">"host2"</span>]</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"192.168.8.81"</span>,<span class="string">"192.168.8.82"</span>,<span class="string">"192.168.8.83"</span>]</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.8.81"</span>, <span class="string">"192.168.8.82"</span>, <span class="string">"192.168.8.83"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">Bootstrap</span> the cluster using an initial set of master-eligible nodes:</span><br><span class="line">#</span><br><span class="line">#cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#可能成为主的节点</span><br><span class="line">cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the discovery and cluster formation module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Gateway</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Block</span> initial recovery after a full cluster restart until <span class="type">N</span> nodes are started:</span><br><span class="line">#</span><br><span class="line">#gateway.recover_after_nodes: <span class="number">3</span></span><br><span class="line">#当集群内达到<span class="number">3</span>个时开始恢复数据（防止集群启动时部分节点自动恢复数据）</span><br><span class="line">gateway.recover_after_nodes: <span class="number">3</span>		</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the gateway module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Various</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Require</span> explicit names when deleting indices:</span><br><span class="line">#</span><br><span class="line">#action.destructive_requires_name: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="hadoop04"><a href="#hadoop04" class="headerlink" title="hadoop04"></a>hadoop04</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"># ======================== <span class="type">Elasticsearch</span> <span class="type">Configuration</span> =========================</span><br><span class="line">#</span><br><span class="line"># <span class="type">NOTE</span>: <span class="type">Elasticsearch</span> comes <span class="keyword">with</span> reasonable defaults <span class="keyword">for</span> most settings.</span><br><span class="line">#       <span class="type">Before</span> you set out to tweak and tune the configuration, make sure you</span><br><span class="line">#       understand what are you trying to accomplish and the consequences.</span><br><span class="line">#</span><br><span class="line"># <span class="type">The</span> primary way of configuring a node is via <span class="keyword">this</span> file. <span class="type">This</span> template lists</span><br><span class="line"># the most important settings you may want to configure <span class="keyword">for</span> a production cluster.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Please</span> consult the documentation <span class="keyword">for</span> further information on configuration options:</span><br><span class="line"># https:<span class="comment">//www.elastic.co/guide/en/elasticsearch/reference/index.html</span></span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Cluster</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> your cluster:</span><br><span class="line">#</span><br><span class="line">#cluster.name: my-application</span><br><span class="line">cluster.name: cluster</span><br><span class="line">#</span><br><span class="line"># ------------------------------------ <span class="type">Node</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> the node:</span><br><span class="line">#</span><br><span class="line">#node.name: node<span class="number">-2</span></span><br><span class="line">node.name: node<span class="number">-1</span></span><br><span class="line">node.master: <span class="literal">true</span></span><br><span class="line">node.data: <span class="literal">false</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Add</span> custom attributes to the node:</span><br><span class="line">#</span><br><span class="line">#node.attr.rack: r1</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Paths</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to directory where to store the data (separate multiple locations by comma):</span><br><span class="line">#</span><br><span class="line">#path.data: /path/to/data</span><br><span class="line">path.data: /home/hadoop/elasticsearch/data</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to log files:</span><br><span class="line">#</span><br><span class="line">#path.logs: /path/to/logs</span><br><span class="line">path.logs: /home/hadoop/elasticsearch/logs</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Memory</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Lock</span> the memory on startup:</span><br><span class="line">#</span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Make</span> sure that the heap size is set to about half the memory available</span><br><span class="line"># on the system and that the owner of the process is allowed to use <span class="keyword">this</span></span><br><span class="line"># limit.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Elasticsearch</span> performs poorly when the system is swapping the memory.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Network</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> the bind address to a specific <span class="type">IP</span> (<span class="type">IPv4</span> or <span class="type">IPv6</span>):</span><br><span class="line">#</span><br><span class="line">#network.host: <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">network.host: <span class="number">192.168</span><span class="number">.8</span><span class="number">.82</span></span><br><span class="line">network.bind_host: <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> a custom port <span class="keyword">for</span> <span class="type">HTTP</span>:</span><br><span class="line">#</span><br><span class="line">#http.port: <span class="number">9200</span></span><br><span class="line">http.port: <span class="number">9200</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the network module documentation.</span><br><span class="line">#</span><br><span class="line"># --------------------------------- <span class="type">Discovery</span> ----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Pass</span> an initial list of hosts to perform discovery when <span class="keyword">this</span> node is started:</span><br><span class="line"># <span class="type">The</span> <span class="keyword">default</span> list of hosts is [<span class="string">"127.0.0.1"</span>, <span class="string">"[::1]"</span>]</span><br><span class="line">#</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"host1"</span>, <span class="string">"host2"</span>]</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"192.168.8.81"</span>,<span class="string">"192.168.8.82"</span>,<span class="string">"192.168.8.83"</span>]</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.8.81"</span>, <span class="string">"192.168.8.82"</span>, <span class="string">"192.168.8.83"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">Bootstrap</span> the cluster using an initial set of master-eligible nodes:</span><br><span class="line">#</span><br><span class="line">#cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#可能成为主的节点</span><br><span class="line">cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the discovery and cluster formation module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Gateway</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Block</span> initial recovery after a full cluster restart until <span class="type">N</span> nodes are started:</span><br><span class="line">#</span><br><span class="line">#gateway.recover_after_nodes: <span class="number">3</span></span><br><span class="line">#当集群内达到<span class="number">3</span>个时开始恢复数据（防止集群启动时部分节点自动恢复数据）</span><br><span class="line">gateway.recover_after_nodes: <span class="number">3</span>		</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the gateway module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Various</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Require</span> explicit names when deleting indices:</span><br><span class="line">#</span><br><span class="line">#action.destructive_requires_name: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="hadoop03"><a href="#hadoop03" class="headerlink" title="hadoop03"></a>hadoop03</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"># ======================== <span class="type">Elasticsearch</span> <span class="type">Configuration</span> =========================</span><br><span class="line">#</span><br><span class="line"># <span class="type">NOTE</span>: <span class="type">Elasticsearch</span> comes <span class="keyword">with</span> reasonable defaults <span class="keyword">for</span> most settings.</span><br><span class="line">#       <span class="type">Before</span> you set out to tweak and tune the configuration, make sure you</span><br><span class="line">#       understand what are you trying to accomplish and the consequences.</span><br><span class="line">#</span><br><span class="line"># <span class="type">The</span> primary way of configuring a node is via <span class="keyword">this</span> file. <span class="type">This</span> template lists</span><br><span class="line"># the most important settings you may want to configure <span class="keyword">for</span> a production cluster.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Please</span> consult the documentation <span class="keyword">for</span> further information on configuration options:</span><br><span class="line"># https:<span class="comment">//www.elastic.co/guide/en/elasticsearch/reference/index.html</span></span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Cluster</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> your cluster:</span><br><span class="line">#</span><br><span class="line">#cluster.name: my-application</span><br><span class="line">cluster.name: cluster</span><br><span class="line">#</span><br><span class="line"># ------------------------------------ <span class="type">Node</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Use</span> a descriptive name <span class="keyword">for</span> the node:</span><br><span class="line">#</span><br><span class="line">#node.name: node<span class="number">-1</span></span><br><span class="line">node.name: node<span class="number">-3</span></span><br><span class="line">node.master: <span class="literal">false</span></span><br><span class="line">node.data: <span class="literal">true</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Add</span> custom attributes to the node:</span><br><span class="line">#</span><br><span class="line">#node.attr.rack: r1</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Paths</span> ------------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to directory where to store the data (separate multiple locations by comma):</span><br><span class="line">#</span><br><span class="line">#path.data: /path/to/data</span><br><span class="line">path.data: /home/hadoop/elasticsearch/data</span><br><span class="line">#</span><br><span class="line"># <span class="type">Path</span> to log files:</span><br><span class="line">#</span><br><span class="line">#path.logs: /path/to/logs</span><br><span class="line">path.logs: /home/hadoop/elasticsearch/logs</span><br><span class="line">#</span><br><span class="line"># ----------------------------------- <span class="type">Memory</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Lock</span> the memory on startup:</span><br><span class="line">#</span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Make</span> sure that the heap size is set to about half the memory available</span><br><span class="line"># on the system and that the owner of the process is allowed to use <span class="keyword">this</span></span><br><span class="line"># limit.</span><br><span class="line">#</span><br><span class="line"># <span class="type">Elasticsearch</span> performs poorly when the system is swapping the memory.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Network</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> the bind address to a specific <span class="type">IP</span> (<span class="type">IPv4</span> or <span class="type">IPv6</span>):</span><br><span class="line">#</span><br><span class="line">#network.host: <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">network.host: <span class="number">192.168</span><span class="number">.8</span><span class="number">.83</span></span><br><span class="line">network.bind_host: <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">Set</span> a custom port <span class="keyword">for</span> <span class="type">HTTP</span>:</span><br><span class="line">#</span><br><span class="line">#http.port: <span class="number">9200</span></span><br><span class="line">http.port: <span class="number">9200</span></span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the network module documentation.</span><br><span class="line">#</span><br><span class="line"># --------------------------------- <span class="type">Discovery</span> ----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Pass</span> an initial list of hosts to perform discovery when <span class="keyword">this</span> node is started:</span><br><span class="line"># <span class="type">The</span> <span class="keyword">default</span> list of hosts is [<span class="string">"127.0.0.1"</span>, <span class="string">"[::1]"</span>]</span><br><span class="line">#</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"host1"</span>, <span class="string">"host2"</span>]</span><br><span class="line">#discovery.seed_hosts: [<span class="string">"192.168.8.81"</span>,<span class="string">"192.168.8.82"</span>,<span class="string">"192.168.8.83"</span>]</span><br><span class="line">discovery.zen.ping.unicast.hosts: [<span class="string">"192.168.8.81"</span>, <span class="string">"192.168.8.82"</span>, <span class="string">"192.168.8.83"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">Bootstrap</span> the cluster using an initial set of master-eligible nodes:</span><br><span class="line">#</span><br><span class="line">#cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#可能成为主的节点</span><br><span class="line">cluster.initial_master_nodes: [<span class="string">"node-1"</span>, <span class="string">"node-2"</span>]</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the discovery and cluster formation module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Gateway</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Block</span> initial recovery after a full cluster restart until <span class="type">N</span> nodes are started:</span><br><span class="line">#</span><br><span class="line">#gateway.recover_after_nodes: <span class="number">3</span></span><br><span class="line">#当集群内达到<span class="number">3</span>个时开始恢复数据（防止集群启动时部分节点自动恢复数据）</span><br><span class="line">gateway.recover_after_nodes: <span class="number">3</span>		</span><br><span class="line">#</span><br><span class="line"># <span class="type">For</span> more information, consult the gateway module documentation.</span><br><span class="line">#</span><br><span class="line"># ---------------------------------- <span class="type">Various</span> -----------------------------------</span><br><span class="line">#</span><br><span class="line"># <span class="type">Require</span> explicit names when deleting indices:</span><br><span class="line">#</span><br><span class="line">#action.destructive_requires_name: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2 id="kibana配置"><a href="#kibana配置" class="headerlink" title="kibana配置"></a>kibana配置</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"># <span class="type">Kibana</span> is served by a back end server. <span class="type">This</span> setting specifies the port to use.</span><br><span class="line">#server.port: <span class="number">5601</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Specifies</span> the address to which the <span class="type">Kibana</span> server will bind. <span class="type">IP</span> addresses and host names are both valid values.</span><br><span class="line"># <span class="type">The</span> <span class="keyword">default</span> is <span class="symbol">'localhos</span>t', which usually means remote machines will not be able to connect.</span><br><span class="line"># <span class="type">To</span> allow connections from remote users, set <span class="keyword">this</span> parameter to a non-loopback address.</span><br><span class="line">server.host: <span class="string">"hadoop01"</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Enables</span> you to specify a path to mount <span class="type">Kibana</span> at <span class="keyword">if</span> you are running behind a proxy.</span><br><span class="line"># <span class="type">Use</span> the `server.rewriteBasePath` setting to tell <span class="type">Kibana</span> <span class="keyword">if</span> it should remove the basePath</span><br><span class="line"># from requests it receives, and to prevent a deprecation warning at startup.</span><br><span class="line"># <span class="type">This</span> setting cannot end in a slash.</span><br><span class="line">#server.basePath: <span class="string">""</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Specifies</span> whether <span class="type">Kibana</span> should rewrite requests that are prefixed <span class="keyword">with</span></span><br><span class="line"># `server.basePath` or require that they are rewritten by your reverse proxy.</span><br><span class="line"># <span class="type">This</span> setting was effectively always `<span class="literal">false</span>` before <span class="type">Kibana</span> <span class="number">6.3</span> and will</span><br><span class="line"># <span class="keyword">default</span> to `<span class="literal">true</span>` starting in <span class="type">Kibana</span> <span class="number">7.0</span>.</span><br><span class="line">#server.rewriteBasePath: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># <span class="type">The</span> maximum payload size in bytes <span class="keyword">for</span> incoming server requests.</span><br><span class="line">#server.maxPayloadBytes: <span class="number">1048576</span></span><br><span class="line"></span><br><span class="line"># <span class="type">The</span> <span class="type">Kibana</span> server<span class="symbol">'s</span> name.  <span class="type">This</span> is used <span class="keyword">for</span> display purposes.</span><br><span class="line">server.name: <span class="string">"kibana"</span></span><br><span class="line"></span><br><span class="line"># <span class="type">The</span> <span class="type">URLs</span> of the <span class="type">Elasticsearch</span> instances to use <span class="keyword">for</span> all your queries.</span><br><span class="line">elasticsearch.hosts: [<span class="string">"http://hadoop01:9200"</span>]</span><br><span class="line"></span><br><span class="line"># <span class="type">When</span> <span class="keyword">this</span> setting<span class="symbol">'s</span> value is <span class="literal">true</span> <span class="type">Kibana</span> uses the hostname specified in the server.host</span><br><span class="line"># setting. <span class="type">When</span> the value of <span class="keyword">this</span> setting is <span class="literal">false</span>, <span class="type">Kibana</span> uses the hostname of the host</span><br><span class="line"># that connects to <span class="keyword">this</span> <span class="type">Kibana</span> instance.</span><br><span class="line">#elasticsearch.preserveHost: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Kibana</span> uses an index in <span class="type">Elasticsearch</span> to store saved searches, visualizations and</span><br><span class="line"># dashboards. <span class="type">Kibana</span> creates a <span class="keyword">new</span> index <span class="keyword">if</span> the index doesn<span class="symbol">'t</span> already exist.</span><br><span class="line">#kibana.index: <span class="string">".kibana"</span></span><br><span class="line"></span><br><span class="line"># <span class="type">The</span> <span class="keyword">default</span> application to load.</span><br><span class="line">#kibana.defaultAppId: <span class="string">"home"</span></span><br><span class="line"></span><br><span class="line"># <span class="type">If</span> your <span class="type">Elasticsearch</span> is <span class="keyword">protected</span> <span class="keyword">with</span> basic authentication, these settings provide</span><br><span class="line"># the username and password that the <span class="type">Kibana</span> server uses to perform maintenance on the <span class="type">Kibana</span></span><br><span class="line"># index at startup. <span class="type">Your</span> <span class="type">Kibana</span> users still need to authenticate <span class="keyword">with</span> <span class="type">Elasticsearch</span>, which</span><br><span class="line"># is proxied through the <span class="type">Kibana</span> server.</span><br><span class="line">#elasticsearch.username: <span class="string">"user"</span></span><br><span class="line">#elasticsearch.password: <span class="string">"pass"</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Enables</span> <span class="type">SSL</span> and paths to the <span class="type">PEM</span>-format <span class="type">SSL</span> certificate and <span class="type">SSL</span> key files, respectively.</span><br><span class="line"># <span class="type">These</span> settings enable <span class="type">SSL</span> <span class="keyword">for</span> outgoing requests from the <span class="type">Kibana</span> server to the browser.</span><br><span class="line">#server.ssl.enabled: <span class="literal">false</span></span><br><span class="line">#server.ssl.certificate: /path/to/your/server.crt</span><br><span class="line">#server.ssl.key: /path/to/your/server.key</span><br><span class="line"></span><br><span class="line"># <span class="type">Optional</span> settings that provide the paths to the <span class="type">PEM</span>-format <span class="type">SSL</span> certificate and key files.</span><br><span class="line"># <span class="type">These</span> files validate that your <span class="type">Elasticsearch</span> backend uses the same key files.</span><br><span class="line">#elasticsearch.ssl.certificate: /path/to/your/client.crt</span><br><span class="line">#elasticsearch.ssl.key: /path/to/your/client.key</span><br><span class="line"></span><br><span class="line"># <span class="type">Optional</span> setting that enables you to specify a path to the <span class="type">PEM</span> file <span class="keyword">for</span> the certificate</span><br><span class="line"># authority <span class="keyword">for</span> your <span class="type">Elasticsearch</span> instance.</span><br><span class="line">#elasticsearch.ssl.certificateAuthorities: [ <span class="string">"/path/to/your/CA.pem"</span> ]</span><br><span class="line"></span><br><span class="line"># <span class="type">To</span> disregard the validity of <span class="type">SSL</span> certificates, change <span class="keyword">this</span> setting<span class="symbol">'s</span> value to <span class="symbol">'non</span>e'.</span><br><span class="line">#elasticsearch.ssl.verificationMode: full</span><br><span class="line"></span><br><span class="line"># <span class="type">Time</span> in milliseconds to wait <span class="keyword">for</span> <span class="type">Elasticsearch</span> to respond to pings. <span class="type">Defaults</span> to the value of</span><br><span class="line"># the elasticsearch.requestTimeout setting.</span><br><span class="line">#elasticsearch.pingTimeout: <span class="number">1500</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Time</span> in milliseconds to wait <span class="keyword">for</span> responses from the back end or <span class="type">Elasticsearch</span>. <span class="type">This</span> value</span><br><span class="line"># must be a positive integer.</span><br><span class="line">#elasticsearch.requestTimeout: <span class="number">30000</span></span><br><span class="line"></span><br><span class="line"># <span class="type">List</span> of <span class="type">Kibana</span> client-side headers to send to <span class="type">Elasticsearch</span>. <span class="type">To</span> send *no* client-side</span><br><span class="line"># headers, set <span class="keyword">this</span> value to [] (an empty list).</span><br><span class="line">#elasticsearch.requestHeadersWhitelist: [ authorization ]</span><br><span class="line"></span><br><span class="line"># <span class="type">Header</span> names and values that are sent to <span class="type">Elasticsearch</span>. <span class="type">Any</span> custom headers cannot be overwritten</span><br><span class="line"># by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.</span><br><span class="line">#elasticsearch.customHeaders: &#123;&#125;</span><br><span class="line"></span><br><span class="line"># <span class="type">Time</span> in milliseconds <span class="keyword">for</span> <span class="type">Elasticsearch</span> to wait <span class="keyword">for</span> responses from shards. <span class="type">Set</span> to <span class="number">0</span> to disable.</span><br><span class="line">#elasticsearch.shardTimeout: <span class="number">30000</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Time</span> in milliseconds to wait <span class="keyword">for</span> <span class="type">Elasticsearch</span> at <span class="type">Kibana</span> startup before retrying.</span><br><span class="line">#elasticsearch.startupTimeout: <span class="number">5000</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Logs</span> queries sent to <span class="type">Elasticsearch</span>. <span class="type">Requires</span> logging.verbose set to <span class="literal">true</span>.</span><br><span class="line">#elasticsearch.logQueries: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Specifies</span> the path where <span class="type">Kibana</span> creates the process <span class="type">ID</span> file.</span><br><span class="line">#pid.file: /<span class="keyword">var</span>/run/kibana.pid</span><br><span class="line"></span><br><span class="line"># <span class="type">Enables</span> you specify a file where <span class="type">Kibana</span> stores log output.</span><br><span class="line">#logging.dest: stdout</span><br><span class="line"></span><br><span class="line"># <span class="type">Set</span> the value of <span class="keyword">this</span> setting to <span class="literal">true</span> to suppress all logging output.</span><br><span class="line">#logging.silent: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Set</span> the value of <span class="keyword">this</span> setting to <span class="literal">true</span> to suppress all logging output other than error messages.</span><br><span class="line">#logging.quiet: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Set</span> the value of <span class="keyword">this</span> setting to <span class="literal">true</span> to log all events, including system usage information</span><br><span class="line"># and all requests.</span><br><span class="line">#logging.verbose: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Set</span> the interval in milliseconds to sample system and process performance</span><br><span class="line"># metrics. <span class="type">Minimum</span> is <span class="number">100</span>ms. <span class="type">Defaults</span> to <span class="number">5000.</span></span><br><span class="line">#ops.interval: <span class="number">5000</span></span><br><span class="line"></span><br><span class="line"># <span class="type">Specifies</span> locale to be used <span class="keyword">for</span> all localizable strings, dates and number formats.</span><br><span class="line">#i18n.locale: <span class="string">"en"</span></span><br></pre></td></tr></table></figure>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p><strong>分别进入每一台机器,运行下面命令，启动es集群</strong>：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch -d</span><br></pre></td></tr></table></figure></p>
+<p><strong>启动kibana</strong>：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./kibana &amp;</span><br></pre></td></tr></table></figure></p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>在浏览器输入如下地址：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.8.81:9200/_cluster/health?pretty=true</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>结果</strong>:<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"cluster_name"</span> : <span class="string">"cluster"</span>,</span><br><span class="line">  <span class="string">"status"</span> : <span class="string">"green"</span>,</span><br><span class="line">  <span class="string">"timed_out"</span> : <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"number_of_nodes"</span> : <span class="number">3</span>,</span><br><span class="line">  <span class="string">"number_of_data_nodes"</span> : <span class="number">2</span>,</span><br><span class="line">  <span class="string">"active_primary_shards"</span> : <span class="number">4</span>,</span><br><span class="line">  <span class="string">"active_shards"</span> : <span class="number">8</span>,</span><br><span class="line">  <span class="string">"relocating_shards"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"initializing_shards"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"unassigned_shards"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"delayed_unassigned_shards"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"number_of_pending_tasks"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"number_of_in_flight_fetch"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"task_max_waiting_in_queue_millis"</span> : <span class="number">0</span>,</span><br><span class="line">  <span class="string">"active_shards_percent_as_number"</span> : <span class="number">100.0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>green表示集群正确启动完成。   </p>
+<p>在浏览器输入如下地址：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.8.81:5601</span></span><br></pre></td></tr></table></figure></p>
+<p>在左边工具栏找到Dev Tools,在开发窗口输入一下命令,查看集群健康状态：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">GET</span> /_cat/health?v</span><br></pre></td></tr></table></figure></p>
+<p><strong>结果</strong><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">epoch      timestamp cluster status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent</span><br><span class="line"><span class="number">1556175058</span> <span class="number">06</span>:<span class="number">50</span>:<span class="number">58</span>  cluster green           <span class="number">3</span>         <span class="number">2</span>      <span class="number">8</span>   <span class="number">4</span>    <span class="number">0</span>    <span class="number">0</span>        <span class="number">0</span>             <span class="number">0</span>                  -                <span class="number">100.0</span>%</span><br></pre></td></tr></table></figure></p>
+<p><strong>集群的健康状况</strong><br><strong>green</strong>：每个索引的primary shard和replica shard都是active状态的。<br><strong>yellow</strong>：每个索引的primary shard都是active状态的，但是部分replica shard不是active状态，处于不可用的状态 。<br><strong>red</strong>：不是所有索引的primary shard都是active状态的，部分索引有数据丢失了。   </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/04/24/hive 自定义UDTF函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -391,7 +627,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-24T14:14:12+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-24T14:20:26+08:00">
                 2019-04-24
               </time>
             
@@ -2163,202 +2399,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/java concurrent包类详解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/13/java concurrent包类详解/" itemprop="url">java concurrent包类详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-13T23:34:37+08:00">
-                2019-02-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/13/java concurrent包类详解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/13/java concurrent包类详解/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  549
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h1><p>原文：<a href="https://zhuanlan.zhihu.com/p/27314456" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27314456</a><br>Semaphore(信号量)是java.util.concurrent下的一个工具类.<strong>用来控制可同时访问特定资源的线程数</strong>.内部是通过维护父类(AQS)的 int state值实现.<br>Semaphore中有一个”许可”的概念:</p>
-<p>访问特定资源前，先使用acquire(1)获得许可，如果许可数量为0，该线程则一直阻塞，直到有可用许可。<br>访问资源后，使用release()释放许可。</p>
-<p>这个许可在构造时传入,赋给state值,它等同于state.</p>
-<p><strong>Semaphore应用场景</strong><br>系统中某类资源比较紧张,只能被有限的线程访问,此时适合使用信号量。<br>Semaphore用来控制访问某资源的线程数,比如数据库连接.假设有这个的需求，读取几万个文件的数据到数据库中，由于文件读取是IO密集型任务，可以启动几十个线程并发读取，但是数据库连接数只有20个，这时就必须控制最多只有20个线程能够拿到数据库连接进行操作。这个时候，就可以使用Semaphore做流量控制。<br><strong>使用案例：</strong><br>spark LiveListenerBus类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> val eventLock = <span class="keyword">new</span> Semaphore(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> val listenerThread = <span class="keyword">new</span> Thread(name) &#123;</span><br><span class="line">  setDaemon(<span class="keyword">true</span>)</span><br><span class="line">  <span class="function">override def <span class="title">run</span><span class="params">()</span>: Unit </span>= Utils.tryOrStopSparkContext(sparkContext) &#123;</span><br><span class="line">    LiveListenerBus.withinListenerThread.withValue(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        eventLock.acquire()</span><br><span class="line">        self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">          processingEvent = <span class="keyword">true</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 消费消息</span></span><br><span class="line">          val event = eventQueue.poll</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// Get out of the while loop and shutdown the daemon thread</span></span><br><span class="line">            <span class="keyword">if</span> (!stopped.get) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Polling `null` from eventQueue means"</span> +</span><br><span class="line">                <span class="string">" the listener bus has been stopped. So `stopped` must be true"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          postToAll(event)</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          self.<span class="keyword">synchronized</span> &#123;</span><br><span class="line">            processingEvent = <span class="keyword">false</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Semaphore属于一种较常见的限流手段，Google Guava封装了一层。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//JDK API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        semaphore.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">        semaphore.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Google Guava API：流速控制在每秒执行100个任务</span></span><br><span class="line"><span class="keyword">final</span> RateLimiter rateLimiter = RateLimiter.create(<span class="number">100</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">submitTasks</span><span class="params">(List&lt;Runnable&gt; tasks, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Runnable task : tasks) &#123;</span><br><span class="line">        rateLimiter.acquire(); <span class="comment">// 也许需要等待</span></span><br><span class="line">        executor.execute(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/02/13/DynamicVariable详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2600,7 +2640,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2611,7 +2651,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2622,7 +2662,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2717,7 +2757,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共56.5k字</span>
+  <span class="post-count">博客全站共59.4k字</span>
 </div>
 
 
