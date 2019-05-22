@@ -360,6 +360,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/05/22/scala正则表达式实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/22/scala正则表达式实战/" itemprop="url">scala正则表达式实战</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-22T14:39:16+08:00">
+                2019-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/22/scala正则表达式实战/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/22/scala正则表达式实战/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  94
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="案例一"><a href="#案例一" class="headerlink" title="案例一"></a>案例一</h1><p><strong>说明</strong>：源码来自spark ConfigReader类<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">object</span> <span class="title">ConfigReader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> <span class="type">REF_RE</span> = <span class="string">"\\$\\&#123;(?:(\\w+?):)?(\\S+?)\\&#125;"</span>.r</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">      <span class="type">ConfigReader</span>.<span class="type">REF_RE</span>.replaceAllIn(input, &#123; m =&gt;</span><br><span class="line">        <span class="keyword">val</span> prefix = m.group(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">val</span> name = m.group(<span class="number">2</span>)</span><br><span class="line">        <span class="keyword">val</span> ref = <span class="keyword">if</span> (prefix == <span class="literal">null</span>) name <span class="keyword">else</span> <span class="string">s"<span class="subst">$prefix</span>:<span class="subst">$name</span>"</span></span><br><span class="line">        require(!usedRefs.contains(ref), <span class="string">s"Circular reference in <span class="subst">$input</span>: <span class="subst">$ref</span>"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> replacement = bindings.get(prefix)</span><br><span class="line">          .flatMap(getOrDefault(_, name))</span><br><span class="line">          .map &#123; v =&gt; substitute(v, usedRefs + ref) &#125;</span><br><span class="line">          .getOrElse(m.matched)</span><br><span class="line">        <span class="type">Regex</span>.quoteReplacement(replacement)</span><br><span class="line">      &#125;)</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+     <div>
+      
+     </div>
+     <div>
+     
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -391,7 +583,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T23:18:52+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T23:55:25+08:00">
                 2019-05-07
               </time>
             
@@ -2270,223 +2462,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/04/18/antlr4学习笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/18/antlr4学习笔记/" itemprop="url">antlr4学习笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-18T15:57:05+08:00">
-                2019-04-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/antlr/" itemprop="url" rel="index">
-                    <span itemprop="name">antlr</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/18/antlr4学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/18/antlr4学习笔记/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,782
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="antlr介绍"><a href="#antlr介绍" class="headerlink" title="antlr介绍"></a>antlr介绍</h1><p><strong>注意</strong>： 文字来自《antlr4权威指南》<br>ANTLR 语言识别的一个工具 (ANother Tool for Language Recognition ) 是一种语言工具，它提供了一个框架，可以通过包含 Java, C++, 或 C# 动作（action）的语法描述来构造语言识别器，编译器和解释器。 计算机语言的解析已经变成了一种非常普遍的工作，在这方面的理论和工具经过近 40 年的发展已经相当成熟，使用 Antlr 等识别工具来识别，解析，构造编译器比手工编程更加容易，同时开发的程序也更易于维护。<br>语言识别的工具有很多种，比如大名鼎鼎的 Lex 和 YACC，Linux 中有他们的开源版本，分别是 Flex 和 Bison。在 Java 社区里，除了 Antlr 外，语言识别工具还有 JavaCC 和 SableCC 等。<br>和大多数语言识别工具一样，Antlr 使用上下文无关文法描述语言。最新的 Antlr 是一个基于 LL(*) 的语言识别器。在 Antlr 中通过解析用户自定义的上下文无关文法，自动生成词法分析器 (Lexer)、语法分析器 (Parser) 和树分析器 (Tree Parser)。   </p>
-<h1 id="antlr-的应用"><a href="#antlr-的应用" class="headerlink" title="antlr 的应用"></a>antlr 的应用</h1><h2 id="编程语言处理"><a href="#编程语言处理" class="headerlink" title="编程语言处理"></a>编程语言处理</h2><p>识别和处理编程语言是 Antlr 的首要任务，编程语言的处理是一项繁重复杂的任务，为了简化处理，一般的编译技术都将语言处理工作分为前端和后端两个部分。其中前端包括词法分析、语法分析、语义分析、中间代码生成等若干步骤，后端包括目标代码生成和代码优化等步骤。</p>
-<p>Antlr 致力于解决编译前端的所有工作。使用 Anltr 的语法可以定义目标语言的词法记号和语法规则，Antlr 自动生成目标语言的词法分析器和语法分析器；此外，如果在语法规则中指定抽象语法树的规则，在生成语法分析器的同时，Antlr 还能够生成抽象语法树；最终使用树分析器遍历抽象语法树，完成语义分析和中间代码生成。整个工作在 Anltr 强大的支持下，将变得非常轻松和愉快。 </p>
-<h2 id="文本处理"><a href="#文本处理" class="headerlink" title="文本处理"></a>文本处理</h2><p>当需要文本处理时，首先想到的是正则表达式，使用 Anltr 的词法分析器生成器，可以很容易的完成正则表达式能够完成的所有工作；除此之外使用 Anltr 还可以完成一些正则表达式难以完成的工作，比如识别左括号和右括号的成对匹配等。</p>
-<h1 id="基本环境配置"><a href="#基本环境配置" class="headerlink" title="基本环境配置"></a>基本环境配置</h1><h2 id="命令方式生成文件"><a href="#命令方式生成文件" class="headerlink" title="命令方式生成文件"></a>命令方式生成文件</h2><h3 id="下载antlr"><a href="#下载antlr" class="headerlink" title="下载antlr"></a>下载antlr</h3><p><a href="https://www.antlr.org/download/antlr-4.7.2-complete.jar" target="_blank" rel="noopener">https://www.antlr.org/download/antlr-4.7.2-complete.jar</a>   </p>
-<h3 id="启动antlr"><a href="#启动antlr" class="headerlink" title="启动antlr"></a>启动antlr</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">alias antlr4='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.Tool'</span><br><span class="line"></span><br><span class="line">alias grun='java -Xmx500M -cp "/home/deeplearning/antlr/antlr-4.7.2-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'</span><br><span class="line"></span><br><span class="line">antlr4</span><br></pre></td></tr></table></figure>
-<h3 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h3><h4 id="定义antlr-Hello-g4文件"><a href="#定义antlr-Hello-g4文件" class="headerlink" title="定义antlr Hello.g4文件"></a>定义antlr Hello.g4文件</h4><p><strong>注意：</strong> 逗号必须对齐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grammar Hello; //定义一个名为Hello的语法</span><br><span class="line">r  : &apos;hello&apos; ID ; // 匹配一个关键字hello和一个紧随其后的标识符</span><br><span class="line">ID : [a-z]+ ;    // 匹配小写字母组成的标识符</span><br><span class="line">WS : [ \t\r\n]+ -&gt; skip; // 忽略空格 Tab 换行</span><br></pre></td></tr></table></figure></p>
-<h4 id="运行生成对应的文件和代码"><a href="#运行生成对应的文件和代码" class="headerlink" title="运行生成对应的文件和代码"></a>运行生成对应的文件和代码</h4><p>antlr4 Hello.g4<br>javac Hello*.java</p>
-<h4 id="运行生成树图"><a href="#运行生成树图" class="headerlink" title="运行生成树图"></a>运行生成树图</h4><p>grun Hello r -gui</p>
-<h2 id="IDEA中antlr4环境配置"><a href="#IDEA中antlr4环境配置" class="headerlink" title="IDEA中antlr4环境配置"></a>IDEA中antlr4环境配置</h2><h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.baeldung.com/java-antlr" target="_blank" rel="noopener">https://www.baeldung.com/java-antlr</a></p>
-<h3 id="在maven-项目src-main下创建一个目录"><a href="#在maven-项目src-main下创建一个目录" class="headerlink" title="在maven 项目src/main下创建一个目录"></a>在maven 项目src/main下创建一个目录</h3><p>mkdir -p  antlr4/cn/xh/parse</p>
-<h3 id="编写MyParse-g4文件"><a href="#编写MyParse-g4文件" class="headerlink" title="编写MyParse.g4文件"></a>编写MyParse.g4文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">grammar MyParse;</span><br><span class="line"></span><br><span class="line">//parser</span><br><span class="line">prog:stat</span><br><span class="line">;</span><br><span class="line">stat:expr|NEWLINE</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">expr:multExpr((&apos;+&apos;|&apos;-&apos;)multExpr)*</span><br><span class="line">;</span><br><span class="line">multExpr:atom((&apos;*&apos;|&apos;/&apos;)atom)*</span><br><span class="line">;</span><br><span class="line">atom:&apos;(&apos;expr&apos;)&apos;</span><br><span class="line">    |INT</span><br><span class="line">    |ID</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">//lexer</span><br><span class="line">ID:(&apos;a&apos;..&apos;z&apos;|&apos;A&apos;..&apos;Z&apos;)+;</span><br><span class="line">INT:&apos;0&apos;..&apos;9&apos;+;</span><br><span class="line">NEWLINE:&apos;\r&apos;?&apos;\n&apos;;</span><br><span class="line">WS:(&apos; &apos;|&apos;\t&apos;|&apos;\n&apos;|&apos;\r&apos;)+&#123;skip();&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="在pom-xml文件中添加如下内容"><a href="#在pom-xml文件中添加如下内容" class="headerlink" title="在pom.xml文件中添加如下内容"></a>在pom.xml文件中添加如下内容</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">antlr4.version</span>&gt;</span>4.7.2<span class="tag">&lt;/<span class="name">antlr4.version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.antlr<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>antlr4-runtime<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;antlr4.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.antlr<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>antlr4-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>antlr4<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="输入maven命令打包"><a href="#输入maven命令打包" class="headerlink" title="输入maven命令打包"></a>输入maven命令打包</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn package</span><br></pre></td></tr></table></figure>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>在target/generated-sources/antlr4/cn/xh/parse 中产生对应的文件</p>
-<h1 id="antlr基本语法详解"><a href="#antlr基本语法详解" class="headerlink" title="antlr基本语法详解"></a>antlr基本语法详解</h1><p>参考《antlr4权威指南》    </p>
-<h2 id="定义文件头"><a href="#定义文件头" class="headerlink" title="定义文件头"></a>定义文件头</h2><p>使用Antlr 的语法规则来定义算术表达式文法，文件头部是 grammar 关键字，定义文法的名字，必须与文法文件文件的名字相同。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grammar MyParse;</span><br></pre></td></tr></table></figure></p>
-<h2 id="自定义一个算术表达式"><a href="#自定义一个算术表达式" class="headerlink" title="自定义一个算术表达式"></a>自定义一个算术表达式</h2><p><strong>表达式规则</strong>：   </p>
-<blockquote>
-<p>算法的优先级需要通过文法规则的嵌套定义来体现，加减法的优先级低于乘除法，表达式 expr 的定义由乘除法表达式 multExpr 和加减法算符 (‘+’|’-‘) 构成；同理，括号的优先级高于乘除法，乘除法表达式 multExpr 通过原子操作数 atom 和乘除法算符 (‘*’|’/’) 构成。   </p>
-</blockquote>
-<p>程序有一个语句构成，语句有表达式或者换行符构成。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">prog: stat </span><br><span class="line">; </span><br><span class="line">stat: expr </span><br><span class="line">  |NEWLINE </span><br><span class="line">;</span><br></pre></td></tr></table></figure></p>
-<p>在 Antlr 中语法定义和词法定义通过规则的第一个字符来区别， 规定语法定义符号的第一个字母小写，而词法定义符号的第一个字母大写。算术表达式中用到了 4 类记号 ( 在 Antlr 中被称为 Token)，分别是标识符 ID，表示一个变量；常量 INT，表示一个常数；换行符 NEWLINE 和空格 WS，空格字符在语言处理时将被跳过，skip() 是词法分析器类的一个方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ID:(&apos;a&apos;..&apos;z&apos;|&apos;A&apos;..&apos;Z&apos;)+;</span><br><span class="line">INT:&apos;0&apos;..&apos;9&apos;+;</span><br><span class="line">NEWLINE:&apos;\r&apos;?&apos;\n&apos;;</span><br><span class="line">WS:(&apos; &apos;|&apos;\t&apos;|&apos;\n&apos;|&apos;\r&apos;)+&#123;skip();&#125;;</span><br></pre></td></tr></table></figure></p>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="antlr文件编写"><a href="#antlr文件编写" class="headerlink" title="antlr文件编写"></a>antlr文件编写</h3><p>MyParse.g4文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">grammar MyParse;</span><br><span class="line"></span><br><span class="line">//parser</span><br><span class="line">prog:stat</span><br><span class="line">;</span><br><span class="line">stat:expr|NEWLINE</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">expr:multExpr((&apos;+&apos;|&apos;-&apos;)multExpr)*</span><br><span class="line">;</span><br><span class="line">multExpr:atom((&apos;*&apos;|&apos;/&apos;)atom)*</span><br><span class="line">;</span><br><span class="line">atom:&apos;(&apos;expr&apos;)&apos;</span><br><span class="line">    |INT</span><br><span class="line">    |ID</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">//lexer</span><br><span class="line">ID:(&apos;a&apos;..&apos;z&apos;|&apos;A&apos;..&apos;Z&apos;)+;</span><br><span class="line">INT:&apos;0&apos;..&apos;9&apos;+;</span><br><span class="line">NEWLINE:&apos;\r&apos;?&apos;\n&apos;;</span><br><span class="line">WS:(&apos; &apos;|&apos;\t&apos;|&apos;\n&apos;|&apos;\r&apos;)+&#123;skip();&#125;;</span><br></pre></td></tr></table></figure></p>
-<h3 id="使用java调用分析器"><a href="#使用java调用分析器" class="headerlink" title="使用java调用分析器"></a>使用java调用分析器</h3><p>参考spark源码中ParseDriver.scala文件中AbstractSqlParser类parse方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xh.antlr4;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.xh.parse.MyParseLexer;</span><br><span class="line"><span class="keyword">import</span> cn.xh.parse.MyParseParser;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.CharStreams;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.CommonTokenStream;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.catalyst.parser.UpperCaseCharStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserMyParse</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(String expr)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对每一个输入的字符串，构造一个 CodePointCharStream 流 in</span></span><br><span class="line">        UpperCaseCharStream in = <span class="keyword">new</span> UpperCaseCharStream(CharStreams.fromString(expr));</span><br><span class="line">        <span class="comment">//用 in 构造词法分析器 lexer，词法分析的作用是产生记号</span></span><br><span class="line">        MyParseLexer lexer = <span class="keyword">new</span> MyParseLexer(in);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//用词法分析器 lexer 构造一个记号流 tokens</span></span><br><span class="line">        CommonTokenStream tokens = <span class="keyword">new</span> CommonTokenStream(lexer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//再使用 tokens 构造语法分析器 parser,至此已经完成词法分析和语法分析的准备工作</span></span><br><span class="line">        MyParseParser parser = <span class="keyword">new</span> MyParseParser(tokens);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//最终调用语法分析器的规则 prog，完成对表达式的验证</span></span><br><span class="line">        parser.prog();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        String[] testStr = &#123;</span><br><span class="line">                <span class="string">"2"</span>,</span><br><span class="line">                <span class="string">"a+b+3"</span>,</span><br><span class="line">                <span class="string">"(a-b)+3"</span>,</span><br><span class="line">                <span class="string">"a+(b*3)"</span></span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String s : testStr) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Input expr:"</span> + s);</span><br><span class="line">            run(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://github.com/tgluon/tgluon.github.io/blob/master/images/myimages/%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E6%B5%81%E5%8A%A8%E8%BF%87%E7%A8%8B.png?raw=true" alt=""></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-     <div>
-      
-     </div>
-     <div>
-     
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2542,7 +2517,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2659,7 +2634,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共60.8k字</span>
+  <span class="post-count">博客全站共60.9k字</span>
 </div>
 
 
