@@ -117,11 +117,11 @@
 <meta name="keywords" content="spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)">
-<meta property="og:url" content="https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/index.html">
+<meta property="og:url" content="https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="背景idea 中连接yarn集群debug spark代码,有利于定位线上问题。 环境默认你hadoop环境已经搞定情况下的说明！！！scala版本： 2.11.8jdk版本：JDK1.8hadoop版本： 2.7.3spark版本： 2.4.1zookeeper： 3.4.6高能预警： 一定要保持yarn集群机器scala版本和项目pom文件中scala版本一致。         linux版本">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-07T15:55:25.997Z">
+<meta property="og:updated_time" content="2019-07-01T22:04:18.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)">
 <meta name="twitter:description" content="背景idea 中连接yarn集群debug spark代码,有利于定位线上问题。 环境默认你hadoop环境已经搞定情况下的说明！！！scala版本： 2.11.8jdk版本：JDK1.8hadoop版本： 2.7.3spark版本： 2.4.1zookeeper： 3.4.6高能预警： 一定要保持yarn集群机器scala版本和项目pom文件中scala版本一致。         linux版本">
@@ -154,7 +154,7 @@
 
 
 
-  <link rel="canonical" href="https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/"/>
+  <link rel="canonical" href="https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/"/>
 
 
 
@@ -361,7 +361,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tang">
@@ -390,8 +390,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T23:55:25+08:00">
-                2019-05-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T06:04:18+08:00">
+                2019-07-02
               </time>
             
 
@@ -431,9 +431,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/#comments" itemprop="discussionUrl">
+                <a href="/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -457,7 +457,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  24,951
+                  24,968
                 </span>
               
 
@@ -562,15 +562,15 @@
 <p>至此,IDEA已经能连接上yarn集群。</p>
 <h1 id="开启远程yarn-client-debug调试"><a href="#开启远程yarn-client-debug调试" class="headerlink" title="开启远程yarn client debug调试"></a>开启远程yarn client debug调试</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>将我们的应用程序打包(在hadoop05机器)，发送到hadoop01机器，并在hadoop01上启动我们的应用程序,具体如下：  </p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /home/hadoop/worker/sparklearning/target/   </span><br><span class="line"></span><br><span class="line">scp -r sparklearning-1.0-SNAPSHOT.jar  hadoop@hadoop01:/home/hadoop/worker/sparklearning/target/</span><br><span class="line"></span><br><span class="line">scp -r sparklearning-1.0-SNAPSHOT.jar  hadoop@hadoop01:/home/hadoop/worker/sparklearning/target/</span><br></pre></td></tr></table></figure>
-<p><strong>在hadoop01启动</strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">./bin/spark-submit --class com.xh.spark.sql.function.WindowFunctionTest \</span><br><span class="line">    --master yarn \</span><br><span class="line">    --deploy-mode client \</span><br><span class="line">    --driver-memory 512m \</span><br><span class="line">    --executor-memory 512m \</span><br><span class="line">    --executor-cores 6 \</span><br><span class="line">	--driver-java-options "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" \</span><br><span class="line">    /home/hadoop/worker/sparklearning/target/sparklearning-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure></p>
+<p><strong>在hadoop01提交spark应用</strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">./bin/spark-submit --class com.xh.spark.sql.practice.JDSaleQuotaRevert \</span><br><span class="line">--master yarn \</span><br><span class="line">--deploy-mode client \</span><br><span class="line">--driver-memory 512m \</span><br><span class="line">--executor-memory 512m \</span><br><span class="line">--executor-cores 6 \</span><br><span class="line">--driver-java-options "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" \</span><br><span class="line">--conf "spark.executor.extraJavaOptions=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" \</span><br><span class="line">/home/hadoop/worker/sparklearning/target/sparklearning-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure></p>
 <h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>在idea中Edit Configurations ——&gt; 点击+号 ——&gt;Remote —— Configuration ——&gt; Debugger Mode (用Attach to remote JVM)——&gt;host(hadoop01)<br>——&gt; Port(默认5005，也可以选择使用未使用的端口，比如5656) ——&gt; Command line arguments for remote JVN (-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005)</p>
 <p>然后点击小虫子图标就可以run程序了！！！！</p>
-<h1 id="问题解决分享"><a href="#问题解决分享" class="headerlink" title="问题解决分享"></a>问题解决分享</h1><h2 id="Could-not-parse-Master-URL"><a href="#Could-not-parse-Master-URL" class="headerlink" title="Could not parse Master URL"></a>Could not parse Master URL</h2><p><strong>解决：</strong> 在pom.xml中添加如下依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-yarn_$&#123;scala.binary.version&#125;<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spark.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Name-node-is-in-safe-mode"><a href="#Name-node-is-in-safe-mode" class="headerlink" title="Name node is in safe mode"></a>Name node is in safe mode</h2><p><strong>解决：</strong>  在hadoop所在linux环境输入如下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -safemode leave</span><br></pre></td></tr></table></figure></p>
+<h1 id="问题解决分享"><a href="#问题解决分享" class="headerlink" title="问题解决分享"></a>问题解决分享</h1><h2 id="Could-not-parse-Master-URL"><a href="#Could-not-parse-Master-URL" class="headerlink" title="Could not parse Master URL"></a>Could not parse Master URL</h2><p><strong>解决：</strong><br> 在pom.xml中添加如下依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.spark<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spark-yarn_$&#123;scala.binary.version&#125;<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spark.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Name-node-is-in-safe-mode"><a href="#Name-node-is-in-safe-mode" class="headerlink" title="Name node is in safe mode"></a>Name node is in safe mode</h2><p><strong>解决：</strong><br>在hadoop所在linux环境输入如下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -safemode leave</span><br></pre></td></tr></table></figure></p>
 <h2 id="Exception-in-thread-“main”-org-apache-hadoop-security-AccessControlException"><a href="#Exception-in-thread-“main”-org-apache-hadoop-security-AccessControlException" class="headerlink" title="Exception in thread “main” org.apache.hadoop.security.AccessControlException:"></a>Exception in thread “main” org.apache.hadoop.security.AccessControlException:</h2><blockquote>
 <p>Exception in thread “main” org.apache.hadoop.security.AccessControlException: Permission denied: user=deeplearning, access=WRITE, inode=”/user/deeplearning/.sparkStaging/application_1554947367832_0002”:hadoop:supergroup:drwxr-xr-x</p>
 </blockquote>
-<p><strong>解决：</strong>  在hdfs-site.xml添加如下配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.permissions.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>解决：</strong><br>在hdfs-site.xml添加如下配置<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.permissions.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="Diagnostics-Container-pid-3293-containerID-container-e12-1555047553207-0002-02-000001-is-running-beyond-virtual-memory-limits-Current-usage-116-1-MB-of-1-GB-physical-memory-used-2-3-GB-of-2-1-GB-virtual-memory-used-Killing-container"><a href="#Diagnostics-Container-pid-3293-containerID-container-e12-1555047553207-0002-02-000001-is-running-beyond-virtual-memory-limits-Current-usage-116-1-MB-of-1-GB-physical-memory-used-2-3-GB-of-2-1-GB-virtual-memory-used-Killing-container" class="headerlink" title="Diagnostics: Container [pid=3293,containerID=container_e12_1555047553207_0002_02_000001] is running beyond virtual memory limits. Current usage: 116.1 MB of 1 GB physical memory used; 2.3 GB of 2.1 GB virtual memory used. Killing container."></a>Diagnostics: Container [pid=3293,containerID=container_e12_1555047553207_0002_02_000001] is running beyond virtual memory limits. Current usage: 116.1 MB of 1 GB physical memory used; 2.3 GB of 2.1 GB virtual memory used. Killing container.</h2><p><strong>解决：</strong> 在yarn-site.xml文件中添加如下配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;yarn.nodemanager.vmem-check-enabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">   &lt;name&gt;yarn.nodemanager.vmem-pmem-ratio&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;5&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure></p>
 <h2 id="问题解决参考文章"><a href="#问题解决参考文章" class="headerlink" title="问题解决参考文章"></a>问题解决参考文章</h2><p><a href="https://stackoverflow.com/questions/41054700/could-not-parse-master-url" target="_blank" rel="noopener">https://stackoverflow.com/questions/41054700/could-not-parse-master-url</a></p>
 <p><a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml</a></p>
@@ -592,12 +592,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/">idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)</a></p>
+  <p><span>本文标题:</span><a href="/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/">idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 tang 的个人博客">tang</a></p>
-  <p><span>发布时间:</span>2019年05月07日 - 23:05</p>
-  <p><span>最后更新:</span>2019年05月07日 - 23:05</p>
-  <p><span>原始链接:</span><a href="/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/" title="idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)">https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/"  aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2019年07月02日 - 06:07</p>
+  <p><span>最后更新:</span>2019年07月02日 - 06:07</p>
+  <p><span>原始链接:</span><a href="/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/" title="idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)">https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/"  aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -654,8 +654,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/25/elasticsearch学习第四弹：聚合案例/" rel="next" title="elasticsearch学习第四弹：聚合案例">
-                <i class="fa fa-chevron-left"></i> elasticsearch学习第四弹：聚合案例
+              <a href="/2019/05/22/scala正则表达式实战/" rel="next" title="scala正则表达式实战">
+                <i class="fa fa-chevron-left"></i> scala正则表达式实战
               </a>
             
           </div>
@@ -663,10 +663,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/22/scala正则表达式实战/" rel="prev" title="scala正则表达式实战">
-                scala正则表达式实战 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -1059,8 +1055,8 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://tgluon.github.io/2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/';
-          this.page.identifier = '2019/05/07/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/';
+          this.page.url = 'https://tgluon.github.io/2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/';
+          this.page.identifier = '2019/07/02/idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)/';
           this.page.title = 'idea中Spark on yarn 远程Debug Spark 源码(Yarn Client+attach 模式)';
         };
         var d = document, s = d.createElement('script');

@@ -360,7 +360,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/04/scala特殊符号使用/">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2019/01/04/scala自定义注解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tang">
@@ -379,7 +379,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/04/scala特殊符号使用/" itemprop="url">scala特殊符号使用</a></h1>
+                <a class="post-title-link" href="/2019/01/04/scala自定义注解/" itemprop="url">scala自定注解</a></h1>
         
 
         <div class="post-meta">
@@ -432,9 +432,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/04/scala特殊符号使用/#comments" itemprop="discussionUrl">
+                <a href="/2019/01/04/scala自定义注解/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/04/scala特殊符号使用/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/01/04/scala自定义注解/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -458,7 +458,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  248
+                  279
                 </span>
               
 
@@ -497,9 +497,10 @@
       
         
           
-            <h1 id="符号"><a href="#符号" class="headerlink" title="_*符号"></a>_*符号</h1><p>作用：它告诉编译器将序列类型的单个参数视为可变参数序列。<br>举例：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">ProcessBuilder</span>(<span class="type">String</span>... command) &#123;</span><br><span class="line">       <span class="keyword">this</span>.command = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(command.length);</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">String</span> arg : command)</span><br><span class="line">           <span class="keyword">this</span>.command.add(arg);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> commandSeq = <span class="type">Seq</span>(command.mainClass) ++ command.arguments</span><br><span class="line"><span class="keyword">val</span> builder = <span class="keyword">new</span> <span class="type">ProcessBuilder</span>(commandSeq: _*)</span><br></pre></td></tr></table></figure>
-<h1 id=""><a href="#" class="headerlink" title="::"></a>::</h1><p>该方法被称为cons，意为构造，向队列的头部追加数据，创造新的列表。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    args.toList <span class="keyword">match</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> workerUrl :: userJar :: mainClass :: extraArgs =&gt;</span><br><span class="line">        <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">        <span class="keyword">val</span> rpcEnv = <span class="type">RpcEnv</span>.create(<span class="string">"Driver"</span>,</span><br><span class="line">          <span class="type">Utils</span>.localHostName(), <span class="number">0</span>, conf, <span class="keyword">new</span> <span class="type">SecurityManager</span>(conf))</span><br><span class="line">        rpcEnv.setupEndpoint(<span class="string">"workerWatcher"</span>, <span class="keyword">new</span> <span class="type">WorkerWatcher</span>(rpcEnv, workerUrl))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> currentLoader = <span class="type">Thread</span>.currentThread.getContextClassLoader</span><br><span class="line">        <span class="keyword">val</span> userJarUrl = <span class="keyword">new</span> <span class="type">File</span>(userJar).toURI().toURL()</span><br><span class="line">        <span class="keyword">val</span> loader =</span><br><span class="line">          <span class="keyword">if</span> (sys.props.getOrElse(<span class="string">"spark.driver.userClassPathFirst"</span>, <span class="string">"false"</span>).toBoolean) &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">ChildFirstURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="type">MutableURLClassLoader</span>(<span class="type">Array</span>(userJarUrl), currentLoader)</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="type">Thread</span>.currentThread.setContextClassLoader(loader)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Delegate to supplied main class</span></span><br><span class="line">        <span class="keyword">val</span> clazz = <span class="type">Utils</span>.classForName(mainClass)</span><br><span class="line">        <span class="keyword">val</span> mainMethod = clazz.getMethod(<span class="string">"main"</span>, classOf[<span class="type">Array</span>[<span class="type">String</span>]])</span><br><span class="line">        mainMethod.invoke(<span class="literal">null</span>, extraArgs.toArray[<span class="type">String</span>])</span><br><span class="line"></span><br><span class="line">        rpcEnv.shutdown()</span><br><span class="line"></span><br><span class="line">      <span class="keyword">case</span> _ =&gt;</span><br><span class="line">        <span class="comment">// scalastyle:off println</span></span><br><span class="line">        <span class="type">System</span>.err.println(<span class="string">"Usage: DriverWrapper &lt;workerUrl&gt; &lt;userJar&gt; &lt;driverMainClass&gt; [options]"</span>)</span><br><span class="line">        <span class="comment">// scalastyle:on println</span></span><br><span class="line">        <span class="type">System</span>.exit(<span class="number">-1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+            <h1 id="为什么要注解"><a href="#为什么要注解" class="headerlink" title="为什么要注解"></a>为什么要注解</h1><p>除了编译和允许之外，还可以对程序做：<br>1、使用Scaladoc 自动产生文档;<br>2、漂亮的打印印出符合你偏爱分割的代码;<br>3、代码常见错误检查，如：打开了文件却没(在全部逻辑分支中)关闭。<br>4、实验类型检查，例如副作用管理或所有权属性确认。<br>这类工具（程序）被称为元编程工具，<code>它们把其它程序当做输入程序</code>。  </p>
+<h1 id="scala注解所在包和基本语法格式"><a href="#scala注解所在包和基本语法格式" class="headerlink" title="scala注解所在包和基本语法格式"></a>scala注解所在包和基本语法格式</h1><p>注解所在包： 标准库定义的注解相关内容在包scala.annotation中。<br>基本语法： @注解名称(注解参数)  </p>
+<h1 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h1><p>自定义注解需要从注解特质继承，scala提供两种注解：<br> 1、基本语法： @注解名称(注解参数)<br> scala中的自定义注解不是接口/特质，而是类。<br>自定义注解需要从注解特质中继承，Scala中提供了两类注解特质：</p>
+<p>scala.annotation.ClassfileAnnotation 由Java编译器生成注解<br>scala.annotation.StaticAnnotation 由Scala编译器生成注解</p>
 
           
         
@@ -956,7 +957,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/ORCFILE格式存储到hive表/">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tang">
@@ -975,7 +976,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/28/ORCFILE格式存储到hive表/" itemprop="url">ORCFILE格式存储到hive表</a></h1>
+                <a class="post-title-link" href="/2018/07/28/RCFILE格式存储到hive表/" itemprop="url">RCFILE格式存储到hive表</a></h1>
         
 
         <div class="post-meta">
@@ -1028,9 +1029,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/28/ORCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/28/RCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/28/ORCFILE格式存储到hive表/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/28/RCFILE格式存储到hive表/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1054,7 +1055,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  201
+                  275
                 </span>
               
 
@@ -1093,10 +1094,11 @@
       
         
           
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。<br>ORCFILE格式的输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.orc</span><br></pre></td></tr></table></figure></p>
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，<strong>被用于在一个时间点操作多行的场景</strong>。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。<br>RCFILE格式的输入输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.RCFileInputFormat</span><br><span class="line">org.apache.hadoop.hive.ql.io.RCFileOutputFormat</span><br></pre></td></tr></table></figure></p>
 <p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立ORCFILE格式表"><a href="#建立ORCFILE格式表" class="headerlink" title="建立ORCFILE格式表"></a>建立ORCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_orcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> orcfile;</span><br></pre></td></tr></table></figure>
-<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_orcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立RCFILE格式表"><a href="#建立RCFILE格式表" class="headerlink" title="建立RCFILE格式表"></a>建立RCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_rcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> rcfile;</span><br></pre></td></tr></table></figure>
+<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_rcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_rcfile</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1350,7 +1352,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/RCFILE格式存储到hive表/">
+    <link itemprop="mainEntityOfPage" href="https://tgluon.github.io/2018/07/28/ORCFILE格式存储到hive表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tang">
@@ -1369,7 +1371,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/28/RCFILE格式存储到hive表/" itemprop="url">RCFILE格式存储到hive表</a></h1>
+                <a class="post-title-link" href="/2018/07/28/ORCFILE格式存储到hive表/" itemprop="url">ORCFILE格式存储到hive表</a></h1>
         
 
         <div class="post-meta">
@@ -1422,9 +1424,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/28/RCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/28/ORCFILE格式存储到hive表/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/28/RCFILE格式存储到hive表/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/28/ORCFILE格式存储到hive表/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1448,7 +1450,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  275
+                  201
                 </span>
               
 
@@ -1487,11 +1489,10 @@
       
         
           
-            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>RCFILE指的是 Record Columnar File,是一种高效压缩率的二进制文件格式，<strong>被用于在一个时间点操作多行的场景</strong>。RCFILEs是由二进制键/值对组成的平面文件，这点于SEQUENCEFILE非常相似。RCFILE以记录的形式存储表中的列，即列存储方式。它先分割行做水平分区，然后分割列做垂直分区。RCFILE把一行的元数据作为键，把行数据作为值，这种面向列的存储在执行数据分析时更高效。<br>RCFILE格式的输入输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.RCFileInputFormat</span><br><span class="line">org.apache.hadoop.hive.ql.io.RCFileOutputFormat</span><br></pre></td></tr></table></figure></p>
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>ORC指的是Optimized Record Columnar,就是说相对于其他文件格式，它已更优化方式存储数据.ORC能将原始的大小缩减75%，从而提升数据处理速度。ORC比Text,Squence和RC文件格式有更好的性能，而且ORC是目前是hive唯一支持事物的文件格式。<br>ORCFILE格式的输出包是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.hive.ql.io.orc</span><br></pre></td></tr></table></figure></p>
 <p><code>注意:</code>本段文字来自《Hadoop构建数据仓库实践》书籍6.2.1章节</p>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立RCFILE格式表"><a href="#建立RCFILE格式表" class="headerlink" title="建立RCFILE格式表"></a>建立RCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_rcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> rcfile;</span><br></pre></td></tr></table></figure>
-<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向RCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_rcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
-<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t_rcfile</span><br></pre></td></tr></table></figure>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="建立ORCFILE格式表"><a href="#建立ORCFILE格式表" class="headerlink" title="建立ORCFILE格式表"></a>建立ORCFILE格式表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t_orcfile(   </span><br><span class="line">    c1 <span class="keyword">string</span>,  </span><br><span class="line">    c2 <span class="built_in">int</span>,   </span><br><span class="line">    c3 <span class="keyword">string</span>,   </span><br><span class="line">    c4 <span class="keyword">string</span>)  </span><br><span class="line">    <span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> </span><br><span class="line">    <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span></span><br><span class="line">    <span class="keyword">stored</span> <span class="keyword">as</span> orcfile;</span><br></pre></td></tr></table></figure>
+<h2 id="向表中导入数据"><a href="#向表中导入数据" class="headerlink" title="向表中导入数据"></a>向表中导入数据</h2><p><code>注意</code>：不能直接向ORCFILE表插入数据，需要从其他表向ORCFILE表插入数据。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> t_orcfile  <span class="keyword">select</span> * <span class="keyword">from</span> t_textfile</span><br></pre></td></tr></table></figure></p>
 
           
         
